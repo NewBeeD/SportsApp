@@ -13,7 +13,7 @@ const LeaderboardPage = () => {
         maxWidth="lg" 
         sx={{ 
           width: '99%',
-          py: { xs: 2, sm: 3, md: 4 },
+          py: { xs: 0, sm: 3, md: 4 },
           px: { xs: 1, sm: 2, md: 3 },
         }}
       >

@@ -96,7 +96,8 @@ const PredictionGameDashboard = () => {
         py: { xs: 2, sm: 2.5 },
         px: { xs: 2, sm: 3, md: 4 },
         color: 'white',
-        boxShadow: 1
+        boxShadow: 1,
+        marginTop: { sm: 4}
       }}
       >
         <Box sx={{ 

@@ -18,14 +18,14 @@ import { db } from '../../config/firebaseConfig';
  */
 export const getMatchCommunityStats = async (matchId) => {
   try {
-    console.log(`[CommunityStats] Fetching stats for match: ${matchId}`);
+    
     const q = query(
       collection(db, 'predictions'),
       where('matchId', '==', matchId)
     );
 
     const snapshot = await getDocs(q);
-    console.log(`[CommunityStats] Fetched ${snapshot.docs.length} predictions for match ${matchId}`);
+    
     const predictions = snapshot.docs.map((doc) => doc.data());
 
     if (predictions.length === 0) {
@@ -112,9 +112,7 @@ export const getMatchCommunityStats = async (matchId) => {
       homeAwayBias, // Positive = home bias, negative = away bias
     };
   } catch (error) {
-    console.error('[CommunityStats] Error fetching match community stats:', error);
-    console.error('[CommunityStats] Error code:', error.code);
-    console.error('[CommunityStats] Error message:', error.message);
+    
     throw error;
   }
 };

@@ -80,8 +80,15 @@ const MyPredictionsPage = () => {
     ...upcomingMatches.reduce((acc, match) => { acc[match.id] = match; return acc; }, {})
   };
 
-  const unscoredPredictions = predictions.filter((p) => p.points === 0);
-  const scoredPredictions = predictions.filter((p) => p.points > 0);
+  // Predictions are "unscored" if match is not finished yet, "scored" once match is finished (regardless of points)
+  const unscoredPredictions = predictions.filter((p) => {
+    const match = matchMap[p.matchId];
+    return !match || match.status !== 'FINISHED';
+  });
+  const scoredPredictions = predictions.filter((p) => {
+    const match = matchMap[p.matchId];
+    return match && match.status === 'FINISHED';
+  });
 
   // Filter predictions based on search and filters
   const getFilteredPredictions = (predictionsList) => {

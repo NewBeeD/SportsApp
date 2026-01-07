@@ -35,24 +35,24 @@ const CommunityPredictions = ({ matchId, match, currentUser }) => {
   const [showScorelines, setShowScorelines] = useState(false);
 
   useEffect(() => {
-    console.log('[CommunityPredictions] Component mounted with matchId:', matchId);
+    
     if (!matchId) {
-      console.warn('[CommunityPredictions] No matchId provided');
+      
       setLoading(false);
       return;
     }
 
     const fetchStats = async () => {
       try {
-        console.log('[CommunityPredictions] Starting to fetch stats for matchId:', matchId);
+        
         const data = await getMatchCommunityStats(matchId);
         const accuracy = await getPredictionAccuracyRate();
-        console.log('[CommunityPredictions] Data fetched successfully:', data);
+        
         setStats(data);
         setAccuracyRate(accuracy);
         setError(null);
       } catch (err) {
-        console.error('[CommunityPredictions] Error fetching stats:', err);
+        
         setError('Failed to load community predictions');
       } finally {
         setLoading(false);

@@ -185,18 +185,92 @@ const PredictionForm = ({ match, onSubmitSuccess, existingPrediction = null }) =
     );
   }
 
-  // If kickoff has passed or match is live/finished, show community predictions
+  // If kickoff has passed or match is live/finished, show prediction in read-only mode
   if (kickoffPassed) {
     const isMatchLiveOrFinished = match.status === 'LIVE' || match.status === 'FINISHED';
+    const hasPrediction = submitted && homeScore !== '' && awayScore !== '';
+
     return (
       <Box>
-        <Card sx={{ borderRadius: 2 }}>
-          <CardContent sx={{ p: { xs: 1.5, sm: 2, md: 3 } }}>
-            <Alert severity={isMatchLiveOrFinished ? 'info' : 'error'} sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>
-              ⏰ {isMatchLiveOrFinished ? `Match ${match.status.toUpperCase()} - Predictions locked.` : 'Kickoff time has passed. Predictions closed.'}
-            </Alert>
-          </CardContent>
-        </Card>
+        {/* Show user's prediction if they made one */}
+        {hasPrediction && (
+          <Card sx={{ borderRadius: 2, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', mb: 2 }}>
+            <CardContent sx={{ p: { xs: 1.5, sm: 2, md: 3 } }}>
+              <Alert severity="info" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' }, mb: 2 }}>
+                ⏰ {isMatchLiveOrFinished ? `Match ${match.status.toUpperCase()} - Your prediction is locked.` : 'Kickoff has started. Predictions locked.'}
+              </Alert>
+
+              {/* Display predicted scores and teams - READ ONLY */}
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: 600, fontSize: { xs: '0.85rem', sm: '0.95rem' } }}>
+                  📊 Your Prediction
+                </Typography>
+                <Paper elevation={0} sx={{ p: { xs: 1.5, sm: 2 }, backgroundColor: 'rgba(255, 255, 255, 0.1)', borderRadius: 2 }}>
+                  <Grid container spacing={{ xs: 1, sm: 2 }} alignItems="center" justifyContent="center">
+                    <Grid item xs={12} sm="auto" sx={{ textAlign: 'center' }}>
+                      <Typography variant="body2" sx={{ opacity: 0.8, fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
+                        {match.homeTeamName}
+                      </Typography>
+                      <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: { xs: '1.5rem', sm: '2rem' } }}>
+                        {homeScore}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm="auto" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+                      <Typography variant="body2" sx={{ fontSize: { xs: '0.9rem', sm: '1rem' }, opacity: 0.8 }}>
+                        VS
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm="auto" sx={{ textAlign: 'center' }}>
+                      <Typography variant="body2" sx={{ opacity: 0.8, fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
+                        {match.awayTeamName}
+                      </Typography>
+                      <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: { xs: '1.5rem', sm: '2rem' } }}>
+                        {awayScore}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  <Box sx={{ textAlign: 'center', mt: 1.5 }}>
+                    <Chip
+                      label={
+                        predictedOutcome === 'HOME_WIN'
+                          ? `${match.homeTeamName} Win`
+                          : predictedOutcome === 'AWAY_WIN'
+                          ? `${match.awayTeamName} Win`
+                          : 'Draw'
+                      }
+                      color={
+                        predictedOutcome === 'HOME_WIN' || predictedOutcome === 'AWAY_WIN'
+                          ? 'success'
+                          : 'warning'
+                      }
+                      variant="filled"
+                      size={isMobile ? 'small' : 'medium'}
+                      sx={{
+                        fontSize: { xs: '0.7rem', sm: '0.875rem' },
+                      }}
+                    />
+                  </Box>
+                </Paper>
+              </Box>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Show message if no prediction was made */}
+        {!hasPrediction && (
+          <Card sx={{ borderRadius: 2 }}>
+            <CardContent sx={{ p: { xs: 1.5, sm: 2, md: 3 } }}>
+              <Alert severity="warning" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>
+                ⏰ {isMatchLiveOrFinished ? `Match ${match.status.toUpperCase()} - Predictions locked.` : 'Kickoff has started. Predictions closed.'}
+              </Alert>
+              <Box sx={{ mt: 2 }}>
+                <Typography sx={{ fontSize: { xs: '0.85rem', sm: '0.95rem' }, color: 'text.secondary' }}>
+                  You did not make a prediction for this match.
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Show Community Predictions after kickoff */}
         <Box sx={{ mt: { xs: 1.5, sm: 2 } }}>

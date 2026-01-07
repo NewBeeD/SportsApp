@@ -106,7 +106,7 @@ const NavBar = () => {
         // Check if user is admin - force refresh to get latest claims
         try {
           const idTokenResult = await user.getIdTokenResult(true)
-          console.log('[NavBar] ID Token Claims:', idTokenResult.claims)
+          
           setIsAdmin(idTokenResult.claims.admin === true)
         } catch (error) {
           console.error('Error checking admin status:', error)

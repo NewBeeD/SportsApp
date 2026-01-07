@@ -48,6 +48,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MatchCard from '../components/MatchCard';
+import NavBar from '../../components/homePage/NavBar.jsx';
 
 const AdminMatchManagementPage = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -238,7 +239,13 @@ const AdminMatchManagementPage = () => {
   if (!currentUser) {
     return (
       <Container sx={{ py: 4 }}>
-        <Alert severity="warning">Please log in to access admin panel</Alert>
+        <NavBar />
+
+        <Box sx={{ mt: {xs:10, sm: 10} }}>
+          <Alert severity="warning">Please log in to access the Prediction Game.</Alert>
+        </Box>
+
+        
       </Container>
     );
   }
