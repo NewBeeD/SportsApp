@@ -1,0 +1,20 @@
+// theme.js
+export const theme = {
+  palette: {
+    primary: {
+      main: '#222629',
+    },
+    secondary: {
+      main: '#FF6B00',
+    },
+    accent: {
+      main: '#FFD700',
+    }
+  },
+  colors: {
+    color1: '#222629',
+    color2: '#FF6B00',
+    color3: '#FFD700',
+    color4: '#86C232',
+  }
+}

@@ -1,0 +1,27 @@
+{"daba_prem_fixtures": [
+
+  {
+    "Date": "19th March",
+    "Time": "6:00 pm",
+    "Teams": "Dr. Darroux PSC Falcons 1 Vs. D-Treads Blazers 1",
+    "Venue": "Massarce Park"  
+  },
+  {
+    "Date": "19th March",
+    "Time": "8:30 pm",
+    "Teams": "Happi 767 Dominators Vs. Lindo Mart X-Men",
+    "Venue": "Massarce Park"  
+  },
+  {
+    "Date": "19th March",
+    "Time": "6:30 pm",
+    "Teams": "Dr. Mac Prowlers Vs. We Marigot Sunrise",
+    "Venue": "Benjamin Park"  
+  },
+  {
+    "Date": "19th March",
+    "Time": "8:30 pm",
+    "Teams": "Police Sports Club 1 Vs. Paix Bouche Eagles",
+    "Venue": "Benjamin Park"  
+  }
+]}

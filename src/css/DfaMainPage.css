@@ -1,0 +1,16 @@
+
+#root > div > div.MuiBottomNavigation-root.css-qu58q3-MuiBottomNavigation-root > a > button{
+
+  padding-top: 9px;
+}
+
+.MuiBottomNavigationAction-label.MuiBottomNavigationAction-iconOnly.css-1gh6k7f-MuiBottomNavigationAction-label{
+
+  opacity: 100;
+}
+
+.css-155nyw6-MuiButton-endIcon{
+
+  margin-left: 2px !important;
+  margin-right: -10px !important;
+}

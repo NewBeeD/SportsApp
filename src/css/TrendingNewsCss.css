@@ -1,0 +1,21 @@
+/* #root > div > div > div.MuiBox-root.css-16jvekr > div.MuiBox-root.css-0 > div > div:nth-child(1) > div > div.MuiCardHeader-root.css-185gdzj-MuiCardHeader-root > div > span.MuiTypography-root.MuiTypography-h5.MuiCardHeader-title.css-1qvr50w-MuiTypography-root{
+
+  color: blue;
+} */
+
+
+.MuiTypography-root.MuiTypography-h5.MuiCardHeader-title.css-1qvr50w-MuiTypography-root{
+
+  color: #26249B;
+}
+
+.css-cyxlny-MuiPaper-root-MuiDialog-paper {
+
+  margin: 2px !important;
+  width: calc(100% - 10px) !important;
+}
+
+.css-ypiqx9-MuiDialogContent-root{
+
+  padding: 10px 6px !important;
+}

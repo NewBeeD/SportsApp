@@ -1,0 +1,59 @@
+{"daba_premier_league": [
+
+  {
+    "team": "Dr. Darroux PSC Falcons 1",
+    "Played": 6,
+    "Won": 6,
+    "Lost": 0,
+    "Points": 12
+  },
+  {
+    "team": "D-Treads Blazers 1",
+    "Played": 6,
+    "Won": 6,
+    "Lost": 0,
+    "Points": 12
+  },
+  {
+    "team": "Happi 767 Dominators",
+    "Played": 6,
+    "Won": 4,
+    "Lost": 2,
+    "Points": 10
+  },
+  {
+    "team": "Lindo Mart X-Men",
+    "Played": 7,
+    "Won": 3,
+    "Lost": 4,
+    "Points": 10
+  },
+  {
+    "team": "Dr. Mac Prowlers",
+    "Played": 7,
+    "Won": 2,
+    "Lost": 5,
+    "Points": 9
+  },
+  {
+    "team": "Marigot Sunrise",
+    "Played": 6,
+    "Won": 2,
+    "Lost": 4,
+    "Points": 8
+  },
+  {
+    "team": "Police Sports Club 1",
+    "Played": 7,
+    "Won": 1,
+    "Lost": 6,
+    "Points": 7
+  },
+  {
+    "team": "Paix Bouche Eagles",
+    "Played": 7,
+    "Won": 2,
+    "Lost": 5,
+    "Points": 6
+  }
+]}

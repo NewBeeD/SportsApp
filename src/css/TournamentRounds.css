@@ -1,0 +1,15 @@
+/* .hide-rounds svg > g:nth-child(n+2) {
+  display: none;
+} */
+
+/* Change the font size for match texts */
+.BracketMatch__score, .BracketMatch__team {
+  font-size: 14px !important; /* Adjust size */
+  font-weight: bold;
+}
+
+/* Adjust round headers */
+.RoundHeader {
+  font-size: 16px !important;
+  text-transform: uppercase;
+}

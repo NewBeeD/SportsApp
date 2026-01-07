@@ -1,0 +1,113 @@
+{"dfa_premier_league": [
+
+    {
+      "team": "Dublanc FC",
+      "Played": 18,
+      "Won": 15,
+      "Drawn": 2,
+      "Lost": 1,
+      "GF": 68,
+      "GA": 15,
+      "GD": 53,
+      "Points": 47
+    },
+    {
+      "team": "Sagicor South East FC",
+      "Played": 18,
+      "Won": 10,
+      "Drawn": 3,
+      "Lost": 5,
+      "GF": 45,
+      "GA": 27,
+      "GD": 18,
+      "Points": 33
+    },
+    {
+      "team": "Middleham United FC",
+      "Played": 18,
+      "Won": 9,
+      "Drawn": 3,
+      "Lost": 6,
+      "GF": 31,
+      "GA": 24,
+      "GD": 7,
+      "Points": 30
+    },
+    {
+      "team": "Blue Waters Bath Estate FC",
+      "Played": 18,
+      "Won": 7,
+      "Drawn": 5,
+      "Lost": 6,
+      "GF": 20,
+      "GA": 24,
+      "GD": -4,
+      "Points": 26
+    },
+    {
+      "team": "Promex Harlem SC",
+      "Played": 18,
+      "Won": 7,
+      "Drawn": 3,
+      "Lost": 8,
+      "GF": 40,
+      "GA": 32,
+      "GD": 8,
+      "Points": 24
+    },
+    {
+      "team": "Petro Caribe Point Michel FC",
+      "Played": 18,
+      "Won": 7,
+      "Drawn": 5,
+      "Lost": 9,
+      "GF": 39,
+      "GA": 44,
+      "GD": -5,
+      "Points": 23
+    },
+    {
+      "team": "Connect 767 East Central Fc",
+      "Played": 18,
+      "Won": 5,
+      "Drawn": 5,
+      "Lost": 8,
+      "GF": 28,
+      "GA": 37,
+      "GD": -9,
+      "Points": 20
+    },
+    {
+      "team": "Valvoline We United FC",
+      "Played": 18,
+      "Won": 6,
+      "Drawn": 1,
+      "Lost": 11,
+      "GF": 24,
+      "GA": 36,
+      "GD": -12,
+      "Points": 19
+    },
+    {
+      "team": "Bombers FC",
+      "Played": 18,
+      "Won": 5,
+      "Drawn": 4,
+      "Lost": 9,
+      "GF": 25,
+      "GA": 41,
+      "GD": -16,
+      "Points": 19
+    },
+    {
+      "team": "L.A Stars FC",
+      "Played": 18,
+      "Won": 4,
+      "Drawn": 2,
+      "Lost": 12,
+      "GF": 22,
+      "GA": 62,
+      "GD": -40,
+      "Points": 14
+    }
+  ]}

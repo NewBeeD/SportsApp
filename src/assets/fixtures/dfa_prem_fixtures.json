@@ -1,0 +1,38 @@
+{"dfa_prem_fixtures": [
+
+  {
+    "Date": "19th March",
+    "Time": "4:00 pm",
+    "Team1": "East Central",
+    "Team2": "We United",
+    "Venue": "Benjamins Park"  
+  },
+  {
+    "Date": "19th March",
+    "Time": "6:30 pm",
+    "Team1": "Dublanc Fc",
+    "Team2": "Bombers Fc",
+    "Venue": "Benjamins Park"  
+  },
+  {
+    "Date": "19th March",
+    "Time": "4:30 pm",
+    "Team1": "Middleham United",
+    "Team2": "We Sagicor South East Fc",
+    "Venue": "StockFarm"  
+  },
+  {
+    "Date": "19th March",
+    "Time": "6:30 pm",
+    "Team1": "Blue Waters Bathestate Fc",
+    "Team2": "Promex Harlem",
+    "Venue": "StockFarm"  
+  },
+  {
+    "Date": "20th March",
+    "Time": "6:30 pm",
+    "Team1": "Petro Caribe Point Michel Fc",
+    "Team2": "Mahaut Fc",
+    "Venue": "StockFarm"  
+  }
+]}
