@@ -32,7 +32,7 @@ import GameweekStatsPage from './GameweekStatsPage';
 import { useUserLeaderboardPosition } from '../hooks/useLeaderboard.jsx';
 
 
-import NavBar from '../../components/homepage/NavBar.jsx';
+import NavBar from '../../components/homePage/NavBar.jsx';
 
 const PredictionGameDashboard = () => {
   const theme = useTheme();
