@@ -73,7 +73,11 @@ const PredictionGameDashboard = () => {
           alignItems: 'center',
         }}
       >
-        <Alert severity="warning">Please log in to access the Prediction Game.</Alert>
+        <NavBar />
+
+        <Box sx={{ mt: {xs:10, sm: 20} }}>
+          <Alert severity="warning">Please log in to access the Prediction Game.</Alert>
+        </Box>
       </Container>
     );
   }

@@ -50,6 +50,13 @@ const navItems = [
     external: false,
     icon: <SportsIcon />
   },
+  { 
+    id: 7, 
+    label: 'Admin', 
+    path: '/Admin/Matches', 
+    external: true,
+    icon: <SportsIcon />
+  },
 ]
 
 const NavBar = () => {
@@ -59,6 +66,7 @@ const NavBar = () => {
   const [visible, setVisible] = useState(true)
   const [userSignedIn, setUserSignedIn] = useState(false)
   const [userProfile, setUserProfile] = useState(null)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   // Handle drawer
   const toggleDrawer = (open) => (event) => {
@@ -87,7 +95,7 @@ const NavBar = () => {
 
   // Handle authentication state
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUserSignedIn(!!user)
       if (user) {
         setUserProfile({
@@ -95,8 +103,18 @@ const NavBar = () => {
           email: user.email,
           photoURL: user.photoURL
         })
+        // Check if user is admin - force refresh to get latest claims
+        try {
+          const idTokenResult = await user.getIdTokenResult(true)
+          console.log('[NavBar] ID Token Claims:', idTokenResult.claims)
+          setIsAdmin(idTokenResult.claims.admin === true)
+        } catch (error) {
+          console.error('Error checking admin status:', error)
+          setIsAdmin(false)
+        }
       } else {
         setUserProfile(null)
+        setIsAdmin(false)
       }
     })
 
@@ -172,6 +190,11 @@ const NavBar = () => {
       {/* Navigation items */}
       <List sx={{ flexGrow: 1, p: 0 }}>
         {navItems.map((item) => {
+          // Skip Admin link if user is not admin
+          if (item.label === 'Admin' && !isAdmin) {
+            return null
+          }
+
           if (item.external) {
             return (
               <ListItem
@@ -384,6 +407,11 @@ const NavBar = () => {
               }}
             >
               {navItems.map((item) => {
+                // Skip Admin link if user is not admin
+                if (item.label === 'Admin' && !isAdmin) {
+                  return null
+                }
+
                 if (item.external) {
                   return (
                     <Button
