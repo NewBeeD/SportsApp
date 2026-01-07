@@ -8,6 +8,9 @@ import HomePage from "./pages/HomePage"
 import Article from "./pages/Article"
 import "./App.css"
 import DFA from './pages/DFA/DFA'
+import Footer from './components/Footer/Footer'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import TermsOfService from './pages/TermsOfService'
 
 
 import PlayerProfile from './pages/DFA/PlayerProfile'
@@ -101,9 +104,13 @@ const isAboveSM = useMediaQuery(theme.breakpoints.up('sm'));
         <Route path='/PredictionGame' element={<PredictionGameDashboard />} />
         <Route path='/Admin/Matches' element={<AdminMatchManagementPage />} />
 
-
+        {/* Policy Pages */}
+        <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+        <Route path='/terms-of-service' element={<TermsOfService />} />
 
       </Routes>
+
+      <Footer />
 
       {/* <ReactQueryDevtools initialIsOpen={false} />      */}
     </div>

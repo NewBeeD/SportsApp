@@ -1,0 +1,63 @@
+.footer-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--color-accent, #00ff88), 
+    transparent
+  );
+  opacity: 0.5;
+}
+
+/* Smooth animations for links */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer-section {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.footer-section:nth-child(1) { animation-delay: 0.1s; }
+.footer-section:nth-child(2) { animation-delay: 0.2s; }
+.footer-section:nth-child(3) { animation-delay: 0.3s; }
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .footer-wrapper {
+    text-align: center;
+  }
+  
+  .footer-wrapper::before {
+    background: linear-gradient(90deg, 
+      transparent, 
+      var(--color-accent, #00ff88), 
+      transparent
+    );
+    opacity: 0.3;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .footer-wrapper {
+    background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%) !important;
+  }
+}

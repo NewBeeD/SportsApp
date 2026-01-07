@@ -406,7 +406,7 @@ const InlineTableLegend = () => {
             <TableBody>
               {premierTable.map(row => (
 
-                <TableRow key={row.team} sx={{ border: 0}}>
+                <TableRow key={row.ID} sx={{ border: 0}}>
 
                   <TableCell sx={{ fontSize: {xs: 12}, paddingY: 0.5, fontWeight: 'bold'}}>{row.Team}</TableCell>
                   <TableCell sx={{ fontSize: {xs: 12}, paddingY: 0.5, fontWeight: 'bold'}}>{row.Played}</TableCell>

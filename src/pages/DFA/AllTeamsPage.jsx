@@ -229,7 +229,7 @@ const AllTeamsPage = () => {
           </Box>
         </Box>
         
-        <Footer />
+        {/* <Footer /> */}
       </Box>
     </>
   );
