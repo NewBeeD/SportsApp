@@ -16,6 +16,7 @@ import Divider from '@mui/material/Divider';
 import { signInWithPopup, createUserWithEmailAndPassword } from 'firebase/auth'
 
 import { auth, googleProvider } from '../config/firebaseConfig'
+import { trackUserSignUp } from '../utils/analyticsEvents'
 
 import { useState, useEffect } from 'react'
 
@@ -38,7 +39,7 @@ const Signup = () => {
 
     try{
       await signInWithPopup(auth, googleProvider).then((userCredentials)=>{
-
+        trackUserSignUp('google')
         navigation('/')
       })
     }
@@ -51,7 +52,7 @@ const Signup = () => {
 
     try{
       await createUserWithEmailAndPassword(auth, email, password).then((userCredentials)=>{
-
+        trackUserSignUp('email')
         console.log(userCredentials);
         navigation('/')
       })

@@ -15,6 +15,7 @@ import Paper from '@mui/material/Paper';
 import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,  createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 
 import { auth, googleProvider } from '../config/firebaseConfig'
+import { trackUserLogin } from '../utils/analyticsEvents'
 
 import { useState, useEffect } from 'react'
 
@@ -37,7 +38,7 @@ const Login = () => {
 
     try{
       await signInWithPopup(auth, googleProvider).then((userCredentials)=>{
-
+        trackUserLogin('google')
         navigation('/')
       })
     }
@@ -50,7 +51,7 @@ const Login = () => {
 
     try{
       await signInWithEmailAndPassword(auth, email, password).then((userCredentials)=>{
-
+        trackUserLogin('email')
 
         navigation('/')
       })

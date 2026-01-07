@@ -1,5 +1,6 @@
 // src/GamePrediction/pages/PredictionGameDashboard.jsx
 import React, { useState, useEffect } from 'react';
+import { trackPredictionGameStarted } from '../../utils/analyticsEvents';
 import {
   Container,
   Box,
@@ -48,6 +49,13 @@ const PredictionGameDashboard = () => {
     });
     return () => unsubscribe();
   }, []);
+
+  // Track prediction game visit
+  useEffect(() => {
+    if (currentUser) {
+      trackPredictionGameStarted();
+    }
+  }, [currentUser]);
 
   // Fetch user's leaderboard position for stats
   const { position: leaderboardPosition } = useUserLeaderboardPosition(

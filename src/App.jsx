@@ -1,5 +1,8 @@
-import { Route, Routes} from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { useMediaQuery, useTheme } from '@mui/material';
+import { useEffect } from 'react';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from './config/firebaseConfig';
 
 import HomePage from "./pages/HomePage"
 import Article from "./pages/Article"
@@ -42,6 +45,15 @@ function App() {
 
   const theme = useTheme();
 const isAboveSM = useMediaQuery(theme.breakpoints.up('sm'));
+  const location = useLocation();
+
+  // Track page views
+  useEffect(() => {
+    logEvent(analytics, 'page_view', {
+      page_path: location.pathname,
+      page_title: document.title,
+    });
+  }, [location.pathname]);
 
 
 

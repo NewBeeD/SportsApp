@@ -48,6 +48,8 @@ const auth = getAuth(app)
 export const googleProvider = new GoogleAuthProvider()
 const analytics = getAnalytics(app);
 
+export { analytics };
+
 
 // Collections
 const collections = {

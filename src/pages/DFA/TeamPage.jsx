@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
+import { trackTeamViewed } from "../../utils/analyticsEvents"
 import qs from 'qs'
 import axios from "axios"
 
@@ -170,6 +171,7 @@ const TeamPage = () => {
 
         const result = TeamDataStructure(response.data.data)
         setData(result)
+        trackTeamViewed(result.name, 'DFA')
       } catch (error) {
         setError(error.message)
         console.error('Error fetching team data:', error)

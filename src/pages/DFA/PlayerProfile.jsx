@@ -803,6 +803,9 @@ const PlayerProfile = () => {
   const [activeTab, setActiveTab] = useState(0)
   const [seasonStats, setseasonStats] = useState(0)
 
+  // Import analytics tracking
+  const { trackPlayerProfileViewed } = require('../../utils/analyticsEvents')
+
   const getPositionCategory = (position) => {
     const categories = {
       'GK': { label: 'Goalkeeper', color: 'error', isGoalkeeper: true },
@@ -850,6 +853,7 @@ const PlayerProfile = () => {
 
         
         setData(result)
+        trackPlayerProfileViewed(result.name, 'DFA')
       } catch (error) {
         setError(error.message)
         console.error('Error fetching player data:', error)
