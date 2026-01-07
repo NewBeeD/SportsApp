@@ -200,7 +200,7 @@ const PredictionForm = ({ match, onSubmitSuccess, existingPrediction = null }) =
 
         {/* Show Community Predictions after kickoff */}
         <Box sx={{ mt: { xs: 1.5, sm: 2 } }}>
-          <CommunityPredictions matchId={match.id || match.matchId} match={match} />
+          <CommunityPredictions matchId={match.id || match.matchId} match={match} currentUser={currentUser} />
         </Box>
       </Box>
     );
@@ -300,7 +300,7 @@ const PredictionForm = ({ match, onSubmitSuccess, existingPrediction = null }) =
 
         {/* Show Community Predictions, Key Analytics, and Top Scorelines */}
         <Box sx={{ mt: { xs: 1.5, sm: 2 } }}>
-          <CommunityPredictions matchId={match.id || match.matchId} match={match} />
+          <CommunityPredictions matchId={match.id || match.matchId} match={match} currentUser={currentUser} />
         </Box>
       </Box>
     );
@@ -523,7 +523,7 @@ const PredictionForm = ({ match, onSubmitSuccess, existingPrediction = null }) =
 
       {/* Show Community Predictions below the form */}
       <Box sx={{ mt: { xs: 1.5, sm: 2, md: 3 } }}>
-        <CommunityPredictions matchId={match.id || match.matchId} match={match} />
+        <CommunityPredictions matchId={match.id || match.matchId} match={match} currentUser={currentUser} />
       </Box>
     </Box>
   );

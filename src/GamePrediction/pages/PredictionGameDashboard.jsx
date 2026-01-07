@@ -63,11 +63,14 @@ const PredictionGameDashboard = () => {
   if (!currentUser) {
     return (
       <Container
+        maxWidth="lg"
         sx={{
+          width: '99%',
           py: { xs: 2, md: 4 },
-          px: { xs: '1px', sm: 2 },
-          width: { xs: '99vw', sm: '100%' },
-          maxWidth: { xs: '99vw', sm: 'lg' },
+          px: { xs: 1, sm: 2 },
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <Alert severity="warning">Please log in to access the Prediction Game.</Alert>
@@ -133,11 +136,10 @@ const PredictionGameDashboard = () => {
       <Container
         maxWidth="lg"
         sx={{
+          width: '99%',
           py: { xs: 1.5, sm: 2, md: 4 },
-          px: { xs: '1px', sm: 2, md: 3 },
-          width: { xs: '99vw', sm: '100%' },
+          px: { xs: 1, sm: 2, md: 3 },
           overflow: 'hidden'
-          
         }}
       >
         {/* User Stats Card */}

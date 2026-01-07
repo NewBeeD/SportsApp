@@ -12,9 +12,9 @@ const LeaderboardPage = () => {
       <Container 
         maxWidth="lg" 
         sx={{ 
+          width: '99%',
           py: { xs: 2, sm: 3, md: 4 },
-          px: { xs: '1px', sm: 2 },
-          width: { xs: '99vw', sm: '100%' },
+          px: { xs: 1, sm: 2, md: 3 },
         }}
       >
         <Box sx={{ mb: { xs: 2, sm: 3 } }}>

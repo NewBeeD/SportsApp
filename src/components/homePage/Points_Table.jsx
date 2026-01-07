@@ -137,9 +137,9 @@ const InlineTableLegend = () => {
             </TableHead>
 
             <TableBody>
-              {premierTable.slice(0, 5).map((row, idx) => (
+              {premierTable.slice(0, 5).map((row) => (
 
-                <TableRow key={idx} sx={{ border: 0}}>
+                <TableRow key={row.ID} sx={{ border: 0}}>
 
                   <TableCell sx={{ fontSize: {xs: 12}, paddingY: 0.5, fontWeight: 'bold'}}>{row.Team}</TableCell>
                   <TableCell sx={{ fontSize: {xs: 12}, paddingY: 0.5, fontWeight: 'bold'}}>{row.Played}</TableCell>
@@ -213,7 +213,7 @@ const InlineTableLegend = () => {
             <TableBody>
               {premierTable.map((row, idx) => (
 
-                <TableRow key={idx} sx={{ border: 0}}>
+                <TableRow key={row.ID} sx={{ border: 0}}>
 
                   <TableCell sx={{ fontSize: {xs: 12}, paddingY: 0.5, paddingleft:10, textAlign: 'left'}}>{idx + 1}.</TableCell>
 
@@ -332,9 +332,8 @@ const InlineTableLegend = () => {
     
             <TableBody>
               {divOneTable.filter(item => item.Group === selectedOption).map((row, idx) => (
-    
-                <TableRow key={idx} sx={{ border: 0}}>
-    
+
+                <TableRow key={row.ID} sx={{ border: 0}}>
                   <TableCell sx={{ fontSize: {xs: 12}, paddingY: 0.5, paddingleft:10, textAlign: 'left'}}>{idx + 1}.</TableCell>
     
                   <TableCell sx={{ fontSize: {xs: 12}, paddingY: 0.5, fontWeight: 900, paddingLeft:0.5, textAlign: 'left', }}>

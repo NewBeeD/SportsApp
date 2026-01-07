@@ -81,7 +81,7 @@ const GameweekStatsPage = ({ userId }) => {
   const avgGameweekPoints = stats.length > 0 ? (totalGameweekPoints / stats.length).toFixed(1) : 0;
 
   return (
-    <Box sx={{ width: '100%', px: { xs: '1px', sm: 2, md: 3 } }}>
+    <Box sx={{ width: '100%', px: { xs: 1, sm: 2, md: 3 } }}>
       {/* Get the latest gameweek from stats */}
       {stats.length > 0 && (
         <Box sx={{ mb: { xs: 2, sm: 3, md: 4 } }}>

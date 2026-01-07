@@ -51,10 +51,13 @@ const PredictionPage = () => {
   if (!matches || matches.length === 0) {
     return (
       <Container
+        maxWidth="lg"
         sx={{
+          width: '99%',
           py: { xs: 2, md: 4 },
-          px: { xs: '1px', sm: 2 },
-          width: { xs: '99vw', sm: '100%' },
+          px: { xs: 1, sm: 2 },
+          display: 'flex',
+          justifyContent: 'center',
         }}
       >
         <Alert severity="info">No upcoming matches available for predictions.</Alert>
@@ -64,14 +67,12 @@ const PredictionPage = () => {
 
   return (
     <Box>
-      <Toolbar /> {/* Spacing for fixed AppBar */}
-
       <Container
         maxWidth="lg"
         sx={{
+          width: '99%',
           py: { xs: 1, sm: 2, md: 3 },
-          px: { xs: '1px', sm: 2 },
-          width: { xs: '99vw', sm: '100%' },
+          px: { xs: 1, sm: 2 },
         }}
       >
         <Box sx={{ mb: { xs: 2, sm: 3, md: 4 } }}>
@@ -83,7 +84,7 @@ const PredictionPage = () => {
           </Typography>
         </Box>
 
-        <Grid container spacing={{ xs: 6, sm: 0, md: 0 }}>
+        <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }}>
           {matches.map((match) => (
             <Grid item xs={12} sm={12} md={6} lg={4} key={match.id}>
               <PredictionForm

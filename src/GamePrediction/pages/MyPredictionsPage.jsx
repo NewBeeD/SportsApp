@@ -149,9 +149,9 @@ const MyPredictionsPage = () => {
     return (
       <Container 
         sx={{
+          width: '99%',
           py: { xs: 3, md: 6 },
-          px: { xs: '1px', sm: 2 },
-          width: { xs: '99vw', sm: '100%' },
+          px: { xs: 1, sm: 2, md: 3 },
           minHeight: '70vh',
           display: 'flex',
           alignItems: 'center'
@@ -182,9 +182,9 @@ const MyPredictionsPage = () => {
       <Container
         maxWidth="lg"
         sx={{
+          width: '99%',
           py: { xs: 1.5, sm: 2, md: 3 },
-          px: { xs: '1px', sm: 2 },
-          width: { xs: '99vw', sm: '100%' },
+          px: { xs: 1, sm: 2, md: 3 },
         }}
       >
         {/* Header */}

@@ -23,7 +23,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { getMatchCommunityStats, getPredictionAccuracyRate } from '../services/communityStatsService';
 
-const CommunityPredictions = ({ matchId, match }) => {
+const CommunityPredictions = ({ matchId, match, currentUser }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [stats, setStats] = useState(null);
@@ -35,21 +35,25 @@ const CommunityPredictions = ({ matchId, match }) => {
   const [showScorelines, setShowScorelines] = useState(false);
 
   useEffect(() => {
+    console.log('[CommunityPredictions] Component mounted with matchId:', matchId);
     if (!matchId) {
+      console.warn('[CommunityPredictions] No matchId provided');
       setLoading(false);
       return;
     }
 
     const fetchStats = async () => {
       try {
+        console.log('[CommunityPredictions] Starting to fetch stats for matchId:', matchId);
         const data = await getMatchCommunityStats(matchId);
         const accuracy = await getPredictionAccuracyRate();
+        console.log('[CommunityPredictions] Data fetched successfully:', data);
         setStats(data);
         setAccuracyRate(accuracy);
         setError(null);
       } catch (err) {
+        console.error('[CommunityPredictions] Error fetching stats:', err);
         setError('Failed to load community predictions');
-        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -67,6 +71,17 @@ const CommunityPredictions = ({ matchId, match }) => {
   }
 
   if (error || !stats) {
+    if (error) {
+      return (
+        <Card sx={{ mt: 2, backgroundColor: '#ffebee' }}>
+          <CardContent>
+            <Typography variant="body2" color="error" sx={{ textAlign: 'center' }}>
+              ⚠️ {error}
+            </Typography>
+          </CardContent>
+        </Card>
+      );
+    }
     return null;
   }
 
