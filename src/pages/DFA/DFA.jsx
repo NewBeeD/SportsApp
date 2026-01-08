@@ -1,4 +1,3 @@
-import NavBar from "../../components/homePage/NavBar"
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useNavigate } from "react-router-dom";
 
@@ -388,8 +387,6 @@ const DFA = () => {
       <>
 
       {/* <GetDFA /> */}
-  
-      <NavBar />
 
       {/* <Box sx={{display: 'flex', flexDirection: 'column', justify: 'center', alignItems: 'center'}}>
         <Typography style={{ color: `var(--color-color2, ${theme.colors.color2})`}} marginTop={{xs: 2}} marginBottom={{xs: 2}} variant="h5" sx={{ textAlign: 'center', fontWeight: 900}}>Dominica Football Association</Typography>
@@ -517,8 +514,6 @@ const DFA = () => {
     return (
       <>
   
-      <NavBar />
-
       <Box paddingTop={2} />
 
       <Box>
@@ -646,8 +641,6 @@ const DFA = () => {
     return (
       <>
   
-      <NavBar />
-
       <Box >
 
         <TabContext value={valueDiv}>
@@ -759,8 +752,6 @@ const DFA = () => {
     return (
       <>
   
-      <NavBar />
-
       <Box >
 
         <TabContext value={valueStats}>
@@ -1179,8 +1170,6 @@ const DFA = () => {
     return (
       <>
   
-      <NavBar />
-
       <Box>
         <TabContext value={valuePlayers}>
 

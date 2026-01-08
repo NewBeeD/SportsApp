@@ -4,7 +4,6 @@ import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Table
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-import NavBar from '../../../components/homePage/NavBar';
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 import { useState, useEffect } from 'react';
@@ -135,8 +134,6 @@ const DivisionOneStatsPage = () => {
   return (
 
     <Box>
-
-      <NavBar />  
 
       <Box width={{sm: 900}} margin='auto' height='100vh'>
 

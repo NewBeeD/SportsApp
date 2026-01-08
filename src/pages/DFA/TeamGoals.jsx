@@ -29,11 +29,6 @@ import TableCell from '@mui/material/TableCell';
 
 
 
-import NavBar from "../../components/homePage/NavBar"
-
-
-
-
 const TeamGoals = () => {
 
 
@@ -146,8 +141,6 @@ const TeamGoals = () => {
 
   return (
     <Box width={{xs:'100%', sm: 800}} sx={{margin: {xs: 0, sm: 'auto'}}}>
-
-    <NavBar />
 
 
     <Box marginBottom={3} paddingLeft={{ xs: 1}} paddingTop={4}>

@@ -1,5 +1,3 @@
-import NavBar from "../../../components/homePage/NavBar"
-
 import { useParams } from "react-router-dom"
 import { useState, useEffect, useMemo } from "react"
 
@@ -116,8 +114,6 @@ const HeadlineArticle = () => {
     return (
 
       <Box width={{xs: '100%', sm: 800, md: 1000}} margin='auto'>
-  
-        <NavBar />
   
           
         <Box margin='auto' width= {{ xs: '90%'}}>

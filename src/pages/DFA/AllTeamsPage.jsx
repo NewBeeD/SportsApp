@@ -23,7 +23,6 @@ import { useState, useEffect } from 'react';
 
 import { queryParams_dfa_teams } from '../../modules/DFA/QueryParams';
 import AllTeamsDataStructure from '../../components/DFAPage/AllTeamsPage/AllTeamsDataStructure';
-import NavBar from '../../components/homePage/NavBar';
 import Footer from '../../components/Footer/Footer';
 import theme from '../../css/theme';
 
@@ -91,7 +90,6 @@ const AllTeamsPage = () => {
   return (
     <>
       <Box display="flex" justifyContent="center" flexDirection="column" alignItems="center" minHeight="100vh">
-        <NavBar />
         
         <Box width={{ xs: '100%', sm: 800, md: 900 }} px={2} py={4}>
           <Box marginTop={4} display="flex" justifyContent="center">

@@ -9,7 +9,6 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 import { useState } from "react";
 
-import NavBar from "../../components/homePage/NavBar"
 import Points_Table from "../../components/homePage/Points_Table"
 
 const LeagueStanding = () => {
@@ -25,8 +24,6 @@ const LeagueStanding = () => {
 
   return (
     <Box >
-
-      <NavBar />
 
       <Box paddingTop={{ sm: 10}} height='100%'>
 

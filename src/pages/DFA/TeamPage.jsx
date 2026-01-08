@@ -46,7 +46,6 @@ import {
   ArrowBack as ArrowBackIcon
 } from '@mui/icons-material'
 
-import NavBar from "../../components/homePage/NavBar"
 import { queryParams_dfa_teams } from "../../modules/DFA/QueryParams"
 import TeamDataStructure from "../../modules/DFA/TeamPage/TeamDataStructure"
 
@@ -186,7 +185,6 @@ const TeamPage = () => {
 if (error) {
   return (
     <Box>
-      <NavBar />
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Alert severity="info" sx={{ mb: 2 }}>
           <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
@@ -217,7 +215,6 @@ if (error) {
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-      <NavBar />
       
       <Container maxWidth="lg" sx={{ py: 3 }}>
         {/* Breadcrumbs */}

@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage"
 import Article from "./pages/Article"
 import "./App.css"
 import DFA from './pages/DFA/DFA'
+import NavBar from './components/homePage/NavBar'
 import Footer from './components/Footer/Footer'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
@@ -44,6 +45,9 @@ import AdminMatchManagementPage from '../src/GamePrediction/pages/AdminMatchMana
 
 
 
+
+
+
 function App() {
 
   const theme = useTheme();
@@ -63,6 +67,7 @@ const isAboveSM = useMediaQuery(theme.breakpoints.up('sm'));
   return (
     
     <div className="app-background-color">
+      <NavBar />
 
       <Routes>
 

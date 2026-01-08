@@ -15,8 +15,6 @@ import qs from 'qs'
 import axios from 'axios'
 
 
-import NavBar from '../../components/homePage/NavBar'
-
 import { queryParams_fixtures } from '../../modules/DFA/QueryParams'
 import GroupingFixturesByDate from '../../modules/Homepage/Fixtures/FixturesDisplay'
 
@@ -86,8 +84,6 @@ const FixturesPage = () => {
   return (
 
     <Box>
-
-      <NavBar />
 
       <Box width={{sm: 800, md: 900}} margin='auto' paddingTop={3}>
 

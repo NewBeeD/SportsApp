@@ -1,5 +1,4 @@
 import { Box, Stack } from "@mui/material"
-import NavBar from "../components/homePage/NavBar"
 import MainNews from "../components/homePage/MainNews"
 import TrendingSection from "../components/homePage/TrendingSection"
 import Points_Table from "../components/homePage/Points_Table"
@@ -33,7 +32,6 @@ const HomePage = () => {
 
     <Box >
 
-      <NavBar />
       <Box marginTop={7} />
 
       <Box width={{xs:'100%', sm: 800, md: 1200}} sx={{margin: {xs: 0, sm: 'auto'}}}>

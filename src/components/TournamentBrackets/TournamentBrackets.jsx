@@ -6,9 +6,6 @@ import useResizeObserver from "use-resize-observer";
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-
-
-import NavBar from '../homePage/NavBar';
 import { Stack } from '@mui/material';
 
 
@@ -2349,8 +2346,6 @@ const TournamentBrackets = () => {
   return (
 
     <Box height='100%' ref={ref} sx={{ backgroundImage: `url("https://cdn.britannica.com/69/228369-050-0B18A1F6/Asian-Cup-Final-2019-Hasan-Al-Haydos-Qatar-Japan-Takumi-Minamino.jpg")` }}>
-
-      <NavBar />
 
       <Box paddingTop={4}>
 

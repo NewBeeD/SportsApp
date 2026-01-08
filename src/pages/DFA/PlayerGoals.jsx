@@ -29,8 +29,6 @@ import TableCell from '@mui/material/TableCell';
 import { useState, useEffect } from 'react';
 
 
-import NavBar from "../../components/homePage/NavBar"
-
 function Sort(a, b){
 
   return b.Goals - a.Goals
@@ -98,8 +96,6 @@ const PlayerGoals = () => {
   
   return (
     <Box  width={{xs:'100%', sm: 800}} sx={{margin: {xs: 0, sm: 'auto'}}}>
-
-      <NavBar />
 
       
 

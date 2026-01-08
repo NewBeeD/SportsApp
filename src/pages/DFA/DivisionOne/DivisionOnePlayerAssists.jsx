@@ -21,7 +21,6 @@ import TableCell from '@mui/material/TableCell';   // ~30KB
 
 import theme from '../../../css/theme';
 
-import NavBar from '../../../components/homePage/NavBar';
 import { queryParams_prem_players_stats } from '../../../modules/DFA/QueryParams';
 import DivisionOnePlayerStatsDisplayStructure from '../../../modules/DFA/DivOne/DivisionOnePlayerStatsDisplay';
 
@@ -93,8 +92,6 @@ const DivisionOnePlayerAssists = () => {
 
   return (
     <Box width={{xs:'100%', sm: 800}} sx={{margin: {xs: 0, sm: 'auto'}}}>
-
-      <NavBar />
 
       <Box marginBottom={3} paddingLeft={{ xs: 1}} paddingTop={{ sm: 4}}>
         <Typography variant='h5' sx={{ fontWeight: 'bold'}}>Most Assists</Typography>

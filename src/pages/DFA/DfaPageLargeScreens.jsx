@@ -8,7 +8,6 @@ import theme from '../../css/theme';
 
 import GetDFA from "../../modules/DFA/AllDfaData";
 
-import NavBar from '../../components/homePage/NavBar'
 import DfaArticles from "../../components/DFAPage/DfaArticles";
 
 import Points_Table from '../../components/homePage/Points_Table';
@@ -59,8 +58,6 @@ const DfaPageLargeScreens = () => {
     paddingTop={10}
     >
       
-      <NavBar />
-
 
       <Box 
       // width={{ sm: 800, md: 1100}} 

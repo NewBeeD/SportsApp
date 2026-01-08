@@ -32,9 +32,6 @@ import LeaderboardPage from './LeaderboardPage';
 import GameweekStatsPage from './GameweekStatsPage';
 import { useUserLeaderboardPosition } from '../hooks/useLeaderboard.jsx';
 
-
-import NavBar from '../../components/homePage/NavBar.jsx';
-
 const PredictionGameDashboard = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -81,8 +78,6 @@ const PredictionGameDashboard = () => {
           alignItems: 'center',
         }}
       >
-        <NavBar />
-
         <Box sx={{ mt: {xs:10, sm: 20} }}>
           <Alert severity="warning">Please log in to access the Prediction Game.</Alert>
         </Box>
@@ -93,11 +88,8 @@ const PredictionGameDashboard = () => {
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
 
-      <NavBar />
-
-
       {/* Header Section */}
-    <Box 
+      <Box 
       component="header"
       sx={{ 
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',

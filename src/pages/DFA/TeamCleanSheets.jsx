@@ -24,8 +24,6 @@ import TableCell from '@mui/material/TableCell';
 
 import TeamCleanSheetsStructure from '../../modules/DFA/PlayerStats/MostTeamCleanSheets'
 
-import NavBar from "../../components/homePage/NavBar"
-
 function Sort(a, b){
 
   return b.totalCleanSheets - a.totalCleanSheets
@@ -144,9 +142,7 @@ const TeamCleanSheets = () => {
 
     <Box width={{xs:'100%', sm: 800}} sx={{margin: {xs: 0, sm: 'auto'}}}>
 
-      <NavBar />
-
-
+      
       
       <Box marginBottom={3} paddingLeft={{ xs: 1}} paddingTop={4}>
         <Typography variant='h5' sx={{ fontWeight: 'bold'}}>Clean Sheets</Typography>

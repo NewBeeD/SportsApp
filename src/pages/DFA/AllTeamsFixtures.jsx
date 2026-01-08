@@ -8,7 +8,6 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 import { useState } from "react";
 
-import NavBar from '../../components/homePage/NavBar';
 import FixturesData from '../../components/homePage/Fixtures';
 
 
@@ -35,9 +34,6 @@ const AllTeamsFixtures = () => {
   
   return (
     <>
-
-
-    <NavBar />
 
 
 

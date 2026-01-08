@@ -713,7 +713,6 @@ import {
   Security as SecurityIcon // Added for clean sheets
 } from '@mui/icons-material'
 
-import NavBar from "../../components/homePage/NavBar"
 import { queryParams_prem_players } from "../../modules/DFA/QueryParams"
 import { queryParams_prem_players_season_stats } from "../../modules/DFA/QueryParams"
 import SinglePlayerDisplay from "../../modules/DFA/PlayerStats/SinglePlayerDispl/SinglePlayerDisplay"
@@ -930,7 +929,6 @@ const PlayerProfile = () => {
   if (error) {
     return (
       <Box>
-        <NavBar />
         <Container maxWidth="lg" sx={{ py: 4 }}>
           <Alert severity="error" sx={{ mb: 2 }}>
             Failed to load player data: {error}
@@ -984,7 +982,6 @@ const PlayerProfile = () => {
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', paddingTop: { sm: '18px' } }}>
-      <NavBar />
       
       <Container maxWidth="lg" sx={{ py: 3 }}>
         {/* Breadcrumbs and Back Button */}

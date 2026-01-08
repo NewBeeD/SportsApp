@@ -1,7 +1,6 @@
 import { Container, Typography, Box, Paper } from "@mui/material"
 import { useEffect } from "react"
 import theme from "../css/theme"
-import NavBar from "../components/homePage/NavBar"
 import "./PolicyPages.css"
 
 const TermsOfService = () => {
@@ -10,9 +9,7 @@ const TermsOfService = () => {
   }, [])
 
   return (
-    <>
-      <NavBar />
-      <Box className="policy-page-wrapper">
+    <Box className="policy-page-wrapper">
       <Container maxWidth="md" className="policy-container">
         {/* Header */}
         <Box className="policy-header">
@@ -230,7 +227,6 @@ const TermsOfService = () => {
         </Paper>
       </Container>
     </Box>
-    </>
   )
 }
 
