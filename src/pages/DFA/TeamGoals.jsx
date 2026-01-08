@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 
 import qs from 'qs'
 import axios from "axios"
+import { Link } from 'react-router-dom';
 
 import { useState, useEffect } from 'react';
 
@@ -18,14 +19,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
-import Paper from '@mui/material/Paper';
-
-import Table from '@mui/material/Table';
-
-import TableHead from '@mui/material/TableHead';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
+import LightweightTable from '../../components/LightweightTable';
 
 
 
@@ -175,37 +169,24 @@ const TeamGoals = () => {
       )}
     </Paper>
 
-    <Paper sx={{ width: {xs: '98%'}, margin: 'auto'}}>
+    <Box sx={{ width: {xs: '98%'}, margin: 'auto'}}>
 
-      <Table sx={{ marginTop: {xs: 2}}}>
+      <LightweightTable 
+        headers={[
+          { label: 'Pos', align: 'center' },
+          { label: 'Club', align: 'left' },
+          { label: 'Goals', align: 'center' }
+        ]}
+        rows={combineData && combineData.slice(1).map((item, idx) => ({
+          cells: [
+            idx + 2,
+            item.teamName,
+            item.totalGoals
+          ]
+        }))}
+      />
 
-        <TableHead>
-          <TableRow>
-            <TableCell>Pos</TableCell>
-            <TableCell>Club</TableCell>
-            <TableCell>Goals</TableCell>
-          </TableRow>
-        </TableHead>
-
-        <TableBody>
-
-          {combineData && combineData.slice(1).map((item, idx) => {
-
-            return (
-              
-              <TableRow key={idx} sx={{ textAlign: 'center'}}>
-
-                <TableCell sx={{ fontWeight: 'bold', paddingY: 0.5, textAlign: 'center'}}>{idx+2}</TableCell>
-                <TableCell sx={{ paddingY: 0.5}}>{item.teamName}</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', paddingY: 0.5, textAlign: 'center'}}>{item.totalGoals}</TableCell>
-              </TableRow>
-            )
-          })}
-
-        </TableBody>
-      </Table>
-
-    </Paper>
+    </Box>
 
     <Box textAlign='center' paddingTop={8} paddingBottom={8}>
       <Typography variant='caption' color='red' letterSpacing={3}>

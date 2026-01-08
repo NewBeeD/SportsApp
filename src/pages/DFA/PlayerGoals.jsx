@@ -17,16 +17,9 @@ import Stack from '@mui/material/Stack';
 
 import Skeleton from '@mui/material/Skeleton';
 
-import Paper from '@mui/material/Paper';
-
-import Table from '@mui/material/Table';
-
-import TableHead from '@mui/material/TableHead';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-
 import { useState, useEffect } from 'react';
+
+import LightweightTable from '../../components/LightweightTable';
 
 
 function Sort(a, b){
@@ -144,47 +137,28 @@ const PlayerGoals = () => {
 
       {players_data && players_data.length > 0 ?
       
-      <Paper sx={{ width: {xs: '98%'}, margin: 'auto'}}>
+      <Box sx={{ width: {xs: '98%'}, margin: 'auto'}}>
 
-        <Table sx={{ marginTop: {xs: 2}}}>
+        <LightweightTable 
+          headers={[
+            { label: 'Pos', align: 'left' },
+            { label: 'Player', align: 'left' },
+            { label: 'Club', align: 'left' },
+            { label: 'Goals', align: 'center' }
+          ]}
+          rows={players_data.filter(item => item.Goals > 0).slice(1).map((item, idx) => ({
+            cells: [
+              idx + 2,
+              <Link key="player" to={`/DFA/Home/Player/${item.Player_ID}`} style={{ textDecoration: 'none', color: 'black', fontWeight: 900}}>
+                {item.Last_Name} {item.First_Name}
+              </Link>,
+              item.team,
+              item.Goals
+            ]
+          }))}
+        />
 
-          <TableHead>
-            <TableRow>
-              <TableCell>Pos</TableCell>
-              <TableCell>Player</TableCell>
-              <TableCell>Club</TableCell>
-              <TableCell>Goals</TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-
-            {players_data && players_data.filter(item => item.Goals > 0 ).slice(1).map((item, idx) => {
-
-              return (
-                
-                <TableRow key={idx}>
-
-                  <TableCell sx={{ fontWeight: 'bold', paddingY: 0.5}}>{idx+2}</TableCell>
-                  <TableCell sx={{ paddingY: 0.5}}>
-
-                    <Link to={`/DFA/Home/Player/${item.Player_ID}`} style={{ textDecoration: 'none', color: 'black', fontWeight: 900}}>
-                    
-                      {item.Last_Name} {item.First_Name}
-                    </Link>
-                    
-                    
-                    </TableCell>
-                  <TableCell sx={{ paddingY: 0.5}}>{item.team}</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', paddingY: 0.5}}>{item.Goals}</TableCell>
-                </TableRow>
-              )
-            })}
-
-          </TableBody>
-        </Table>
-
-      </Paper>
+      </Box>
     : <Skeleton width={300} height={500} sx={{ margin: 'auto'}} />}
 
 

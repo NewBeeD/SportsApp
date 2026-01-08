@@ -15,14 +15,9 @@ import TeamGoalsAssists from '../../modules/DFA/TeamGoalsandAssist/TeamGoalsAssi
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
 
 import TeamCleanSheetsStructure from '../../modules/DFA/PlayerStats/MostTeamCleanSheets'
+import LightweightTable from '../../components/LightweightTable';
 
 function Sort(a, b){
 
@@ -176,37 +171,24 @@ const TeamCleanSheets = () => {
         )}
       </Paper>
 
-      <Paper sx={{ width: {xs: '98%'}, margin: 'auto'}}>
+      <Box sx={{ width: {xs: '98%'}, margin: 'auto'}}>
 
-        <Table sx={{ marginTop: {xs: 2}}}>
+        <LightweightTable 
+          headers={[
+            { label: 'Pos', align: 'center' },
+            { label: 'Club', align: 'left' },
+            { label: 'Clean Sheets', align: 'center' }
+          ]}
+          rows={combineData && combineData.sort(Sort).filter(dataPoint => dataPoint.totalCleanSheets > 0).slice(1).map((item, idx) => ({
+            cells: [
+              idx + 2,
+              item.teamName,
+              item.totalCleanSheets
+            ]
+          }))}
+        />
 
-          <TableHead>
-            <TableRow>
-              <TableCell>Pos</TableCell>
-              <TableCell>Club</TableCell>
-              <TableCell>CleanSheets</TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-
-            {combineData && combineData.sort(Sort).filter(dataPoint => dataPoint.totalCleanSheets > 0).slice(1).map((item, idx) => {
-
-              return (
-                
-                <TableRow key={idx} sx={{ textAlign: 'center'}}>
-
-                  <TableCell sx={{ fontWeight: 'bold', paddingY: 0.5, textAlign: 'center'}}>{idx+2}</TableCell>
-                  <TableCell sx={{ paddingY: 0.5}}>{item.teamName}</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', paddingY: 0.5, textAlign: 'center'}}>{item.totalCleanSheets}</TableCell>
-                </TableRow>
-              )
-            })}
-
-          </TableBody>
-        </Table>
-
-      </Paper>
+      </Box>
 
 
 

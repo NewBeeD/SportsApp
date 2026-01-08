@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux'
 
 import qs from 'qs'
 import axios from "axios"
+import { Link } from 'react-router-dom';
 
 import { useState, useEffect } from 'react';
 
@@ -11,19 +12,11 @@ import Stack from '@mui/material/Stack';
 
 import Skeleton from '@mui/material/Skeleton';
 
-import Paper from '@mui/material/Paper';
-
-import Table from '@mui/material/Table';
-
-import TableHead from '@mui/material/TableHead';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-
 import theme from '../../css/theme';
 
 import { queryParams_prem_players_stats } from '../../modules/DFA/QueryParams';
 import PlayerStatsDisplayStructure from '../../modules/DFA/PlayerStats/PlayerStatsDisplayStructure';
+import LightweightTable from '../../components/LightweightTable';
 
 
 
@@ -147,46 +140,28 @@ const PlayerAssists = () => {
 
       { players_data && players_data.length > 0 ? 
       
-      <Paper sx={{ width: {xs: '98%'}, margin: 'auto'}}>
+      <Box sx={{ width: {xs: '98%'}, margin: 'auto'}}>
 
-        {console.log('Player data', players_data)}
+        <LightweightTable 
+          headers={[
+            { label: 'Pos', align: 'left' },
+            { label: 'Player', align: 'left' },
+            { label: 'Club', align: 'left' },
+            { label: 'Assists', align: 'center' }
+          ]}
+          rows={players_data.filter(item => item.Assists > 0).slice(1).map((item, idx) => ({
+            cells: [
+              idx + 2,
+              <Link key="player" to={`/DFA/Home/Player/${item.Player_ID}`} style={{ textDecoration: 'none', color: 'black', fontWeight: 900}}>
+                {item.Last_Name} {item.First_Name}
+              </Link>,
+              item.team,
+              item.Assists
+            ]
+          }))}
+        />
 
-        <Table sx={{ marginTop: {xs: 2}}}>
-
-          <TableHead>
-            <TableRow>
-              <TableCell>Pos</TableCell>
-              <TableCell>Player</TableCell>
-              <TableCell>Club</TableCell>
-              <TableCell>Assists</TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-
-
-            {players_data && players_data.filter(item => item.Assists > 0).slice(1).map((item, idx) => {
-
-
-              // {console.log('data', item)}
-
-              return (
-
-                
-                <TableRow key={idx}>
-
-                  <TableCell sx={{ fontWeight: 'bold', paddingY: 1}}>{idx+2}</TableCell>
-                  <TableCell sx={{ paddingY: 1}}>{item.Last_Name} {item.First_Name}</TableCell>
-                  <TableCell sx={{ paddingY: 1}}>{item.team}</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', paddingY: 1}}>{item.Assists}</TableCell>
-                </TableRow>
-              )
-            })}
-
-          </TableBody>
-        </Table>
-
-      </Paper>
+      </Box>
     : <Skeleton width={300} height={500} sx={{ margin: 'auto'}}/>
     
     }
