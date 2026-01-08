@@ -28,7 +28,6 @@ import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
 
 import theme from '../../css/theme';
-import Footer from '../../components/Footer/Footer';
 
 import { queryParams_prem_players_stats } from '../../modules/DFA/QueryParams';
 
@@ -153,13 +152,9 @@ const StatsPage = () => {
 
 
   return (
-
-    <Box>
-
-      <Box width={{sm: 900}} margin='auto' height='100vh'>
-
-
-        <Box marginTop={{ sm: 10}}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px)' }}>
+      <Box width={{ sm: 900 }} margin='auto' flex={1}>
+        <Box marginTop={{ sm: 10 }}>
           <Typography variant='h2' fontWeight={900} textAlign='center'>Stats Centre</Typography>
         </Box>
 

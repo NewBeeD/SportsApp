@@ -178,7 +178,7 @@ const Footer = () => {
 
   return (
     <footer className="footer-wrapper" style={{ background: `linear-gradient(180deg, ${theme.colors.color1} 0%, #000000 100%)` }}>
-      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 } }}>
         <Grid container spacing={{ xs: 4, md: 6 }} alignItems="flex-start">
           {/* Logo & Description */}
           <Grid item xs={12} md={4}>
@@ -267,7 +267,7 @@ const Footer = () => {
             }}>
               Quick Links
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               {quickLinks.map((link) => (
                 <MuiLink
                   key={link.label}

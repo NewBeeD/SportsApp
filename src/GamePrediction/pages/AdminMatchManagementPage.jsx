@@ -263,7 +263,7 @@ const AdminMatchManagementPage = () => {
   const finishedMatches = matches.filter((m) => m.status === 'FINISHED');
 
   return (
-    <>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px)' }}>
       <AppBar sx={{ background: 'linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%)' }}>
         <Toolbar>
           <SecurityIcon sx={{ mr: 2 }} />
@@ -281,6 +281,7 @@ const AdminMatchManagementPage = () => {
           py: { xs: 2, sm: 3, md: 4 },
           px: { xs: '1px', sm: 2 },
           width: { xs: '99vw', sm: '100%' },
+          flex: 1,
         }}
       >
         {/* Header with Add Button */}
@@ -522,7 +523,7 @@ const AdminMatchManagementPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Box>
   );
 };
 

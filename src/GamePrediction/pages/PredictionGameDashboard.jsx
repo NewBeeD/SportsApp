@@ -1,6 +1,8 @@
 // src/GamePrediction/pages/PredictionGameDashboard.jsx
 import React, { useState, useEffect } from 'react';
 import { trackPredictionGameStarted } from '../../utils/analyticsEvents';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from '../../config/firebaseConfig';
 import {
   Container,
   Box,
@@ -53,6 +55,15 @@ const PredictionGameDashboard = () => {
       trackPredictionGameStarted();
     }
   }, [currentUser]);
+
+  // Track tab changes
+  useEffect(() => {
+    const tabNames = ['Predictions', 'MyPredictions', 'Leaderboard', 'GameweekStats'];
+    logEvent(analytics, 'prediction_tab_change', {
+      tab_name: tabNames[tabValue],
+      tab_index: tabValue,
+    });
+  }, [tabValue]);
 
   // Fetch user's leaderboard position for stats
   const { position: leaderboardPosition } = useUserLeaderboardPosition(
