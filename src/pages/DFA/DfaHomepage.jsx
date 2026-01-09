@@ -80,7 +80,10 @@ const DfaHomepage = () => {
       <Box sx={{ paddingY: 0 }}>
         <HeadlineFeature />
 
-        
+        {/* Video Section - Featured at top */}
+        <Box marginY={2}>
+          <Video VideoLocation="Homepage1" />
+        </Box>
 
         <Box marginTop={3} height="100%">
           <TabContext value={value}>
@@ -100,13 +103,6 @@ const DfaHomepage = () => {
         </Box>
 
         <DfaArticles level="first" size="small" />
-
-
-        <Box marginY={2}>
-          <Video VideoLocation="Homepage1" />
-        </Box>
-
-
 
         <DfaArticles level="second" size="small" />
 

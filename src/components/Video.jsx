@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 
 import {  Box } from '@mui/material'
 import Typography from '@mui/material/Typography';
+import StarIcon from '@mui/icons-material/Star';
 
 
 import { useEffect, useState } from 'react';
@@ -24,78 +25,8 @@ const Video = ({ VideoLocation }) => {
 
   let videoLocate = VideoLocation
 
-
-
   const [video, setVideo] = useState(null);
   const [videoTitle, setVideoTitle] = useState('');
-
-  let width;
-  let height;
-
-
-
-  const getVideoDimensions = () => {
-    
-    const windowWidth = window.innerWidth;
-
-    let width = windowWidth-20;
-    let height;
-
-    // return {width: windowWidth-20, height: '290'}
-
-    // Adjust these values based on your layout and design preferences
-    if (windowWidth >= 1200) {
-      height= '300'
-    } else if (windowWidth >= 768) {
-      height= '290'
-    }else if (windowWidth >= 530) {
-      height= '280'
-    }else if (windowWidth >= 400) {
-     height= '270'
-    }else if (windowWidth >= 350) {
-     height= '260'
-    }
-    else if (windowWidth >= 300) {
-     height= '250'
-    } 
-    else {
-      height= '450'
-    }
-
-    return {width: width, height: height}
-  };
-
-  switch(VideoLocation){
-
-    case 'Homepage1':
-    case 'Homepage2':
-    case 'Homepage3':
-      width = '100%'
-      height = '300px'
-      break;
-    
-    default:
-      ({width, height} = getVideoDimensions())
-    
-  }
-
-
-  const opts = {
-    playerVars: {
-      // https://developers.google.com/youtube/player_parameters
-      autoplay: 0,
-      controls: 1,
-      fs: 1,
-      iv_load_policy: 3,
-      loop: 1,
-
-    },
-  };
-
-  const onEnd = (event) => {
-    // Manually seek to the beginning when the video ends
-    event.target.seekTo(0);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -145,40 +76,143 @@ const Video = ({ VideoLocation }) => {
   return(
     // Only render if a video was found
     !video ? null : (
-    <Box display='flex' justifyContent='center' alignItems='center' width={{xs: 'inherit'}} style={{ height: '100%'}} >
+    <Box display='flex' justifyContent='center' alignItems='center' width={{xs: 'inherit'}} >
 
       <Box width="100%">
-        {/* Video Title */}
+        {/* Video Title - Modern Gradient Card Design */}
         {videoTitle && (
-          <Typography variant="h5" fontWeight={700} marginBottom={1} textAlign="center">
-            {videoTitle}
-          </Typography>
+          <Box
+            sx={{
+              marginBottom: 2,
+              padding: '20px 24px',
+              background: '#fff',
+              borderRadius: '16px',
+              boxShadow: '0 10px 40px rgba(0, 0, 0, 0.08)',
+              transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              position: 'relative',
+              border: '1px solid rgba(0, 0, 0, 0.05)',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '4px',
+                background: 'linear-gradient(90deg, #00D4FF 0%, #7C3AED 50%, #EC4899 100%)',
+                borderRadius: '16px 16px 0 0',
+              },
+              '&:hover': {
+                boxShadow: '0 20px 60px rgba(124, 58, 237, 0.15)',
+                transform: 'translateY(-8px)',
+                border: '1px solid rgba(124, 58, 237, 0.1)',
+              }
+            }}
+          >
+            <Box display="flex" alignItems="center" gap={2}>
+              <StarIcon 
+                sx={{ 
+                  color: '#7C3AED',
+                  fontSize: '26px',
+                  transition: 'all 0.4s ease',
+                }} 
+              />
+              <Box flex={1}>
+                <Typography 
+                  sx={{
+                    fontSize: { xs: '12px', sm: '13px' },
+                    color: '#7C3AED',
+                    fontWeight: 600,
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase',
+                    marginBottom: '4px'
+                  }}
+                >
+                  Featured Video
+                </Typography>
+                <Typography 
+                  variant="h6" 
+                  sx={{
+                    color: '#1a1a1a',
+                    fontWeight: 700,
+                    letterSpacing: '0.2px',
+                    fontSize: { xs: '16px', sm: '18px' },
+                    background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                  }}
+                >
+                  {videoTitle}
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
         )}
 
-        {/* Video Player */}
-        {video && video.length > 0 ? (
-          // Try to detect if it's a Mux playback ID or YouTube ID
-          video.includes('youtube') || video.match(/^[a-zA-Z0-9_-]{11}$/) ? (
-            // YouTube video
-            <Youtube
-              videoId={video}
-              opts={{ ...opts, width, height }}
-              onReady={(event) => {
-                event.target.pauseVideo();
-              }}
-              onEnd={onEnd}
-            />
-          ) : (
-            // Mux video - assuming video is a Mux playback ID
-            <MuxPlayer
-              playbackId={video}
-              style={{ width: width === '100%' ? '100%' : `${width}px`, height: `${height}px` }}
-              autoPlay={false}
-              controls
-              theme="light"
-            />
-          )
-        ) : ''}
+        {/* Video Player Container - Maintains aspect ratio naturally */}
+        <Box
+          sx={{
+            width: '100%',
+            maxWidth: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#000',
+            borderRadius: '0px',
+            overflow: 'hidden',
+            '& iframe': {
+              width: '100%',
+              height: 'auto',
+              objectFit: 'contain',
+            },
+            '& video': {
+              width: '100%',
+              height: 'auto',
+              objectFit: 'contain',
+            }
+          }}
+        >
+          {/* Video Player */}
+          {video && video.length > 0 ? (
+            // Try to detect if it's a Mux playback ID or YouTube ID
+            video.includes('youtube') || video.match(/^[a-zA-Z0-9_-]{11}$/) ? (
+              // YouTube video
+              <Youtube
+                videoId={video}
+                opts={{ 
+                  playerVars: {
+                    autoplay: 0,
+                    controls: 1,
+                    fs: 1,
+                    iv_load_policy: 3,
+                    loop: 1,
+                  },
+                  width: '100%', 
+                  height: 'auto'
+                }}
+                onReady={(event) => {
+                  event.target.pauseVideo();
+                }}
+                onEnd={(event) => {
+                  event.target.seekTo(0);
+                }}
+              />
+            ) : (
+              // Mux video - maintains natural aspect ratio
+              <MuxPlayer
+                playbackId={video}
+                style={{ 
+                  width: '100%',
+                  maxWidth: '100%',
+                  height: 'auto'
+                }}
+                autoPlay={false}
+                controls
+                theme="light"
+              />
+            )
+          ) : ''}
+        </Box>
       </Box>
 
     </Box>
