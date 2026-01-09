@@ -83,9 +83,5 @@ export default function DfaPoints (){
     })
   })
 
-
-
-
-
+  return null;
 }
-

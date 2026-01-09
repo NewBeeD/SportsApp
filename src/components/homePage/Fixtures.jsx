@@ -288,20 +288,30 @@ const FixtureCard = memo(({ fixture, showLeague = false, showVenue = true, showG
           </Stack>
         )}
 
-        {/* Compact view date/time */}
+        {/* Compact view date/time and venue */}
         {compact && !scoreDisplay && (
-          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: 1 }}>
-            <Stack direction="row" spacing={0.5} alignItems="center">
-              <CalendarToday fontSize="small" sx={{ color: appTheme.colors.success, fontSize: 12 }} />
-              <Typography variant="caption" sx={{ color: appTheme.colors.lightGray }}>
-                {fixture.Date}
-              </Typography>
-            </Stack>
-            <Stack direction="row" spacing={0.5} alignItems="center">
-              <AccessTime fontSize="small" sx={{ color: appTheme.colors.accent, fontSize: 12 }} />
-              <Typography variant="caption" sx={{ color: appTheme.colors.lightGray }}>
-                {fixture.Time}
-              </Typography>
+          <Stack direction="column" spacing={0.5} sx={{ mt: 1 }}>
+            {showVenue && fixture.Venue && fixture.Venue !== 'Cancelled' && (
+              <Stack direction="row" spacing={0.5} alignItems="center">
+                <LocationOn fontSize="small" sx={{ color: appTheme.colors.accent, fontSize: 12 }} />
+                <Typography variant="caption" sx={{ color: appTheme.colors.lightGray }}>
+                  {fixture.Venue}
+                </Typography>
+              </Stack>
+            )}
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Stack direction="row" spacing={0.5} alignItems="center">
+                <CalendarToday fontSize="small" sx={{ color: appTheme.colors.success, fontSize: 12 }} />
+                <Typography variant="caption" sx={{ color: appTheme.colors.lightGray }}>
+                  {fixture.Date}
+                </Typography>
+              </Stack>
+              <Stack direction="row" spacing={0.5} alignItems="center">
+                <AccessTime fontSize="small" sx={{ color: appTheme.colors.accent, fontSize: 12 }} />
+                <Typography variant="caption" sx={{ color: appTheme.colors.lightGray }}>
+                  {fixture.Time}
+                </Typography>
+              </Stack>
             </Stack>
           </Stack>
         )}

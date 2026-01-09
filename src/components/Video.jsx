@@ -9,6 +9,15 @@ import MuxPlayer from '@mux/mux-player-react'
 import VideoStructure from '../modules/Video/VideoStructure';
 import theme from '../css/theme';
 
+// Suppress Media Chrome stylesheet warning from MuxPlayer
+const originalError = console.error;
+console.error = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('Media Chrome: No style sheet found')) {
+    return;
+  }
+  originalError.call(console, ...args);
+};
+
 
 
 
@@ -201,8 +210,7 @@ const Video = ({ VideoLocation }) => {
                   height: 'auto'
                 }}
                 autoPlay={false}
-                controls
-                theme="light"
+                controls={true}
                 onError={(error) => {
                   console.error('Mux player error:', error);
                 }}

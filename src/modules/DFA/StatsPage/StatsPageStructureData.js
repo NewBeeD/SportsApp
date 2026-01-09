@@ -63,15 +63,20 @@ export default function StatsPageStructureData(data) {
     const profilePicAttrs = playerAttrs?.Profile_Pic?.data?.attributes?.formats;
     const leagueAttrs = playerAttrs?.all_league?.data?.attributes;
     const teamAttrs = playerAttrs?.dfa_team?.data?.attributes;
+    const teamData = playerAttrs?.dfa_team?.data;
     
     result[i] = {
+      player_id: playerData?.id,
+      team_id: teamData?.id,
       Player_ID: playerData?.id,
       First_Name: playerAttrs?.First_Name,
       Last_Name: playerAttrs?.Last_Name,
       Season: attr.Season,
       Assists: attr.Assists || 0,
-      Goals: Number(attr.Goals) || 0,
+      Goals: attr.Goals || 0,
       Clean_Sheets: attr.Clean_Sheets || 0,
+      Yellow_Cards: attr.Yellow_Cards || 0,
+      Red_Cards: attr.Red_Cards || 0,
       Foot: playerAttrs?.Foot,
       url: profilePicAttrs?.medium?.url || profilePicAttrs?.small?.url || null,
       league: leagueAttrs?.name || null,
