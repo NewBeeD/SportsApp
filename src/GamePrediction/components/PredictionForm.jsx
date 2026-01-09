@@ -1,5 +1,6 @@
 // src/GamePrediction/components/PredictionForm.jsx
 import React, { useState, useEffect } from 'react';
+import appTheme from '../../css/theme';
 import {
   Card,
   CardContent,
@@ -194,7 +195,7 @@ const PredictionForm = ({ match, onSubmitSuccess, existingPrediction = null }) =
       <Box>
         {/* Show user's prediction if they made one */}
         {hasPrediction && (
-          <Card sx={{ borderRadius: 2, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', mb: 2 }}>
+          <Card sx={{ borderRadius: 2, background: `linear-gradient(135deg, ${appTheme.colors.primary} 0%, ${appTheme.colors.accent} 100%)`, color: 'white', mb: 2 }}>
             <CardContent sx={{ p: { xs: 1.5, sm: 2, md: 3 } }}>
               <Alert severity="info" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' }, mb: 2 }}>
                 ⏰ {isMatchLiveOrFinished ? `Match ${match.status.toUpperCase()} - Your prediction is locked.` : 'Kickoff has started. Predictions locked.'}
@@ -284,7 +285,7 @@ const PredictionForm = ({ match, onSubmitSuccess, existingPrediction = null }) =
   if (submitted && !editing) {
     return (
       <Box>
-        <Card sx={{ borderRadius: 2, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
+        <Card sx={{ borderRadius: 2, background: `linear-gradient(135deg, ${appTheme.colors.primary} 0%, ${appTheme.colors.accent} 100%)`, color: 'white' }}>
           <CardContent sx={{ p: { xs: 1.5, sm: 2, md: 3 } }}>
             <Alert severity={predictionScored ? 'info' : 'success'} sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' }, mb: 2 }}>
               {predictionScored 
@@ -384,7 +385,7 @@ const PredictionForm = ({ match, onSubmitSuccess, existingPrediction = null }) =
     <Box>
       <Card
         sx={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: `linear-gradient(135deg, ${appTheme.colors.primary} 0%, ${appTheme.colors.accent} 100%)`,
           color: 'white',
           borderRadius: 2,
           boxShadow: 3,

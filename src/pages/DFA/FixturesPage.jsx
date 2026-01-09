@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-
+import theme from '../../css/theme';
 
 // Heavy imports to replace:
 import Stack from '@mui/material/Stack';          // ~35KB
@@ -87,9 +87,9 @@ const FixturesPage = () => {
 
       <Box width={{sm: 800, md: 900}} margin='auto' paddingTop={3}>
 
-      <Typography paddingBottom={3} variant="h4" sx={{ textAlign: 'center', color: 'blue', fontWeight: 900}}>Game Fixtures</Typography>
+      <Typography paddingBottom={3} variant="h4" sx={{ textAlign: 'center', color: theme.colors.primary, fontWeight: 900}}>Game Fixtures</Typography>
 
-        <Box marginTop={2.3} width={{ xs: '95%'}} marginX='auto' sx={{ backgroundColor: {xs: '#F9F9F9', sm: 'white'}, border: '1px solid #D3E1FF', borderRadius: {xs: '4px'}}}>
+        <Box marginTop={2.3} width={{ xs: '95%'}} marginX='auto' sx={{ backgroundColor: {xs: '#F9F9F9', sm: 'white'}, border: `1px solid ${theme.colors.border}`, borderRadius: {xs: '4px'}}}>
       
 
           {data && type === 'now' ? (data.filter(item => item.Complete != 'Yes').map((item, idx) => {
@@ -98,7 +98,7 @@ const FixturesPage = () => {
               
               <Box key={idx} width={{xs: '100%'}} margin={{xs:'auto'}}>
 
-                <Card sx={{ marginY: {xs: 0}, height: 'auto', boxShadow: 'none', borderBottom: {xs: '1px solid #D3E1FF'}, borderRadius: {xs: '4px'}}}>
+                <Card sx={{ marginY: {xs: 0}, height: 'auto', boxShadow: 'none', borderBottom: `1px solid ${theme.colors.border}`, borderRadius: {xs: '4px'}}}>
 
                   <Stack direction={{xs: 'row'}} justifyContent='space-between' marginX={2} paddingTop={1}>
 

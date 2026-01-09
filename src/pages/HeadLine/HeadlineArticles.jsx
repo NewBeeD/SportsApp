@@ -93,8 +93,6 @@ const HeadlineArticle = () => {
 
         let final_data = HeadLineDisplay(result)    
         
-        
-        console.log(final_data);
                     
         // Set the data state
         setArticles(final_data);

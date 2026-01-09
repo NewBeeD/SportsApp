@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { trackPredictionGameStarted } from '../../utils/analyticsEvents';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../config/firebaseConfig';
+import appTheme from '../../css/theme';
 import {
   Container,
   Box,
@@ -97,13 +98,13 @@ const PredictionGameDashboard = () => {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
+    <Box sx={{ minHeight: '100vh', backgroundColor: appTheme.colors.lightGray }}>
 
       {/* Header Section */}
       <Box 
       component="header"
       sx={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: `linear-gradient(135deg, ${appTheme.colors.primary} 0%, ${appTheme.colors.accent} 100%)`,
         py: { xs: 2, sm: 2.5 },
         px: { xs: 2, sm: 3, md: 4 },
         color: 'white',
@@ -163,7 +164,7 @@ const PredictionGameDashboard = () => {
           <Card
             sx={{
               mb: { xs: 2, sm: 3, md: 4 },
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: `linear-gradient(135deg, ${appTheme.colors.primary} 0%, ${appTheme.colors.accent} 100%)`,
               color: 'white',
               borderRadius: { xs: 1, md: 2 },
             }}

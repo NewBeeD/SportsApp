@@ -1,19 +1,13 @@
 import PropTypes from 'prop-types';
-
-import {  Box } from '@mui/material'
+import { Box } from '@mui/material'
 import Typography from '@mui/material/Typography';
 import StarIcon from '@mui/icons-material/Star';
-
-
 import { useEffect, useState } from 'react';
-
-
 import axios from 'axios'
-
 import Youtube from 'react-youtube'
 import MuxPlayer from '@mux/mux-player-react'
-
 import VideoStructure from '../modules/Video/VideoStructure';
+import theme from '../css/theme';
 
 
 
@@ -85,12 +79,12 @@ const Video = ({ VideoLocation }) => {
             sx={{
               marginBottom: 2,
               padding: '20px 24px',
-              background: '#fff',
+              background: theme.colors.background,
               borderRadius: '16px',
-              boxShadow: '0 10px 40px rgba(0, 0, 0, 0.08)',
+              boxShadow: `0 10px 40px rgba(0, 0, 0, 0.08)`,
               transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
               position: 'relative',
-              border: '1px solid rgba(0, 0, 0, 0.05)',
+              border: `1px solid ${theme.colors.border}`,
               '&::before': {
                 content: '""',
                 position: 'absolute',
@@ -98,20 +92,20 @@ const Video = ({ VideoLocation }) => {
                 left: 0,
                 right: 0,
                 height: '4px',
-                background: 'linear-gradient(90deg, #00D4FF 0%, #7C3AED 50%, #EC4899 100%)',
+                background: `linear-gradient(90deg, ${theme.colors.primary} 0%, ${theme.colors.accent} 50%, ${theme.colors.secondary} 100%)`,
                 borderRadius: '16px 16px 0 0',
               },
               '&:hover': {
-                boxShadow: '0 20px 60px rgba(124, 58, 237, 0.15)',
+                boxShadow: `0 20px 60px rgba(124, 58, 237, 0.15)`,
                 transform: 'translateY(-8px)',
-                border: '1px solid rgba(124, 58, 237, 0.1)',
+                border: `1px solid rgba(124, 58, 237, 0.1)`,
               }
             }}
           >
             <Box display="flex" alignItems="center" gap={2}>
               <StarIcon 
                 sx={{ 
-                  color: '#7C3AED',
+                  color: theme.colors.accent,
                   fontSize: '26px',
                   transition: 'all 0.4s ease',
                 }} 
@@ -120,7 +114,7 @@ const Video = ({ VideoLocation }) => {
                 <Typography 
                   sx={{
                     fontSize: { xs: '12px', sm: '13px' },
-                    color: '#7C3AED',
+                    color: theme.colors.accent,
                     fontWeight: 600,
                     letterSpacing: '1px',
                     textTransform: 'uppercase',
@@ -132,11 +126,11 @@ const Video = ({ VideoLocation }) => {
                 <Typography 
                   variant="h6" 
                   sx={{
-                    color: '#1a1a1a',
+                    color: theme.colors.textPrimary,
                     fontWeight: 700,
                     letterSpacing: '0.2px',
                     fontSize: { xs: '16px', sm: '18px' },
-                    background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
+                    background: `linear-gradient(135deg, ${theme.colors.accent} 0%, ${theme.colors.secondary} 100%)`,
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent'
@@ -209,6 +203,9 @@ const Video = ({ VideoLocation }) => {
                 autoPlay={false}
                 controls
                 theme="light"
+                onError={(error) => {
+                  console.error('Mux player error:', error);
+                }}
               />
             )
           ) : ''}

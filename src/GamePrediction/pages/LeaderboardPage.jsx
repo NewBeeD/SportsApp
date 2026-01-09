@@ -1,12 +1,13 @@
 // src/GamePrediction/pages/LeaderboardPage.jsx
 import React from 'react';
+import appTheme from '../../css/theme';
 import { Box, AppBar, Toolbar, Typography, Container } from '@mui/material';
 import Leaderboard from '../components/Leaderboard';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 const LeaderboardPage = () => {
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
+    <Box sx={{ minHeight: '100vh', backgroundColor: appTheme.colors.lightGray }}>
       <Toolbar />
 
       <Container 
