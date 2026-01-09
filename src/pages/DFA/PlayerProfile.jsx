@@ -137,19 +137,19 @@ const PlayerProfile = () => {
 
   const getPositionCategory = (position) => {
     const categories = {
-      'GK': { label: 'Goalkeeper', color: 'error', isGoalkeeper: true },
-      'CB': { label: 'Defender', color: 'warning', isGoalkeeper: false },
-      'LB': { label: 'Defender', color: 'warning', isGoalkeeper: false },
-      'RB': { label: 'Defender', color: 'warning', isGoalkeeper: false },
-      'CDM': { label: 'Midfielder', color: 'info', isGoalkeeper: false },
-      'CM': { label: 'Midfielder', color: 'info', isGoalkeeper: false },
-      'CAM': { label: 'Midfielder', color: 'info', isGoalkeeper: false },
-      'LW': { label: 'Forward', color: 'success', isGoalkeeper: false },
-      'RW': { label: 'Forward', color: 'success', isGoalkeeper: false },
-      'ST': { label: 'Forward', color: 'success', isGoalkeeper: false },
-      'CF': { label: 'Forward', color: 'success', isGoalkeeper: false }
+      'GK': { label: 'Goalkeeper', color: 'error', isGoalkeeper: true, isDefender: false },
+      'CB': { label: 'Defender', color: 'warning', isGoalkeeper: false, isDefender: true },
+      'LB': { label: 'Defender', color: 'warning', isGoalkeeper: false, isDefender: true },
+      'RB': { label: 'Defender', color: 'warning', isGoalkeeper: false, isDefender: true },
+      'CDM': { label: 'Midfielder', color: 'info', isGoalkeeper: false, isDefender: false },
+      'CM': { label: 'Midfielder', color: 'info', isGoalkeeper: false, isDefender: false },
+      'CAM': { label: 'Midfielder', color: 'info', isGoalkeeper: false, isDefender: false },
+      'LW': { label: 'Forward', color: 'success', isGoalkeeper: false, isDefender: false },
+      'RW': { label: 'Forward', color: 'success', isGoalkeeper: false, isDefender: false },
+      'ST': { label: 'Forward', color: 'success', isGoalkeeper: false, isDefender: false },
+      'CF': { label: 'Forward', color: 'success', isGoalkeeper: false, isDefender: false }
     }
-    return categories[position] || { label: position, color: 'default', isGoalkeeper: false }
+    return categories[position] || { label: position, color: 'default', isGoalkeeper: false, isDefender: false }
   }
 
   const getPositionIcon = (category) => {
@@ -249,6 +249,7 @@ const PlayerProfile = () => {
   }, [data])
 
   const handleBackClick = () => {
+    window.scrollTo(0, 0)
     navigate(-1)
   }
 
@@ -292,10 +293,10 @@ const PlayerProfile = () => {
     { label: 'Goals', value: seasonStats.Goals, icon: <SoccerIcon />, color: 'success' },
     { label: 'Assists', value: seasonStats.Assists, icon: <TrendingUpIcon />, color: 'info' },
     { label: 'Yellow Cards', value: seasonStats.YellowCards, icon: <MilitaryTechIcon />, color: 'warning' },
-    ...(positionInfo.isGoalkeeper && seasonStats.CleanSheets !== undefined ? [
+    { label: 'Red Cards', value: seasonStats.RedCards || 0, icon: <SecurityIcon />, color: 'error' },
+    ...((positionInfo.isGoalkeeper || positionInfo.isDefender) && seasonStats.CleanSheets !== undefined && seasonStats.CleanSheets !== null ? [
       { label: 'Clean Sheets', value: seasonStats.CleanSheets, icon: <SecurityIcon />, color: 'primary' }
     ] : []),
-    ...(seasonStats.RedCards ? [{ label: 'Red Cards', value: seasonStats.RedCards, icon: <MilitaryTechIcon />, color: 'error' }] : []),
     ...(seasonStats.MinutesPlayed ? [{ label: 'Minutes', value: seasonStats.MinutesPlayed, icon: <CalendarIcon />, color: 'secondary' }] : [])
   ] : []
 
