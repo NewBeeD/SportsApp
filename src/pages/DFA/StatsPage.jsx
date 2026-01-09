@@ -16,7 +16,6 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
-
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import { TabContext, TabList, TabPanel } from "@mui/lab";
@@ -32,6 +31,7 @@ import theme from '../../css/theme';
 import { queryParams_prem_players_stats } from '../../modules/DFA/QueryParams';
 
 import StatsPageStructureData from '../../modules/DFA/StatsPage/StatsPageStructureData';
+import LightweightTable from '../../components/LightweightTable';
 
 function Sort(a, b){
 

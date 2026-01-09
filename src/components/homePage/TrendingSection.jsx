@@ -23,7 +23,7 @@ import { useSelector } from 'react-redux';
 
 import theme from '../../css/theme';
 
-import VideoHighlights from '../WeekendHighlights/VideoHighlights';
+import VideoHighlights from '../Video';
 import FixturesData from './Fixtures';
 
 
