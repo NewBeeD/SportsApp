@@ -1,19 +1,24 @@
+import PropTypes from 'prop-types';
+
 import {  Box } from '@mui/material'
+import Typography from '@mui/material/Typography';
 
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 import axios from 'axios'
 
 import Youtube from 'react-youtube'
+import MuxPlayer from '@mux/mux-player-react'
 
 import VideoStructure from '../modules/Video/VideoStructure';
 
 
 
 
-// TODO: Set up this component to recieve the video/media type (name) you want to use
+// Video player component that supports both YouTube and Mux videos
+// Automatically detects video type and uses appropriate player
 
 const Video = ({ VideoLocation }) => {
 
@@ -22,8 +27,7 @@ const Video = ({ VideoLocation }) => {
 
 
   const [video, setVideo] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [videoTitle, setVideoTitle] = useState('');
 
   let width;
   let height;
@@ -33,18 +37,17 @@ const Video = ({ VideoLocation }) => {
   const getVideoDimensions = () => {
     
     const windowWidth = window.innerWidth;
-    let marginError;
+
+    let width = windowWidth-20;
     let height;
 
     // return {width: windowWidth-20, height: '290'}
 
     // Adjust these values based on your layout and design preferences
     if (windowWidth >= 1200) {
-      height= '340'
-      marginError = 600;
+      height= '300'
     } else if (windowWidth >= 768) {
       height= '290'
-      marginError = 200;
     }else if (windowWidth >= 530) {
       height= '280'
     }else if (windowWidth >= 400) {
@@ -58,8 +61,6 @@ const Video = ({ VideoLocation }) => {
     else {
       height= '450'
     }
-
-    let width = windowWidth - marginError;
 
     return {width: width, height: height}
   };
@@ -99,8 +100,6 @@ const Video = ({ VideoLocation }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Set loading to true when starting the fetch
-        setLoading(true);
 
         // Your API endpoint URL
         const apiUrl = 'https://strapi-dominica-sport.onrender.com/api/videos';
@@ -119,54 +118,77 @@ const Video = ({ VideoLocation }) => {
 
         let final_data = VideoStructure(result)
 
+        // console.log(final_data);
 
         final_data = final_data.filter(item => item.Location === videoLocate)
         
-        // Set the data state
-        setVideo(final_data[0].VideoId);
+        // Only set data if a matching video is found
+        if (final_data.length > 0) {
+          setVideo(final_data[0].VideoId);
+          setVideoTitle(final_data[0].Title);
+        } else {
+          // No video found for this location - hide component
+          setVideo(null);
+          setVideoTitle('');
+        }
       } catch (error) {
-        // Set the error state if there's an issue
-        setError(error.message);
-      } finally {
-        // Set loading to false regardless of success or failure
-        setLoading(false);
+        console.error('Error fetching video:', error.message);
       }
     };
 
     // Call the fetchData function when the component mounts
     fetchData();
-  }, []);
+  }, [videoLocate]);
 
 
 
   return(
+    // Only render if a video was found
+    !video ? null : (
+    <Box display='flex' justifyContent='center' alignItems='center' width={{xs: 'inherit'}} style={{ height: '100%'}} >
 
-    <Box display='flex' justifyContent='center'>
+      <Box width="100%">
+        {/* Video Title */}
+        {videoTitle && (
+          <Typography variant="h5" fontWeight={700} marginBottom={1} textAlign="center">
+            {videoTitle}
+          </Typography>
+        )}
 
-
-      <Box 
-      display='flex' 
-      alignItems='center' 
-      marginTop={2} 
-      
-      >
-
-          {video && video.length > 0 ? <Youtube
-          videoId={video}
-          opts={{ ...opts, width, height }}
-          onReady={(event) => {
-            event.target.pauseVideo();
-          }}
-          onEnd={onEnd}
-
-          />: ''}
-
+        {/* Video Player */}
+        {video && video.length > 0 ? (
+          // Try to detect if it's a Mux playback ID or YouTube ID
+          video.includes('youtube') || video.match(/^[a-zA-Z0-9_-]{11}$/) ? (
+            // YouTube video
+            <Youtube
+              videoId={video}
+              opts={{ ...opts, width, height }}
+              onReady={(event) => {
+                event.target.pauseVideo();
+              }}
+              onEnd={onEnd}
+            />
+          ) : (
+            // Mux video - assuming video is a Mux playback ID
+            <MuxPlayer
+              playbackId={video}
+              style={{ width: width === '100%' ? '100%' : `${width}px`, height: `${height}px` }}
+              autoPlay={false}
+              controls
+              theme="light"
+            />
+          )
+        ) : ''}
       </Box>
+
     </Box>
-
-
+    )
   )
 
 }
 
-export default Video
+export default Video;
+
+Video.propTypes = {
+  VideoLocation: PropTypes.string.isRequired,
+};

@@ -1,5 +1,4 @@
 import { Route, Routes, useLocation } from 'react-router-dom'
-import { useMediaQuery, useTheme } from '@mui/material';
 import { lazy, Suspense, useEffect } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 import { logEvent } from 'firebase/analytics';
@@ -32,7 +31,7 @@ import Footer from './components/Footer/Footer'
 // Lazy load pages to enable code splitting
 const HomePage = lazy(() => import("./pages/HomePage"))
 const Article = lazy(() => import("./pages/Article"))
-const DFA = lazy(() => import('./pages/DFA/DFA'))
+const DfaHomepage = lazy(() => import('./pages/DFA/DfaHomepage'))
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
 const TermsOfService = lazy(() => import('./pages/TermsOfService'))
 const PlayerProfile = lazy(() => import('./pages/DFA/PlayerProfile'))
@@ -51,7 +50,6 @@ const AllTeamsPage = lazy(() => import('./pages/DFA/AllTeamsPage'))
 const StatsPage = lazy(() => import('./pages/DFA/StatsPage'))
 const DivisionOneStatsPage = lazy(() => import('./pages/DFA/DivisionOne/DivisionOneStatsPage'))
 const FixturesPage = lazy(() => import('./pages/DFA/FixturesPage'))
-const DfaPageLargeScreens = lazy(() => import('./pages/DFA/DfaPageLargeScreens'))
 const AllTeamsFixtures = lazy(() => import('./pages/DFA/AllTeamsFixtures'))
 const TournamentBrackets = lazy(() => import('./components/TournamentBrackets/TournamentBrackets'))
 const HeadlineArticle = lazy(() => import('./pages/HeadLine/HeadlineArticles'))
@@ -66,8 +64,6 @@ const AdminMatchManagementPage = lazy(() => import('./GamePrediction/pages/Admin
 
 function App() {
 
-  const theme = useTheme();
-const isAboveSM = useMediaQuery(theme.breakpoints.up('sm'));
   const location = useLocation();
 
   // Track page views
@@ -89,8 +85,8 @@ const isAboveSM = useMediaQuery(theme.breakpoints.up('sm'));
       <Suspense fallback={<PageLoader />}>
         <Routes>
 
-          {/* <Route path='/' element={<HomePage />} /> */}
-          <Route path="/" element={isAboveSM ? <DfaPageLargeScreens />: <DFA />} />
+          {/* Unified responsive homepage - works on all devices */}
+          <Route path="/" element={<DfaHomepage />} />
           <Route path='/:id' element={<Article />} />
           <Route path='headline/:id' element={<HeadlineArticle />} />
 
