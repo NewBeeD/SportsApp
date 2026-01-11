@@ -54,7 +54,7 @@ const navItems = [
     id: 7, 
     label: 'Admin', 
     path: '/Admin/Matches', 
-    external: true,
+    external: false,
     icon: <SportsIcon />
   },
 ]
