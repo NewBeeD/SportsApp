@@ -1,5 +1,6 @@
 // src/GamePrediction/components/UserStatsCard.jsx
 import React, { useEffect, useState } from 'react';
+import appTheme from '../../css/theme';
 import {
   Card,
   CardContent,
@@ -64,7 +65,7 @@ const UserStatsCard = ({ userId }) => {
             <Typography color="textSecondary" gutterBottom>
               Total Points
             </Typography>
-            <Typography variant="h4" sx={{ color: '#1976d2', fontWeight: 'bold' }}>
+            <Typography variant="h4" sx={{ color: appTheme.colors.primary, fontWeight: 'bold' }}>
               {stats.totalPoints || 0}
             </Typography>
           </CardContent>

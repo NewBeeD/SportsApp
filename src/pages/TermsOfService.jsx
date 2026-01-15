@@ -210,7 +210,7 @@ const TermsOfService = () => {
           <Typography variant="body1" className="section-content">
             If you have questions about these Terms of Service, please contact us at:
           </Typography>
-          <Box sx={{ marginTop: 2, padding: 2, backgroundColor: `rgba(134, 194, 50, 0.05)`, borderRadius: 1 }}>
+          <Box sx={{ marginTop: 2, padding: 2, backgroundColor: `rgba(${parseInt(theme.colors.primary.slice(1, 3), 16)}, ${parseInt(theme.colors.primary.slice(3, 5), 16)}, ${parseInt(theme.colors.primary.slice(5, 7), 16)}, 0.05)`, borderRadius: 1 }}>
             <Typography variant="body2"><strong>Email:</strong> danieldanphil@gmail.com</Typography>
             <Typography variant="body2"><strong>Phone:</strong> 767-614-0626</Typography>
           </Box>

@@ -16,15 +16,24 @@ import {
   AvatarGroup
 } from "@mui/material"
 import { Link } from "react-router-dom"
-import { useState, useEffect } from "react"
-import qs from 'qs'
+import { useState, useEffect, useMemo } from "react"
 import axios from "axios"
+import appTheme from '../../css/theme'
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer'
 import PersonIcon from '@mui/icons-material/Person'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
+
+// Constants
+const API_BASE_URL = 'https://strapi-dominica-sport.onrender.com/api/dfa-players'
+const FADE_TIMEOUT = 800
+const HOVER_ELEVATION = '-8px'
+const CARD_HEIGHT = 420
+const IMAGE_HEIGHT = 220
+const PLAYER_BOX_WIDTH = { xs: '100%', sm: 300, md: 320 }
+const FILTER_POSITIONS = ['Striker', 'Forward', 'Goalkeeper']
 
 const queryParams_prem_players = {
   populate: {
@@ -43,38 +52,58 @@ const queryParams_prem_players = {
 const FeaturedPlayer = () => { 
 
   const [players, setPlayers] = useState([])
-  const [error, setError] = useState()
+  const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
   const [randomPlayer, setRandomPlayer] = useState(null)
+
+  // Build query string from params object
+  const buildQueryString = (params) => {
+    const buildNestedParams = (obj, prefix = '') => {
+      let result = []
+      for (let key in obj) {
+        let value = obj[key]
+        let newKey = prefix ? `${prefix}[${key}]` : key
+        if (typeof value === 'object' && value !== null) {
+          result.push(...buildNestedParams(value, newKey))
+        } else {
+          result.push(`${newKey}=${encodeURIComponent(value)}`)
+        }
+      }
+      return result
+    }
+    return buildNestedParams(params).join('&')
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const queryString = qs.stringify(queryParams_prem_players)
-        const apiUrl = `https://strapi-dominica-sport.onrender.com/api/dfa-players?${queryString}`
+        const queryString = buildQueryString(queryParams_prem_players)
+        const apiUrl = `${API_BASE_URL}?${queryString}`
 
         const response = await axios.get(apiUrl)
         if (response.status !== 200) {
-          throw new Error(`Error: ${response.statusText}`)
+          throw new Error(`API Error: ${response.statusText}`)
         }
 
         const result = response.data.data
+        if (!Array.isArray(result) || result.length === 0) {
+          throw new Error('No players found in API response')
+        }
+
         setPlayers(result)
 
-        if (result.length > 0) {
-          // Filter for featured or notable players first, then random
-          const notablePlayers = result.filter(player => 
-            player.attributes.isFeatured || 
-            player.attributes.Position === 'Striker' ||
-            player.attributes.Position === 'Forward'
-          )
-          
-          const chosen = notablePlayers.length > 0 
-            ? notablePlayers[Math.floor(Math.random() * notablePlayers.length)]
-            : result[Math.floor(Math.random() * result.length)]
-          
-          setRandomPlayer(chosen)
-        }
+        // Filter for featured or notable players first, then random
+        const notablePlayers = result.filter(player => 
+          player.attributes.isFeatured || 
+          FILTER_POSITIONS.includes(player.attributes.Position)
+        )
+        
+        const chosen = notablePlayers.length > 0 
+          ? notablePlayers[Math.floor(Math.random() * notablePlayers.length)]
+          : result[Math.floor(Math.random() * result.length)]
+        
+        setRandomPlayer(chosen)
+        setError(null)
       } catch (error) {
         setError(error.message)
         console.error("Error fetching players:", error)
@@ -88,7 +117,7 @@ const FeaturedPlayer = () => {
 
   if (loading) {
     return (
-      <Box sx={{ width: { xs: '100%', sm: 300, md: 350 } }}>
+      <Box sx={{ width: PLAYER_BOX_WIDTH }}>
         <Skeleton 
           variant="rectangular" 
           width="100%" 
@@ -104,19 +133,22 @@ const FeaturedPlayer = () => {
 
   if (error || !randomPlayer) {
     return (
-      <Box sx={{ width: { xs: '100%', sm: 300, md: 350 } }}>
+      <Box sx={{ width: PLAYER_BOX_WIDTH }}>
         <Paper
           sx={{
             p: 3,
             textAlign: 'center',
-            backgroundColor: 'rgba(34, 38, 41, 0.9)',
+            backgroundColor: `rgba(34, 38, 41, 0.9)`,
             borderRadius: 3,
             border: '2px solid',
-            borderImage: 'linear-gradient(135deg, #FFD700 0%, #FF6B00 100%) 1',
+            borderColor: appTheme.colors.error,
           }}
         >
-          <Typography color="#FF6B6B" fontWeight={600}>
+          <Typography color={appTheme.colors.error} fontWeight={600}>
             {error || 'No player data available'}
+          </Typography>
+          <Typography variant="caption" sx={{ color: appTheme.colors.lightGray, mt: 1, display: 'block' }}>
+            Unable to load featured player
           </Typography>
         </Paper>
       </Box>
@@ -125,12 +157,12 @@ const FeaturedPlayer = () => {
 
   return (
     
-    <Fade in={!loading} timeout={800}>
+    <Fade in={!loading} timeout={FADE_TIMEOUT}>
       <Box sx={{ 
-        width: { xs: '100%', sm: 300, md: 320 },
+        width: PLAYER_BOX_WIDTH,
         position: 'relative',
         '&:hover': {
-          transform: 'translateY(-8px)',
+          transform: `translateY(${HOVER_ELEVATION})`,
           transition: 'transform 0.3s ease'
         }
       }}>
@@ -141,7 +173,7 @@ const FeaturedPlayer = () => {
             top: '50%',
             right: 16,
             zIndex: 2,
-            backgroundColor: 'rgba(255, 215, 0, 0.9)',
+            backgroundColor: `rgba(${appTheme.colors.secondary}, 0.9)`,
             borderRadius: '20px',
             px: 2,
             py: 0.5,
@@ -151,7 +183,7 @@ const FeaturedPlayer = () => {
           <Typography
             variant="caption"
             sx={{
-              color: '#222629',
+              color: appTheme.colors.color1,
               fontWeight: 900,
               letterSpacing: 1,
               textTransform: 'uppercase',
@@ -165,21 +197,22 @@ const FeaturedPlayer = () => {
         <Link 
           to={`/DFA/Home/Player/${randomPlayer.id}`} 
           style={{ textDecoration: 'none' }}
+          aria-label={`View profile for ${randomPlayer.attributes.First_Name} ${randomPlayer.attributes.Last_Name}`}
         >
           <Card
             sx={{
               position: 'relative',
               overflow: 'visible',
-              backgroundColor: 'rgba(34, 38, 41, 0.95)',
+              backgroundColor: `rgba(34, 38, 41, 0.95)`,
               backdropFilter: 'blur(10px)',
               borderRadius: 3,
               border: '3px solid',
-              borderImage: 'linear-gradient(135deg, #FFD700 0%, #FF6B00 50%, #FFD700 100%) 1',
+              borderColor: appTheme.colors.secondary,
               boxShadow: '0 12px 32px rgba(0, 0, 0, 0.4)',
               transition: 'all 0.3s ease',
-              height: 420,
+              height: CARD_HEIGHT,
               '&:hover': {
-                boxShadow: '0 16px 40px rgba(255, 107, 0, 0.3)',
+                boxShadow: `0 16px 40px rgba(${appTheme.colors.secondary}, 0.3)`,
                 '& .player-image': {
                   transform: 'scale(1.05)',
                 },
@@ -194,7 +227,7 @@ const FeaturedPlayer = () => {
             <Box
               sx={{
                 position: 'relative',
-                height: 220,
+                height: IMAGE_HEIGHT,
                 overflow: 'hidden',
                 borderTopLeftRadius: 12,
                 borderTopRightRadius: 12,
@@ -206,7 +239,8 @@ const FeaturedPlayer = () => {
                   component="img"
                   className="player-image"
                   image={randomPlayer.attributes.Profile_Pic.data.attributes.formats.small.url}
-                  alt={`${randomPlayer.attributes.First_Name} ${randomPlayer.attributes.Last_Name}`}
+                  alt={`${randomPlayer.attributes.First_Name} ${randomPlayer.attributes.Last_Name} - ${randomPlayer.attributes.Position}`}
+                  loading="lazy"
                   sx={{
                     width: '100%',
                     height: '100%',
@@ -223,10 +257,10 @@ const FeaturedPlayer = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: 'rgba(255, 215, 0, 0.1)'
+                    backgroundColor: `rgba(${appTheme.colors.secondary}, 0.1)`
                   }}
                 >
-                  <PersonIcon sx={{ fontSize: 80, color: 'rgba(255, 215, 0, 0.3)' }} />
+                  <PersonIcon sx={{ fontSize: 80, color: `rgba(${appTheme.colors.secondary}, 0.3)` }} />
                 </Box>
               )}
 
@@ -250,7 +284,7 @@ const FeaturedPlayer = () => {
                 <Typography
                   variant="body1"
                   sx={{
-                    color: '#86C232',
+                    color: appTheme.colors.success,
                     fontWeight: 700,
                     letterSpacing: 1,
                     textTransform: 'uppercase',
@@ -262,10 +296,10 @@ const FeaturedPlayer = () => {
                 <Typography
                   variant="h4"
                   sx={{
-                    color: '#FFD700',
+                    color: appTheme.colors.secondary,
                     fontWeight: 900,
                     lineHeight: 1.1,
-                    background: 'linear-gradient(90deg, #FFD700 0%, #FFA500 100%)',
+                    background: `linear-gradient(90deg, ${appTheme.colors.secondary} 0%, ${appTheme.colors.warning} 100%)`,
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent'
                   }}
@@ -281,12 +315,12 @@ const FeaturedPlayer = () => {
                   icon={<SportsSoccerIcon />}
                   label={randomPlayer.attributes.dfa_team?.data?.attributes?.Name || 'No Team'}
                   sx={{
-                    backgroundColor: 'rgba(255, 107, 0, 0.15)',
-                    color: '#FFED4E',
+                    backgroundColor: `rgba(${appTheme.colors.secondary}, 0.15)`,
+                    color: appTheme.colors.secondary,
                     fontWeight: 600,
-                    border: '1px solid #FF6B00',
+                    border: `1px solid ${appTheme.colors.secondary}`,
                     '& .MuiChip-icon': {
-                      color: '#FFD700'
+                      color: appTheme.colors.secondary
                     },
                     fontSize: '11px'
                   }}
@@ -296,126 +330,17 @@ const FeaturedPlayer = () => {
                   icon={<EmojiEventsIcon />}
                   label={randomPlayer.attributes.Position}
                   sx={{
-                    backgroundColor: 'rgba(134, 194, 50, 0.15)',
-                    color: '#86C232',
+                    backgroundColor: `rgba(${appTheme.colors.accent}, 0.15)`,
+                    color: appTheme.colors.accent,
                     fontWeight: 600,
-                    border: '1px solid #86C232',
+                    border: `1px solid ${appTheme.colors.accent}`,
                     '& .MuiChip-icon': {
-                      color: '#86C232'
+                      color: appTheme.colors.accent
                     },
                     fontSize: '11px'
                   }}
                 />
               </Stack>
-
-              {/* Stats/Details */}
-              {/* <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-                {randomPlayer.attributes.Goals && (
-                  <Box sx={{ textAlign: 'center' }}>
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        color: '#FFD700',
-                        fontWeight: 900
-                      }}
-                    >
-                      {randomPlayer.attributes.Goals}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        color: '#CCCCCC',
-                        textTransform: 'uppercase',
-                        fontWeight: 600
-                      }}
-                    >
-                      Goals
-                    </Typography>
-                  </Box>
-                )}
-
-                {randomPlayer.attributes.Assists && (
-                  <Box sx={{ textAlign: 'center' }}>
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        color: '#86C232',
-                        fontWeight: 900
-                      }}
-                    >
-                      {randomPlayer.attributes.Assists}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        color: '#CCCCCC',
-                        textTransform: 'uppercase',
-                        fontWeight: 600
-                      }}
-                    >
-                      Assists
-                    </Typography>
-                  </Box>
-                )}
-
-                {randomPlayer.attributes.Matches && (
-                  <Box sx={{ textAlign: 'center' }}>
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        color: '#FFFFFF',
-                        fontWeight: 900
-                      }}
-                    >
-                      {randomPlayer.attributes.Matches}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        color: '#CCCCCC',
-                        textTransform: 'uppercase',
-                        fontWeight: 600
-                      }}
-                    >
-                      Matches
-                    </Typography>
-                  </Box>
-                )}
-              </Stack> */}
-
-              {/* View Details Button (shown on hover) */}
-              {/* <Box
-                className="view-details"
-                sx={{
-                  position: 'absolute',
-                  bottom: 20,
-                  right: 20,
-                  opacity: 0,
-                  transform: 'translateY(10px)',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                <Button
-                  endIcon={<ArrowForwardIcon />}
-                  sx={{
-                    color: '#FFD700',
-                    backgroundColor: 'rgba(255, 215, 0, 0.1)',
-                    border: '1px solid #FFD700',
-                    borderRadius: '20px',
-                    px: 2,
-                    py: 0.5,
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    fontSize: '0.75rem',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 215, 0, 0.2)',
-                      transform: 'translateX(4px)'
-                    }
-                  }}
-                >
-                  View Profile
-                </Button>
-              </Box> */}
             </CardContent>
           </Card>
         </Link>

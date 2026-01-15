@@ -1,5 +1,6 @@
 // src/GamePrediction/components/PredictionComparison.jsx
 import React, { useEffect, useState } from 'react';
+import appTheme from '../../css/theme';
 import {
   Box,
   Card,
@@ -65,7 +66,7 @@ const PredictionComparison = ({ userId, matchId, match, prediction }) => {
   const isOutperforming = comparison.userOutperformed;
 
   return (
-    <Card sx={{ mt: 2, backgroundColor: '#f8f9fa', border: '1px solid #e0e0e0' }}>
+    <Card sx={{ mt: 2, backgroundColor: appTheme.colors.lightGray, border: `1px solid ${appTheme.colors.border}` }}>
       <CardContent>
         <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
           📊 Your Prediction vs Community Average
@@ -74,11 +75,11 @@ const PredictionComparison = ({ userId, matchId, match, prediction }) => {
         <Grid container spacing={2}>
           {/* Your Points */}
           <Grid item xs={12} sm={5}>
-            <Box sx={{ p: 1.5, backgroundColor: '#e3f2fd', borderRadius: 1, textAlign: 'center' }}>
+            <Box sx={{ p: 1.5, backgroundColor: `${appTheme.colors.primary}15`, borderRadius: 1, textAlign: 'center' }}>
               <Typography variant="caption" color="textSecondary" sx={{ fontWeight: 'bold' }}>
                 Your Points
               </Typography>
-              <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#1976d2', mt: 0.5 }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', color: appTheme.colors.primary, mt: 0.5 }}>
                 {userPoints}
               </Typography>
               <Typography variant="caption" sx={{ display: 'block', mt: 0.5 }}>
@@ -92,22 +93,22 @@ const PredictionComparison = ({ userId, matchId, match, prediction }) => {
             <Box sx={{ textAlign: 'center' }}>
               {isOutperforming ? (
                 <>
-                  <TrendingUpIcon sx={{ color: '#4caf50', fontSize: 28 }} />
-                  <Typography variant="caption" sx={{ fontWeight: 'bold', color: '#4caf50', display: 'block' }}>
+                  <TrendingUpIcon sx={{ color: appTheme.colors.success, fontSize: 28 }} />
+                  <Typography variant="caption" sx={{ fontWeight: 'bold', color: appTheme.colors.success, display: 'block' }}>
                     +{Math.abs(difference)}
                   </Typography>
                 </>
               ) : difference === 0 ? (
                 <>
-                  <EqualIcon sx={{ color: '#ff9800', fontSize: 28 }} />
-                  <Typography variant="caption" sx={{ fontWeight: 'bold', color: '#ff9800', display: 'block' }}>
+                  <EqualIcon sx={{ color: appTheme.colors.warning, fontSize: 28 }} />
+                  <Typography variant="caption" sx={{ fontWeight: 'bold', color: appTheme.colors.warning, display: 'block' }}>
                     Equal
                   </Typography>
                 </>
               ) : (
                 <>
-                  <TrendingDownIcon sx={{ color: '#f44336', fontSize: 28 }} />
-                  <Typography variant="caption" sx={{ fontWeight: 'bold', color: '#f44336', display: 'block' }}>
+                  <TrendingDownIcon sx={{ color: appTheme.colors.error, fontSize: 28 }} />
+                  <Typography variant="caption" sx={{ fontWeight: 'bold', color: appTheme.colors.error, display: 'block' }}>
                     {difference}
                   </Typography>
                 </>

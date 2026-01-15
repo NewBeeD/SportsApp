@@ -78,6 +78,26 @@ const StatsPage = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedChoice, setSelectedChoice] = useState('Goals');
 
+  // League and Tab state
+  const [leagueValue, setLeagueValue] = useState('1');
+
+  const handleLeagueChange = (event, newValue) => {
+    setLeagueValue(newValue);
+  };
+
+  const getLeagueFilter = () => {
+    switch(leagueValue) {
+      case '1':
+        return 'DFA_Premier_League_Men';
+      case '2':
+        return 'DFA_Division_One';
+      case '3':
+        return 'DFA_Women';
+      default:
+        return 'DFA_Premier_League_Men';
+    }
+  };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -124,6 +144,9 @@ const StatsPage = () => {
         // Parse the JSON data
         const result = await response.data.data;
 
+        console.log(result);
+        
+
         let final_data = StatsPageStructureData(result)
         final_data = final_data.map(goals => goals).sort(Sort)
         
@@ -169,10 +192,38 @@ const StatsPage = () => {
                       <Tab label='Club Stats' value='2' />
             </TabList>
 
-
             <TabPanel  value='1'>
+              <Box marginTop={3}>
 
-              <Stack direction='column' marginTop={3}>
+                {/* League Selection Tabs */}
+                <TabContext value={leagueValue}>
+                  <TabList 
+                    onChange={handleLeagueChange} 
+                    aria-label="league tabs" 
+                    centered 
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    sx={{ 
+                      borderBottom: 1, 
+                      borderColor: 'divider', 
+                      mb: 3,
+                      display: 'flex',
+                      justifyContent: { xs: 'flex-start', sm: 'center' },
+                      '& .MuiTabScrollButtonForward, & .MuiTabScrollButtonBack': {
+                        display: { xs: 'flex', sm: 'none' }
+                      },
+                      '& .MuiTab-root': {
+                        fontSize: { xs: '0.7rem', sm: '0.875rem' },
+                        minWidth: { xs: 'auto', sm: '120px' },
+                        padding: { xs: '8px 6px', sm: '12px 16px' }
+                      }
+                    }}
+                  >
+                    <Tab label='Premier League' value='1' />
+                    <Tab label='Division One' value='2' />
+                    <Tab label='Women League' value='3' />
+                  </TabList>
+                </TabContext>
 
                 <Stack direction='row' justifyContent='space-between'>
 
@@ -226,7 +277,7 @@ const StatsPage = () => {
 
                             <TableBody>
 
-                              {players_Goals_data && players_Goals_data.sort(Sort).filter(playerGoals => playerGoals.Goals> 0 && playerGoals.league === 'DFA_Premier_League_Men').map((item, idx) => {
+                              {players_Goals_data && players_Goals_data.sort(Sort).filter(playerGoals => playerGoals.Goals> 0 && playerGoals.league === getLeagueFilter()).map((item, idx) => {
 
                                 return(
 
@@ -306,7 +357,7 @@ const StatsPage = () => {
 
                             <TableBody>
 
-                              {players_Goals_data && players_Goals_data.sort(Sort_Assists).filter(playerGoals => playerGoals.Assists > 0 && playerGoals.league === 'DFA_Premier_League_Men').map((item, idx) => {
+                              {players_Goals_data && players_Goals_data.sort(Sort_Assists).filter(playerGoals => playerGoals.Assists > 0 && playerGoals.league === getLeagueFilter()).map((item, idx) => {
 
                                 return(
 
@@ -377,7 +428,7 @@ const StatsPage = () => {
 
                             <TableBody>
 
-                              {players_Goals_data && players_Goals_data.sort(Sort_Clean_Sheets).filter(playerGoals => playerGoals.Clean_Sheets> 0 && playerGoals.league === 'DFA_Premier_League_Men').map((item, idx) => {
+                              {players_Goals_data && players_Goals_data.sort(Sort_Clean_Sheets).filter(playerGoals => playerGoals.Clean_Sheets> 0 && playerGoals.league === getLeagueFilter()).map((item, idx) => {
 
                                 return(
 
@@ -448,7 +499,7 @@ const StatsPage = () => {
 
                             <TableBody>
 
-                              {players_Goals_data && players_Goals_data.filter(playerGoals => playerGoals.Yellow_Cards > 0 && playerGoals.league === 'DFA_Premier_League_Men').sort(Sort_YellowCards).map((item, idx) => {
+                              {players_Goals_data && players_Goals_data.filter(playerGoals => playerGoals.Yellow_Cards > 0 && playerGoals.league === getLeagueFilter()).sort(Sort_YellowCards).map((item, idx) => {
 
                                 return(
 
@@ -519,7 +570,7 @@ const StatsPage = () => {
 
                             <TableBody>
 
-                              {players_Goals_data && players_Goals_data.filter(playerGoals => playerGoals.Red_Cards > 0 && playerGoals.league === 'DFA_Premier_League_Men').sort(Sort_RedCards).map((item, idx) => {
+                              {players_Goals_data && players_Goals_data.filter(playerGoals => playerGoals.Red_Cards > 0 && playerGoals.league === getLeagueFilter()).sort(Sort_RedCards).map((item, idx) => {
 
                                 return(
 
@@ -568,10 +619,7 @@ const StatsPage = () => {
 
                 </Box>
 
-                
-
-              </Stack>
-    
+              </Box>
             </TabPanel>
 
             <TabPanel  value='2'>

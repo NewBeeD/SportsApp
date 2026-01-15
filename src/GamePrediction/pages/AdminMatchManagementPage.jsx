@@ -1,5 +1,6 @@
 // src/GamePrediction/pages/AdminMatchManagementPage.jsx
 import React, { useState, useEffect } from 'react';
+import appTheme from '../../css/theme';
 import {
   Container,
   Box,
@@ -263,15 +264,15 @@ const AdminMatchManagementPage = () => {
   const finishedMatches = matches.filter((m) => m.status === 'FINISHED');
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px)' }}>
-      <AppBar sx={{ background: 'linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%)' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px)',  }}>
+      {/* <AppBar sx={{ background: `linear-gradient(135deg, ${appTheme.colors.error} 0%, ${appTheme.colors.error} 100%)` }}>
         <Toolbar>
           <SecurityIcon sx={{ mr: 2 }} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Admin - Match Management
           </Typography>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
 
       <Toolbar />
 

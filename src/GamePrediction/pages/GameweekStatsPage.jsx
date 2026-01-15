@@ -1,5 +1,6 @@
 // src/GamePrediction/pages/GameweekStatsPage.jsx
 import React, { useEffect, useState } from 'react';
+import appTheme from '../../css/theme';
 import {
   Box,
   Card,
@@ -100,7 +101,7 @@ const GameweekStatsPage = ({ userId }) => {
               <Typography color="textSecondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }} gutterBottom>
                 Gameweeks Played
               </Typography>
-              <Typography variant={isMobile ? 'h5' : 'h4'} sx={{ fontWeight: 'bold', color: '#1976d2' }}>
+              <Typography variant={isMobile ? 'h5' : 'h4'} sx={{ fontWeight: 'bold', color: appTheme.colors.primary }}>
                 {stats.length}
               </Typography>
             </CardContent>
@@ -113,7 +114,7 @@ const GameweekStatsPage = ({ userId }) => {
               <Typography color="textSecondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }} gutterBottom>
                 Total Gameweek Points
               </Typography>
-              <Typography variant={isMobile ? 'h5' : 'h4'} sx={{ fontWeight: 'bold', color: '#4caf50' }}>
+              <Typography variant={isMobile ? 'h5' : 'h4'} sx={{ fontWeight: 'bold', color: appTheme.colors.success }}>
                 {totalGameweekPoints}
               </Typography>
             </CardContent>
@@ -126,7 +127,7 @@ const GameweekStatsPage = ({ userId }) => {
               <Typography color="textSecondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }} gutterBottom>
                 Avg Points/GW
               </Typography>
-              <Typography variant={isMobile ? 'h5' : 'h4'} sx={{ fontWeight: 'bold', color: '#ff9800' }}>
+              <Typography variant={isMobile ? 'h5' : 'h4'} sx={{ fontWeight: 'bold', color: appTheme.colors.warning }}>
                 {avgGameweekPoints}
               </Typography>
             </CardContent>
@@ -139,7 +140,7 @@ const GameweekStatsPage = ({ userId }) => {
               <Typography color="textSecondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }} gutterBottom>
                 Accuracy
               </Typography>
-              <Typography variant={isMobile ? 'h5' : 'h4'} sx={{ fontWeight: 'bold', color: '#9c27b0' }}>
+              <Typography variant={isMobile ? 'h5' : 'h4'} sx={{ fontWeight: 'bold', color: appTheme.colors.accent }}>
                 {totalGameweekPredictions > 0
                   ? ((totalGameweekCorrect / totalGameweekPredictions) * 100).toFixed(0)
                   : 0}
@@ -154,7 +155,7 @@ const GameweekStatsPage = ({ userId }) => {
       <Card sx={{ borderRadius: 2, overflow: 'auto' }}>
         <CardContent sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
           <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
-            <TrendingUpIcon sx={{ color: '#1976d2', fontSize: { xs: 20, sm: 24 } }} />
+            <TrendingUpIcon sx={{ color: appTheme.colors.primary, fontSize: { xs: 20, sm: 24 } }} />
             <Typography variant={isMobile ? 'body1' : 'h6'} sx={{ fontWeight: 'bold' }}>
               Gameweek Performance
             </Typography>
@@ -163,7 +164,7 @@ const GameweekStatsPage = ({ userId }) => {
           <Box sx={{ overflowX: 'auto' }}>
             <TableContainer component={Paper}>
               <Table size={isMobile ? 'small' : 'medium'}>
-                <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+                <TableHead sx={{ backgroundColor: appTheme.colors.lightGray }}>
                   <TableRow>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.7rem', sm: '0.875rem' } }}>Gameweek</TableCell>
                     <TableCell align="right" sx={{ fontWeight: 'bold', fontSize: { xs: '0.7rem', sm: '0.875rem' } }}>
@@ -185,11 +186,11 @@ const GameweekStatsPage = ({ userId }) => {
                 </TableHead>
                 <TableBody>
                   {stats.map((gw) => (
-                    <TableRow key={gw.gameweek} sx={{ '&:hover': { backgroundColor: '#f5f5f5' } }}>
+                    <TableRow key={gw.gameweek} sx={{ '&:hover': { backgroundColor: appTheme.colors.lightGray } }}>
                       <TableCell sx={{ fontWeight: 'bold', fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                         GW {gw.gameweek}
                       </TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 'bold', color: '#4caf50', fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
+                      <TableCell align="right" sx={{ fontWeight: 'bold', color: appTheme.colors.success, fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                         {gw.gameweekPoints || 0}
                       </TableCell>
                       {!isMobile && <TableCell align="right" sx={{ fontSize: '0.875rem' }}>{gw.gameweekPredictions || 0}</TableCell>}

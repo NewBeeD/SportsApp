@@ -8,8 +8,8 @@ import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
-import { useState, useEffect, useCallback } from 'react'
-import qs from 'qs'
+import appTheme from '../../../css/theme'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import axios from "axios"
 import { Link } from 'react-router-dom'
 
@@ -25,7 +25,54 @@ import ScheduleIcon from '@mui/icons-material/Schedule'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import PersonIcon from '@mui/icons-material/Person'
 
+// Constants
+const API_URL = 'https://strapi-dominica-sport.onrender.com/api/headline-features?populate=*';
+const CAROUSEL_DELAY = 5000;
+const SUMMARY_MAX_LENGTH = 200;
+const WORDS_PER_MINUTE = 200; // Average reading speed
+
 const HeadlineFeature = () => {
+  // Helper function to parse hex color to RGB values
+  const hexToRgb = (hex) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? [
+      parseInt(result[1], 16),
+      parseInt(result[2], 16),
+      parseInt(result[3], 16)
+    ] : [255, 107, 0]; // Default to secondary color
+  };
+
+  // Format ISO date to readable format (e.g., "Jan 20, 2025")
+  const formatDate = (dateString) => {
+    if (!dateString) return new Date().toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+      });
+    } catch {
+      return new Date().toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+      });
+    }
+  };
+
+  // Calculate read time based on word count
+  const calculateReadTime = (text) => {
+    if (!text) return '1 min read';
+    const wordCount = text.trim().split(/\s+/).length;
+    const minutes = Math.ceil(wordCount / WORDS_PER_MINUTE);
+    return `${Math.max(1, minutes)} min read`;
+  };
+
   const [articles, setArticles] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -34,7 +81,7 @@ const HeadlineFeature = () => {
 
   // Configure Embla Carousel with autoplay
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
-    Autoplay({ delay: 5000, stopOnInteraction: false })
+    Autoplay({ delay: CAROUSEL_DELAY, stopOnInteraction: false })
   ]);
 
   // Function to extract image URL from Strapi response
@@ -77,8 +124,8 @@ const HeadlineFeature = () => {
     });
     
     // Truncate if too long
-    return summary.trim().length > 200 
-      ? summary.trim().substring(0, 200) + '...' 
+    return summary.trim().length > SUMMARY_MAX_LENGTH 
+      ? summary.trim().substring(0, SUMMARY_MAX_LENGTH) + '...' 
       : summary.trim();
   };
 
@@ -98,14 +145,14 @@ const HeadlineFeature = () => {
                  `https://images.unsplash.com/photo-${1574629810360 + index * 100}-7efbbe195018?w=1200&h=600&fit=crop`,
         category: attributes.Type || 'News',
         author: attributes.Author || 'Staff Writer',
-        date: attributes.createdAt || attributes.updatedAt || new Date().toISOString().split('T')[0],
-        readTime: '3 min read' // Default, could be calculated from content
+        date: formatDate(attributes.createdAt || attributes.updatedAt),
+        readTime: calculateReadTime(extractSummary(attributes.HeadlineContent))
       };
     });
   };
 
-  // Fallback data for football league
-  const fallbackArticles = [
+  // Memoized fallback articles
+  const fallbackArticles = useMemo(() => [
     {
       id: 1,
       title: "Dominica Premier League Season Kicks Off",
@@ -113,7 +160,7 @@ const HeadlineFeature = () => {
       imageUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=600&fit=crop",
       category: "Premier League",
       author: "Danphil Daniel",
-      date: "2024-01-15",
+      date: formatDate("2024-01-15"),
       readTime: "3 min read"
     },
     {
@@ -123,10 +170,10 @@ const HeadlineFeature = () => {
       imageUrl: "https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=1200&h=600&fit=crop",
       category: "Facilities",
       author: "Sports Reporter",
-      date: "2024-01-14",
+      date: formatDate("2024-01-14"),
       readTime: "4 min read"
     }
-  ];
+  ], []);
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev()
@@ -150,42 +197,42 @@ const HeadlineFeature = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
-        // Updated API URL to include population of image
-        const apiUrl = `https://strapi-dominica-sport.onrender.com/api/headline-features?populate=*`;
-        
-        const response = await axios.get(apiUrl);
+        const response = await axios.get(API_URL);
         
         if (response.status !== 200) {
-          throw new Error(`Error: ${response.statusText}`);
+          throw new Error(`API Error: ${response.statusText}`);
         }
 
-        // Check if we have data in the expected format
         let data = response.data;
+        let processedData = [];
         
-        // Handle different possible response structures
         if (data.data && Array.isArray(data.data)) {
-          // Standard Strapi v4 response
-          const processedData = processStrapiData(data.data);
-          setArticles(processedData);
+          processedData = processStrapiData(data.data);
         } else if (Array.isArray(data)) {
-          // Direct array response
-          const processedData = processStrapiData(data);
-          setArticles(processedData);
+          processedData = processStrapiData(data);
         } else {
-          throw new Error('Unexpected response format');
+          throw new Error('Unexpected response format from API');
         }
+
+        if (processedData.length === 0) {
+          throw new Error('No articles found in API response');
+        }
+
+        setArticles(processedData);
+        setError(null);
         
       } catch (error) {
-        console.error("API Error, using fallback data:", error.message);
+        console.error("API Error:", error.message);
         setArticles(fallbackArticles);
-        setError(error.message);
+        setError(`Unable to load articles: ${error.message}`);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
+    // Only run on component mount, allow empty dependency array since processStrapiData is stable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -209,9 +256,9 @@ const HeadlineFeature = () => {
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'center',
-        backgroundColor: '#222629'
+        backgroundColor: appTheme.colors.color1
       }}>
-        <SportsSoccerIcon sx={{ fontSize: 60, color: '#FFD700', mr: 2, animation: 'spin 1s linear infinite' }} />
+        <SportsSoccerIcon sx={{ fontSize: 60, color: appTheme.colors.secondary, mr: 2, animation: 'spin 1s linear infinite' }} />
         <Typography variant="h5" sx={{ color: 'white' }}>
           Loading League Headlines...
         </Typography>
@@ -229,7 +276,7 @@ const HeadlineFeature = () => {
     <Box 
       sx={{ 
         width: '100%',
-        backgroundColor: '#222629',
+        backgroundColor: appTheme.colors.color1,
         paddingTop: 0,
         borderRadius: { xs: 0, sm: 2 },
         overflow: 'hidden',
@@ -253,7 +300,7 @@ const HeadlineFeature = () => {
             paddingBottom: 1,
             fontSize: { xs: '1.8rem', sm: '2.5rem' },
             fontWeight: 700,
-            background: 'linear-gradient(90deg, #FFD700 0%, #FFA500 100%)',
+            background: `linear-gradient(90deg, ${appTheme.colors.secondary} 0%, ${appTheme.colors.warning} 100%)`,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             textAlign: { xs: 'center', sm: 'left' }
@@ -322,6 +369,7 @@ const HeadlineFeature = () => {
                             component="img"
                             src={article.imageUrl}
                             alt={article.title}
+                            loading="lazy"
                             sx={{
                               width: '100%',
                               height: '100%',
@@ -337,7 +385,7 @@ const HeadlineFeature = () => {
                               position: 'absolute',
                               top: 20,
                               left: 20,
-                              backgroundColor: '#FF6B00',
+                              backgroundColor: appTheme.colors.secondary,
                               color: 'white',
                               padding: '6px 16px',
                               borderRadius: '20px',
@@ -358,7 +406,7 @@ const HeadlineFeature = () => {
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
-                            backgroundColor: 'rgba(34, 38, 41, 0.95)'
+                            backgroundColor: `rgba(34, 38, 41, 0.95)`
                           }}
                         >
                           <Typography 
@@ -377,7 +425,7 @@ const HeadlineFeature = () => {
                           <Typography 
                             variant="body1"
                             sx={{
-                              color: '#B0B0B0',
+                              color: appTheme.colors.lightGray,
                               fontSize: { xs: '0.9rem', sm: '1rem' },
                               lineHeight: 1.6,
                               marginBottom: 3,
@@ -392,7 +440,7 @@ const HeadlineFeature = () => {
                               <Typography 
                                 variant="caption"
                                 sx={{
-                                  color: '#FFD700',
+                                  color: appTheme.colors.secondary,
                                   fontSize: '0.8rem',
                                   display: 'flex',
                                   alignItems: 'center',
@@ -407,7 +455,7 @@ const HeadlineFeature = () => {
                               <Typography 
                                 variant="caption"
                                 sx={{
-                                  color: '#4FC3F7',
+                                  color: appTheme.colors.accent,
                                   fontSize: '0.8rem',
                                   display: 'flex',
                                   alignItems: 'center',
@@ -422,7 +470,7 @@ const HeadlineFeature = () => {
                               <Typography 
                                 variant="caption"
                                 sx={{
-                                  color: '#90EE90',
+                                  color: appTheme.colors.success,
                                   fontSize: '0.8rem',
                                   display: 'flex',
                                   alignItems: 'center',
@@ -435,46 +483,27 @@ const HeadlineFeature = () => {
                             </Grid>
                           </Grid>
 
-                          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', marginBottom: {xs: 2.5} }}>
+                          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', marginBottom: {xs: 2.5}, justifyContent: 'center' }}>
                             <Button
                               variant="contained"
                               component={Link}
                               to={`/headline/${article.id}`}
                               sx={{
-                                backgroundColor: '#FF6B00',
+                                backgroundColor: appTheme.colors.secondary,
                                 color: 'white',
                                 padding: '10px 24px',
                                 borderRadius: '25px',
                                 fontWeight: 600,
                                 '&:hover': {
-                                  backgroundColor: '#FF8B33',
+                                  backgroundColor: appTheme.colors.secondary,
+                                  opacity: 0.8,
                                   transform: 'translateY(-2px)',
-                                  boxShadow: '0 6px 20px rgba(255, 107, 0, 0.3)'
+                                  boxShadow: `0 6px 20px rgba(255, 107, 0, 0.3)`
                                 },
                                 transition: 'all 0.3s ease'
                               }}
                             >
                               Read Full Story
-                            </Button>
-                            
-                            <Button
-                              variant="outlined"
-                              component={Link}
-                              to="/articles"
-                              sx={{
-                                borderColor: '#FFD700',
-                                color: '#FFD700',
-                                padding: '10px 24px',
-                                borderRadius: '25px',
-                                fontWeight: 600,
-                                '&:hover': {
-                                  borderColor: '#FFED4E',
-                                  color: '#FFED4E',
-                                  backgroundColor: 'rgba(255, 215, 0, 0.1)'
-                                }
-                              }}
-                            >
-                              All News
                             </Button>
                           </Box>
                         </Box>
@@ -498,12 +527,13 @@ const HeadlineFeature = () => {
               }}>
                 <IconButton
                   onClick={scrollPrev}
+                  aria-label="Previous article"
                   sx={{
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    color: '#FFD700',
+                    color: appTheme.colors.secondary,
                     pointerEvents: 'auto',
                     '&:hover': {
-                      backgroundColor: 'rgba(255, 107, 0, 0.8)',
+                      backgroundColor: `rgba(255, 107, 0, 0.8)`,
                       transform: 'scale(1.1)'
                     },
                     transition: 'all 0.3s ease',
@@ -515,12 +545,13 @@ const HeadlineFeature = () => {
                 
                 <IconButton
                   onClick={scrollNext}
+                  aria-label="Next article"
                   sx={{
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    color: '#FFD700',
+                    color: appTheme.colors.secondary,
                     pointerEvents: 'auto',
                     '&:hover': {
-                      backgroundColor: 'rgba(255, 107, 0, 0.8)',
+                      backgroundColor: `rgba(255, 107, 0, 0.8)`,
                       transform: 'scale(1.1)'
                     },
                     transition: 'all 0.3s ease',
@@ -537,7 +568,7 @@ const HeadlineFeature = () => {
                 bottom: 20,
                 left: 0,
                 right: 0,
-                display: 'flex',
+                display: { xs: 'none', sm: 'flex' },
                 justifyContent: 'center',
                 gap: 1,
                 zIndex: 10
@@ -546,15 +577,18 @@ const HeadlineFeature = () => {
                   <Box
                     key={index}
                     onClick={() => scrollTo(index)}
+                    role="tab"
+                    aria-selected={selectedIndex === index}
+                    aria-label={`Go to article ${index + 1}`}
                     sx={{
                       width: selectedIndex === index ? 40 : 12,
                       height: 6,
-                      backgroundColor: selectedIndex === index ? '#FF6B00' : 'rgba(255, 255, 255, 0.5)',
+                      backgroundColor: selectedIndex === index ? appTheme.colors.secondary : 'rgba(255, 255, 255, 0.5)',
                       borderRadius: '3px',
                       cursor: 'pointer',
                       transition: 'all 0.3s ease',
                       '&:hover': {
-                        backgroundColor: selectedIndex === index ? '#FF8B33' : 'rgba(255, 255, 255, 0.7)'
+                        backgroundColor: selectedIndex === index ? appTheme.colors.secondary : 'rgba(255, 255, 255, 0.7)'
                       }
                     }}
                   />
@@ -567,13 +601,27 @@ const HeadlineFeature = () => {
               textAlign: 'center',
               color: 'white'
             }}>
-              <SportsSoccerIcon sx={{ fontSize: 60, color: '#FF6B00', mb: 2 }} />
-              <Typography variant="h6" sx={{ mb: 1 }}>
+              <SportsSoccerIcon sx={{ fontSize: 60, color: appTheme.colors.secondary, mb: 2 }} />
+              <Typography variant="h6" sx={{ mb: 2 }}>
                 No Featured Articles Available
               </Typography>
-              <Typography variant="body2" sx={{ color: '#B0B0B0' }}>
+              <Typography variant="body2" sx={{ color: appTheme.colors.lightGray, mb: 3 }}>
                 Check back soon for the latest league headlines and updates.
               </Typography>
+              <Button
+                component={Link}
+                to="/articles"
+                variant="contained"
+                sx={{
+                  backgroundColor: appTheme.colors.secondary,
+                  color: 'white',
+                  '&:hover': {
+                    opacity: 0.8
+                  }
+                }}
+              >
+                Browse All Articles
+              </Button>
             </Box>
           )}
         </Box>
@@ -584,12 +632,14 @@ const HeadlineFeature = () => {
             position: 'absolute', 
             bottom: 10, 
             right: 10, 
-            backgroundColor: 'rgba(255, 0, 0, 0.1)',
-            padding: 1,
-            borderRadius: 1
+            backgroundColor: 'rgba(244, 67, 54, 0.15)',
+            padding: 2,
+            borderRadius: 1,
+            borderLeft: `4px solid ${appTheme.colors.error}`,
+            maxWidth: 300
           }}>
-            <Typography variant="caption" sx={{ color: '#FF6B6B' }}>
-              Using fallback data
+            <Typography variant="caption" sx={{ color: appTheme.colors.error, display: 'block' }}>
+              {error}
             </Typography>
           </Box>
         )}
@@ -602,7 +652,7 @@ const HeadlineFeature = () => {
             left: 0,
             right: 0,
             height: '4px',
-            background: 'linear-gradient(90deg, #FFD700 0%, #FF6B00 50%, #FFD700 100%)'
+            background: `linear-gradient(90deg, ${appTheme.colors.secondary} 0%, ${appTheme.colors.secondary} 50%, ${appTheme.colors.secondary} 100%)`
           }}
         />
       </Stack>
