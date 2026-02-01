@@ -28,7 +28,8 @@ const DEFAULT_STATS = {
   Goals: 0,
   Appearances: 0,
   RedCards: 0,
-  YellowCards: 0
+  YellowCards: 0,
+  MOTM: 0
 };
 
 // Map source field names to output field names
@@ -39,6 +40,13 @@ const FIELD_MAPPINGS = {
   Matches_Played: 'Appearances',
   RedCards: 'RedCards',
   YellowCards: 'YellowCards'
+};
+
+const firstDefined = (...values) => {
+  for (const value of values) {
+    if (value !== undefined && value !== null && value !== '') return value;
+  }
+  return undefined;
 };
 
 export default function transformPlayerStats(data) {
@@ -65,6 +73,20 @@ export default function transformPlayerStats(data) {
       transformedStats[targetField] = attributes[sourceField];
     }
   });
+
+  // Man of the Match (support common field name variants)
+  const motm = firstDefined(
+    attributes.MOTM,
+    attributes.Motm,
+    attributes.Man_Of_The_Match,
+    attributes.ManOfTheMatch,
+    attributes.MOTM_Awards,
+    attributes.MOTM_awards,
+    attributes.ManOfMatch
+  );
+  if (motm !== undefined) {
+    transformedStats.MOTM = motm;
+  }
 
   return transformedStats;
 }
