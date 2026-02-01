@@ -25,8 +25,9 @@ export const getAllGameweeks = async () => {
 
     matchesSnapshot.docs.forEach((doc) => {
       const match = doc.data();
-      if (match.gameweek) {
-        gameweeks.add(match.gameweek);
+      const gameweek = match.gameweek ?? match.gameWeek ?? match.game_week;
+      if (typeof gameweek !== 'undefined' && gameweek !== null && gameweek !== '') {
+        gameweeks.add(gameweek);
       }
     });
 
@@ -64,14 +65,27 @@ export const getGameweekLeaderboard = async (gameweek, topN = 50) => {
 
         if (gameweekDoc.exists()) {
           const gwData = gameweekDoc.data();
+          const gameweekPoints = gwData.gameweekPoints || 0;
+          const gameweekPredictions = gwData.gameweekPredictions || 0;
+          const gameweekCorrect = gwData.gameweekCorrect || 0;
+          const gameweekExactScores = gwData.gameweekExactScores || 0;
+
           gameweekScores.push({
             userId: userId,
             displayName: userData.displayName || 'Unknown Player',
+            profilePicture: userData.profilePictureUrl || userData.profilePicture || null,
             gameweek: gameweek,
-            gameweekPoints: gwData.gameweekPoints || 0,
-            gameweekPredictions: gwData.gameweekPredictions || 0,
-            gameweekCorrect: gwData.gameweekCorrect || 0,
-            gameweekExactScores: gwData.gameweekExactScores || 0,
+            // Raw gameweek fields
+            gameweekPoints,
+            gameweekPredictions,
+            gameweekCorrect,
+            gameweekExactScores,
+
+            // Compatibility fields expected by Leaderboard.jsx UI
+            totalPoints: gameweekPoints,
+            totalPredictions: gameweekPredictions,
+            correctPredictions: gameweekCorrect,
+            exactScorePredictions: gameweekExactScores,
           });
         }
       } catch (error) {

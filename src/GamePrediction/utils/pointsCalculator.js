@@ -43,24 +43,21 @@ export const calculateExpectedPoints = (prediction, actualScore) => {
 
   const actualOutcome = deriveOutcome(actualScore);
 
-  const OUTCOME_POINTS = 5;
-  const EXACT_SCORE_POINTS = 10;
-
   // Check outcome
   if (prediction.predictedOutcome === actualOutcome) {
-    outcomePoints = OUTCOME_POINTS;
+    outcomePoints = 3;
   }
 
-  // Check exact score (exact score still implies correct outcome)
+  // Check exact score (only if outcome correct)
   if (
+    outcomePoints > 0 &&
     prediction.predictedScore.home === actualScore.home &&
     prediction.predictedScore.away === actualScore.away
   ) {
-    exactScorePoints = EXACT_SCORE_POINTS;
+    exactScorePoints = 5;
   }
 
   return {
-    // Cloud Function awards outcome + exact score (exact implies outcome)
     total: outcomePoints + exactScorePoints,
     outcomePoints,
     exactScorePoints,
@@ -142,8 +139,8 @@ export const formatTimeRemaining = (timestamp) => {
  * @returns {string} - Color code
  */
 export const getPointsColor = (points) => {
-  if (points >= 10) return '#4caf50'; // Green (exact score total is 15)
-  if (points >= 5) return '#2196f3'; // Blue
+  if (points >= 8) return '#4caf50'; // Green
+  if (points >= 3) return '#2196f3'; // Blue
   if (points > 0) return '#ff9800'; // Orange
   return '#999'; // Gray
 };

@@ -80,7 +80,7 @@ const PredictionPage = () => {
             ⚽ Upcoming Matches
           </Typography>
           <Typography variant="body2" color="textSecondary" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>
-            Predict match results and earn points! Correct outcome: +5 pts, Exact score: +10 pts (total 15 for exact score)
+            Predict match results and earn points! Correct outcome: +3 pts, Exact score: +5 pts
           </Typography>
         </Box>
 
