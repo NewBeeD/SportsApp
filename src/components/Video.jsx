@@ -165,7 +165,7 @@ const Video = ({ VideoLocation }) => {
             overflow: 'hidden',
             '& iframe': {
               width: '100%',
-              height: 'auto',
+              height: { xs: '300px', sm: '400px' },
               objectFit: 'contain',
             },
             '& video': {
