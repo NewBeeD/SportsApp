@@ -57,7 +57,7 @@ const PredictionForm = ({ match, onSubmitSuccess, existingPrediction = null }) =
 
   // Check if prediction is already scored (cannot edit scored predictions)
   useEffect(() => {
-    if (existingPrediction && existingPrediction.points > 0) {
+    if (existingPrediction && existingPrediction.pointsAwarded === true) {
       setPredictionScored(true);
       setSubmitted(true);
     } else if (existingPrediction) {
@@ -536,7 +536,7 @@ const PredictionForm = ({ match, onSubmitSuccess, existingPrediction = null }) =
                       Correct Outcome
                     </Typography>
                     <Typography variant={isMobile ? 'body2' : 'h6'} sx={{ fontWeight: 'bold' }}>
-                      +3 pts
+                      +5 pts
                     </Typography>
                   </Box>
                   <Box sx={{ flex: 1 }}>
@@ -544,7 +544,7 @@ const PredictionForm = ({ match, onSubmitSuccess, existingPrediction = null }) =
                       Exact Score
                     </Typography>
                     <Typography variant={isMobile ? 'body2' : 'h6'} sx={{ fontWeight: 'bold' }}>
-                      +5 pts
+                      +10 pts
                     </Typography>
                   </Box>
                 </Stack>

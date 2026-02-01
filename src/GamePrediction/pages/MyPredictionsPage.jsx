@@ -1,5 +1,5 @@
 // src/GamePrediction/pages/MyPredictionsPage.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Container,
   Box,
@@ -26,13 +26,13 @@ import {
   Button,
   Divider,
   LinearProgress,
-  Badge,
   Fade,
 } from '@mui/material';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../config/firebaseConfig';
 import { usePredictions } from '../hooks/usePrediction';
 import { useMatches } from '../hooks/useMatches';
+import { getMatch } from '../services/matchService';
 import MatchCard from '../components/MatchCard';
 import MatchResultsView from '../components/MatchResultsView';
 import UserStatsCard from '../components/UserStatsCard';
@@ -74,20 +74,78 @@ const MyPredictionsPage = () => {
   const { matches: finishedMatches, loading: matchesLoading } = useMatches('FINISHED');
   const { matches: upcomingMatches } = useMatches('UPCOMING');
 
-  // Create match map for quick lookup
-  const matchMap = {
-    ...finishedMatches.reduce((acc, match) => { acc[match.id] = match; return acc; }, {}),
-    ...upcomingMatches.reduce((acc, match) => { acc[match.id] = match; return acc; }, {})
+  const [matchMapState, setMatchMapState] = useState({});
+  const fetchingMatchIdsRef = useRef(new Set());
+
+  // Seed match map with the cached lists (fast path)
+  useEffect(() => {
+    const seeded = {
+      ...finishedMatches.reduce((acc, match) => { acc[match.id] = match; return acc; }, {}),
+      ...upcomingMatches.reduce((acc, match) => { acc[match.id] = match; return acc; }, {})
+    };
+
+    setMatchMapState((prev) => ({ ...prev, ...seeded }));
+  }, [finishedMatches, upcomingMatches]);
+
+  // Ensure we have match data for every prediction (avoid "Pending" for finished matches outside the last 20)
+  useEffect(() => {
+    if (!predictions || predictions.length === 0) return;
+
+    const uniqueMatchIds = Array.from(new Set(predictions.map((p) => p.matchId).filter(Boolean)));
+    const missing = uniqueMatchIds.filter((id) => !matchMapState[id] && !fetchingMatchIdsRef.current.has(id));
+    if (missing.length === 0) return;
+
+    missing.forEach((id) => fetchingMatchIdsRef.current.add(id));
+
+    (async () => {
+      try {
+        const fetched = await Promise.all(missing.map((id) => getMatch(id)));
+        const fetchedMap = fetched
+          .filter(Boolean)
+          .reduce((acc, match) => {
+            acc[match.id] = match;
+            return acc;
+          }, {});
+
+        setMatchMapState((prev) => ({ ...prev, ...fetchedMap }));
+      } finally {
+        missing.forEach((id) => fetchingMatchIdsRef.current.delete(id));
+      }
+    })();
+  }, [predictions, matchMapState]);
+
+  const matchMap = useMemo(() => matchMapState, [matchMapState]);
+
+  const isMatchFinished = (match) => {
+    return !!match && (match.status === 'FINISHED' || !!match.actualScore);
   };
 
-  // Predictions are "unscored" if match is not finished yet, "scored" once match is finished (regardless of points)
+  const getPredictionStatus = (prediction, match) => {
+    // Primary source of truth: Cloud Function sets pointsAwarded when match is scored
+    if (prediction?.pointsAwarded === true) return 'SCORED';
+
+    // If match is finished, treat it as not-pending in UI (even if scoring is delayed)
+    if (isMatchFinished(match)) return 'FINISHED';
+
+    // Only count as pending when we can confirm match is not finished
+    if (match) return 'PENDING';
+
+    // Match not loaded yet; don't count it as pending
+    return 'UNKNOWN';
+  };
+
+  // Pending should only include predictions you actually made for matches not yet finished.
+  // Missing a match (no prediction doc) will never create a pending entry.
   const unscoredPredictions = predictions.filter((p) => {
     const match = matchMap[p.matchId];
-    return !match || match.status !== 'FINISHED';
+    return getPredictionStatus(p, match) === 'PENDING';
   });
+
+  // Everything else is "not pending" (scored or finished)
   const scoredPredictions = predictions.filter((p) => {
     const match = matchMap[p.matchId];
-    return match && match.status === 'FINISHED';
+    const status = getPredictionStatus(p, match);
+    return status === 'SCORED' || status === 'FINISHED';
   });
 
   // Filter predictions based on search and filters
@@ -95,7 +153,12 @@ const MyPredictionsPage = () => {
     return predictionsList
       .filter(pred => {
         const match = matchMap[pred.matchId];
-        if (!match) return false;
+        // If match data isn't loaded yet, still show it unless user is filtering/searching
+        if (!match) {
+          if (searchQuery) return false;
+          if (leagueFilter !== 'ALL') return false;
+          return true;
+        }
         
         if (searchQuery) {
           const query = searchQuery.toLowerCase();
@@ -113,6 +176,11 @@ const MyPredictionsPage = () => {
       .sort((a, b) => {
         const matchA = matchMap[a.matchId];
         const matchB = matchMap[b.matchId];
+
+        // Put items with missing match data at the end
+        if (!matchA && !matchB) return 0;
+        if (!matchA) return 1;
+        if (!matchB) return -1;
         
         switch(sortBy) {
           case 'DATE':
@@ -134,8 +202,8 @@ const MyPredictionsPage = () => {
     const totalPredictions = predictions.length;
     const totalPoints = scoredPredictions.reduce((sum, pred) => sum + pred.points, 0);
     const averagePoints = scoredPredictions.length > 0 ? (totalPoints / scoredPredictions.length).toFixed(1) : 0;
-    const correctPredictions = scoredPredictions.filter(p => p.points >= 3).length;
-    const exactPredictions = scoredPredictions.filter(p => p.points === 5).length;
+    const correctPredictions = scoredPredictions.filter(p => p.points >= 5).length;
+    const exactPredictions = scoredPredictions.filter(p => (p.pointBreakdown?.exactScorePoints || 0) > 0 || p.points >= 10).length;
     const successRate = scoredPredictions.length > 0 ? Math.round((correctPredictions / scoredPredictions.length) * 100) : 0;
 
     return {
@@ -420,7 +488,6 @@ const MyPredictionsPage = () => {
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                     <span>{isMobile ? 'Pending' : 'Pending'}</span>
-                    <Badge badgeContent={unscoredPredictions.length} size="small" />
                   </Box>
                 }
               />
@@ -430,7 +497,6 @@ const MyPredictionsPage = () => {
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                     <span>{isMobile ? 'Scored' : 'Scored'}</span>
-                    <Badge badgeContent={scoredPredictions.length} size="small" />
                   </Box>
                 }
               />
@@ -477,7 +543,18 @@ const MyPredictionsPage = () => {
                             </Stack>
                           </Box>
                           <Box sx={{ p: { xs: 1, sm: 1.5 } }}>
-                            <MatchCard match={matchMap[pred.matchId]} prediction={pred} />
+                            {matchMap[pred.matchId] ? (
+                              <MatchCard match={matchMap[pred.matchId]} prediction={pred} />
+                            ) : (
+                              <Box>
+                                <Typography variant="body2" fontWeight={600} sx={{ mb: 0.5 }}>
+                                  Loading match details…
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                  Match ID: {pred.matchId}
+                                </Typography>
+                              </Box>
+                            )}
                           </Box>
                         </Paper>
                       </Grid>
@@ -505,39 +582,54 @@ const MyPredictionsPage = () => {
                   </Box>
                 ) : (
                   <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }}>
-                    {filteredScored.map((pred) => (
-                      <Grid item xs={12} sm={6} lg={4} key={pred.docId}>
-                        <Paper
-                          elevation={0}
-                          sx={{
-                            borderRadius: 2,
-                            border: '1px solid',
-                            borderColor: pred.points === 5 ? 'success.light' : 'primary.light',
-                            overflow: 'hidden',
-                            transition: 'all 0.3s ease',
-                            '&:hover': {
-                              transform: 'translateY(-2px)',
-                              boxShadow: theme.shadows[2]
-                            }
-                          }}
-                        >
-                          {/* Points Badge */}
-                          <Box sx={{ position: 'relative', p: { xs: 1, sm: 1.5 } }}>
-                            <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
-                              <Chip
-                                label={`+${pred.points} pts`}
-                                size="small"
-                                color={pred.points === 5 ? 'success' : 'primary'}
-                                sx={{ fontWeight: 600, fontSize: '0.65rem' }}
-                              />
+                    {filteredScored.map((pred) => {
+                      const isExact = (pred.pointBreakdown?.exactScorePoints || 0) > 0 || pred.points >= 10;
+
+                      return (
+                        <Grid item xs={12} sm={6} lg={4} key={pred.docId}>
+                          <Paper
+                            elevation={0}
+                            sx={{
+                              borderRadius: 2,
+                              border: '1px solid',
+                              borderColor: isExact ? 'success.light' : 'primary.light',
+                              overflow: 'hidden',
+                              transition: 'all 0.3s ease',
+                              '&:hover': {
+                                transform: 'translateY(-2px)',
+                                boxShadow: theme.shadows[2]
+                              }
+                            }}
+                          >
+                            {/* Points Badge */}
+                            <Box sx={{ position: 'relative', p: { xs: 1, sm: 1.5 } }}>
+                              <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
+                                <Chip
+                                  label={`+${pred.points} pts`}
+                                  size="small"
+                                  color={isExact ? 'success' : 'primary'}
+                                  sx={{ fontWeight: 600, fontSize: '0.65rem' }}
+                                />
+                              </Box>
+                              <Box sx={{ pt: 1.5 }}>
+                                {matchMap[pred.matchId] ? (
+                                  <MatchCard match={matchMap[pred.matchId]} prediction={pred} />
+                                ) : (
+                                  <Box>
+                                    <Typography variant="body2" fontWeight={600} sx={{ mb: 0.5 }}>
+                                      Loading match details…
+                                    </Typography>
+                                    <Typography variant="caption" color="text.secondary">
+                                      Match ID: {pred.matchId}
+                                    </Typography>
+                                  </Box>
+                                )}
+                              </Box>
                             </Box>
-                            <Box sx={{ pt: 1.5 }}>
-                              <MatchCard match={matchMap[pred.matchId]} prediction={pred} />
-                            </Box>
-                          </Box>
-                        </Paper>
-                      </Grid>
-                    ))}
+                          </Paper>
+                        </Grid>
+                      );
+                    })}
                   </Grid>
                 )}
               </>
