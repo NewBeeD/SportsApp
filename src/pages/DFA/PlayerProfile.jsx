@@ -292,6 +292,7 @@ const PlayerProfile = () => {
     { label: 'Appearances', value: seasonStats.Appearances, icon: <PersonIcon />, color: 'primary' },
     { label: 'Goals', value: seasonStats.Goals, icon: <SoccerIcon />, color: 'success' },
     { label: 'Assists', value: seasonStats.Assists, icon: <TrendingUpIcon />, color: 'info' },
+    { label: 'MOTM Awards', value: seasonStats.MOTM ?? 0, icon: <TrophyIcon />, color: 'secondary' },
     { label: 'Yellow Cards', value: seasonStats.YellowCards, icon: <MilitaryTechIcon />, color: 'warning' },
     { label: 'Red Cards', value: seasonStats.RedCards || 0, icon: <SecurityIcon />, color: 'error' },
     ...((positionInfo.isGoalkeeper || positionInfo.isDefender) && seasonStats.CleanSheets !== undefined && seasonStats.CleanSheets !== null ? [

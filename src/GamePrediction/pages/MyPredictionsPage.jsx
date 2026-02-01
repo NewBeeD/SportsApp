@@ -1,5 +1,5 @@
 // src/GamePrediction/pages/MyPredictionsPage.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Container,
   Box,
@@ -33,6 +33,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../config/firebaseConfig';
 import { usePredictions } from '../hooks/usePrediction';
 import { useMatches } from '../hooks/useMatches';
+import { getMatch } from '../services/matchService';
 import MatchCard from '../components/MatchCard';
 import MatchResultsView from '../components/MatchResultsView';
 import UserStatsCard from '../components/UserStatsCard';
@@ -60,6 +61,8 @@ const MyPredictionsPage = () => {
   const [leagueFilter, setLeagueFilter] = useState('ALL');
   const [sortBy, setSortBy] = useState('DATE');
   const [showStats, setShowStats] = useState(true);
+  const [extraMatchMap, setExtraMatchMap] = useState({});
+  const [visibleScoredCount, setVisibleScoredCount] = useState(6);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -74,20 +77,107 @@ const MyPredictionsPage = () => {
   const { matches: finishedMatches, loading: matchesLoading } = useMatches('FINISHED');
   const { matches: upcomingMatches } = useMatches('UPCOMING');
 
-  // Create match map for quick lookup
+  // Create base match map for quick lookup
+  const baseMatchMap = useMemo(() => {
+    return {
+      ...finishedMatches.reduce((acc, match) => {
+        acc[match.id] = match;
+        return acc;
+      }, {}),
+      ...upcomingMatches.reduce((acc, match) => {
+        acc[match.id] = match;
+        return acc;
+      }, {}),
+    };
+  }, [finishedMatches, upcomingMatches]);
+
+  // Fetch any matches referenced by predictions that aren't in the base lists.
+  // This prevents "ghost pending" counts when finishedMatches/upcomingMatches are limited.
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchMissingMatches = async () => {
+      if (!predictions?.length) return;
+
+      const uniqueMatchIds = Array.from(
+        new Set(predictions.map((p) => p.matchId).filter(Boolean))
+      );
+
+      const missingIds = uniqueMatchIds.filter(
+        (id) => !baseMatchMap[id] && !extraMatchMap[id]
+      );
+
+      if (missingIds.length === 0) return;
+
+      try {
+        const fetched = await Promise.all(
+          missingIds.map(async (matchId) => {
+            const match = await getMatch(matchId);
+            return { matchId, match };
+          })
+        );
+
+        if (cancelled) return;
+
+        setExtraMatchMap((prev) => {
+          const next = { ...prev };
+          for (const { matchId, match } of fetched) {
+            if (match) next[matchId] = match;
+          }
+          return next;
+        });
+      } catch (e) {
+        // Non-fatal: page still works with partial match data
+        console.warn('Failed to fetch some missing matches:', e);
+      }
+    };
+
+    fetchMissingMatches();
+    return () => {
+      cancelled = true;
+    };
+  }, [predictions, baseMatchMap, extraMatchMap]);
+
   const matchMap = {
-    ...finishedMatches.reduce((acc, match) => { acc[match.id] = match; return acc; }, {}),
-    ...upcomingMatches.reduce((acc, match) => { acc[match.id] = match; return acc; }, {})
+    ...baseMatchMap,
+    ...extraMatchMap,
   };
 
-  // Predictions are "unscored" if match is not finished yet, "scored" once match is finished (regardless of points)
-  const unscoredPredictions = predictions.filter((p) => {
-    const match = matchMap[p.matchId];
-    return !match || match.status !== 'FINISHED';
-  });
+  const getMatchForPrediction = (prediction) => {
+    return matchMap[prediction?.matchId];
+  };
+
+  const isMatchFinished = (match) => {
+    if (!match) return false;
+    const status = String(match.status || '').trim().toUpperCase();
+    if (status === 'FINISHED' || status === 'COMPLETED' || status === 'FT' || status === 'FULL_TIME') return true;
+    const hasActualScore =
+      match.actualScore &&
+      typeof match.actualScore.home !== 'undefined' &&
+      typeof match.actualScore.away !== 'undefined';
+    return Boolean(hasActualScore);
+  };
+
+  // Predictions are "scored" when either:
+  // - Cloud Function has marked pointsAwarded true, or
+  // - match is finished (status/actualScore). 
+  // If a match can't be loaded at all, don't count it as pending (avoids "Pending X" with no visible cards).
+  const isPredictionScored = (prediction) => {
+    if (prediction?.pointsAwarded === true) return true;
+    return isMatchFinished(getMatchForPrediction(prediction));
+  };
+
+  const isPredictionPending = (prediction) => {
+    const match = getMatchForPrediction(prediction);
+    if (!match) return false;
+    return !isPredictionScored(prediction);
+  };
+
+  const unscoredPredictions = predictions.filter((p) => isPredictionPending(p));
   const scoredPredictions = predictions.filter((p) => {
-    const match = matchMap[p.matchId];
-    return match && match.status === 'FINISHED';
+    const match = getMatchForPrediction(p);
+    if (!match) return false;
+    return isPredictionScored(p);
   });
 
   // Filter predictions based on search and filters
@@ -129,6 +219,15 @@ const MyPredictionsPage = () => {
 
   const filteredUnscored = getFilteredPredictions(unscoredPredictions);
   const filteredScored = getFilteredPredictions(scoredPredictions);
+
+  // Reset pagination when filters/view change
+  useEffect(() => {
+    if (tabValue === 1) {
+      setVisibleScoredCount(6);
+    }
+  }, [tabValue, searchQuery, leagueFilter, sortBy]);
+
+  const visibleScored = filteredScored.slice(0, visibleScoredCount);
 
   const getPredictionStats = () => {
     const totalPredictions = predictions.length;
@@ -418,7 +517,7 @@ const MyPredictionsPage = () => {
                 icon={<Pending />}
                 iconPosition="start"
                 label={
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <span>{isMobile ? 'Pending' : 'Pending'}</span>
                     <Badge badgeContent={unscoredPredictions.length} size="small" />
                   </Box>
@@ -428,7 +527,7 @@ const MyPredictionsPage = () => {
                 icon={<CheckCircle />}
                 iconPosition="start"
                 label={
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <span>{isMobile ? 'Scored' : 'Scored'}</span>
                     <Badge badgeContent={scoredPredictions.length} size="small" />
                   </Box>
@@ -504,8 +603,9 @@ const MyPredictionsPage = () => {
                     </Typography>
                   </Box>
                 ) : (
-                  <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }}>
-                    {filteredScored.map((pred) => (
+                  <>
+                    <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }}>
+                      {visibleScored.map((pred) => (
                       <Grid item xs={12} sm={6} lg={4} key={pred.docId}>
                         <Paper
                           elevation={0}
@@ -537,8 +637,24 @@ const MyPredictionsPage = () => {
                           </Box>
                         </Paper>
                       </Grid>
-                    ))}
-                  </Grid>
+                      ))}
+                    </Grid>
+
+                    {filteredScored.length > visibleScoredCount && (
+                      <Box sx={{ mt: { xs: 2, sm: 3 }, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                        <Typography variant="caption" color="text.secondary">
+                          Showing {Math.min(visibleScoredCount, filteredScored.length)} of {filteredScored.length}
+                        </Typography>
+                        <Button
+                          variant="outlined"
+                          onClick={() => setVisibleScoredCount((c) => c + 6)}
+                          sx={{ borderRadius: 2, textTransform: 'none' }}
+                        >
+                          Load more
+                        </Button>
+                      </Box>
+                    )}
+                  </>
                 )}
               </>
             )}
