@@ -13,6 +13,7 @@ export default function SingleStructuredDisplay(data){
 
   required_data_fields['id'] = data.id
   required_data_fields['title'] = data.attributes['Title'],
+  required_data_fields['Headline'] = data.attributes['Headline'],
   required_data_fields['time'] = daysElapsed(data.attributes['publishedAt'])
   required_data_fields['author'] = data.attributes['Author']
   required_data_fields['body_content'] = data.attributes['Body_Content']

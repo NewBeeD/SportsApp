@@ -32,7 +32,7 @@ import FixturesData from './Fixtures';
 
 
 
-const TrendingSection = ({ level }) => {
+const TrendingSection = ({ level, showSidePanel = true }) => {
 
   // This function fetches the data on strapi and then structures it, then passes it to redux state
   GetArticles()
@@ -214,28 +214,30 @@ const TrendingSection = ({ level }) => {
           </Grid>
 
           {/* Side panel in the homepage */}
-          {level === 'first'?
-          
-            <Stack width={{ sm:'380px', md: '400px' }} display={{xs:'none', sm:'inherit'}}
-            direction='column'
-            justifyContent='center'
-            alignItems='center'
-            spacing={0}
-            sx={{ backgroundColor: `var(--color-color3, ${theme.colors.color3})`, borderRadius: '8px'}}
-            height={{ sm: '450px'}}>
+          {showSidePanel ? (
+            level === 'first' ? (
+              <Stack width={{ sm:'380px', md: '400px' }} display={{xs:'none', sm:'inherit'}}
+              direction='column'
+              justifyContent='center'
+              alignItems='center'
+              spacing={0}
+              sx={{ backgroundColor: `var(--color-color3, ${theme.colors.color3})`, borderRadius: '8px'}}
+              height={{ sm: '450px'}}>
 
-              {/* <Typography  variant='h3'>Ad Space here</Typography> */}
-              <Typography variant='h4' color='white' padding={0} sx={{ paddingTop: 2}}>The Video of The Day</Typography>
+                {/* <Typography  variant='h3'>Ad Space here</Typography> */}
+                <Typography variant='h4' color='white' padding={0} sx={{ paddingTop: 2}}>The Video of The Day</Typography>
 
-              <VideoHighlights VideoLocation='Homepage1' />
-              
-            </Stack>: level === 'second'?
-            
-            <Box display={{ xs: 'none'}}>
-              <FixturesData page='home' type='sm' />
-            </Box>
-          
-          : ''}
+                <VideoHighlights VideoLocation='Homepage1' />
+                
+              </Stack>
+            ) : level === 'second' ? (
+              <Box display={{ xs: 'none'}}>
+                <FixturesData page='home' type='sm' />
+              </Box>
+            ) : (
+              ''
+            )
+          ) : null}
 
 
         </Box>
