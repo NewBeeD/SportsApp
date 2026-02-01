@@ -8,7 +8,7 @@ import { queryParams_articles } from "../modules/DFA/QueryParams"
 import SingleStructuredDisplay from "../modules/Homepage/TrendingSection/SingleArticleDisplayStructure"
 
 import ImageSlideshow from "../components/Article/ImageSlideshow"
-// import Comments from "../components/Article/Comments"
+import Comments from "../components/Article/Comments"
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 
 
@@ -274,7 +274,7 @@ const Article = () => {
               </Box>
             ): <Skeleton width='100%' height='500px' variant="rectangular" sx={{ marginTop: 4}} />}
   
-            {/* <Comments articleId={id} /> */}
+            <Comments articleId={id} />
   
         </Box>
   
