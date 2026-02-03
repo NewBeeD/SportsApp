@@ -79,7 +79,7 @@ const Video = ({ VideoLocation }) => {
   return(
     // Only render if a video was found
     !video ? null : (
-    <Box display='flex' justifyContent='center' alignItems='center' width={{xs: 'inherit'}} >
+    <Box display='flex' justifyContent='center' alignItems='center' width={{xs: 'inherit'}} marginTop={{ sm:4 }}>
 
       <Box width="100%">
         {/* Video Title - Modern Gradient Card Design */}

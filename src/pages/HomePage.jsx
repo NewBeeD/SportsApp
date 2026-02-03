@@ -5,6 +5,7 @@ import Points_Table from "../components/homePage/Points_Table"
 import FixturesData from "../components/homePage/Fixtures"
 import FeaturedPlayer from "../components/homePage/FeaturedPlayer"
 import TopStories from "../components/homePage/TopStories"
+import CommunityPredictionsHome from "../components/homePage/CommunityPredictionsHome"
 import Footer from "../components/Footer/Footer"
 
 import Tab from "@mui/material/Tab"; 
@@ -36,7 +37,14 @@ const HomePage = () => {
 
       <Box marginTop={7} />
 
-      <Box width={{xs:'100%', sm: 800, md: 1200}} sx={{margin: {xs: 0, sm: 'auto'}}}>
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: { xs: '100%', sm: 900, md: 1200, lg: 1440, xl: 1680 },
+          mx: { xs: 0, sm: 'auto' },
+          px: { xs: 0, sm: 2 },
+        }}
+      >
         <Grid container spacing={2}>
           {/* Left column: Hero + Top Stories + Latest */}
           <Grid item xs={12} md={8}>
@@ -93,6 +101,8 @@ const HomePage = () => {
               </Box>
 
               <FeaturedPlayer />
+
+              <CommunityPredictionsHome limit={5} />
 
             </Stack>
 

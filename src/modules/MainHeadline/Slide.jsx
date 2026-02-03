@@ -16,7 +16,7 @@ const Slide = ({ headline }) => {
 
       <Box
         width={{xs: '100%', sm: '90%'}}
-        height={{xs: 330, sm: 400}}
+        height={{xs: 330, sm: 400, md: 440, lg: 520, xl: 560}}
         sx={{ position: 'relative', overflow: 'hidden' }}
       >
 
@@ -40,7 +40,7 @@ const Slide = ({ headline }) => {
         >
           <Stack direction='column' sx={{ maxWidth: { xs: '100%', lg: '80%' } }}>
             <Typography
-              fontSize={{xs: 10, sm: 14}}
+              fontSize={{xs: 10, sm: 14, lg: 16}}
               sx={{
                 color: 'white',
                 fontFamily: 'Josefin Slab',
@@ -52,11 +52,11 @@ const Slide = ({ headline }) => {
                 overflow: 'hidden',
               }}
             >
-              {headline.league}
+              {(headline?.type || 'News').toUpperCase()}
             </Typography>
 
             <Typography
-              fontSize={{xs: 14, sm: 26, md: 30}}
+              fontSize={{xs: 14, sm: 26, md: 30, lg: 38, xl: 42}}
               sx={{
                 color: 'white',
                 fontWeight: 900,

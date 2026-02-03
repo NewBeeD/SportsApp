@@ -2,109 +2,109 @@ import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import Skeleton from '@mui/material/Skeleton';
+import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
 
 const ArticleCardDesktop = ({ item, theme }) => {
-  const excerpt = item.body_content.length < 25
-    ? item.body_content
-    : `${item.body_content.substring(0, 80)}...`;
+  const body = typeof item?.body_content === 'string' ? item.body_content : '';
+  const excerpt = body.length <= 120 ? body : `${body.substring(0, 120)}...`;
+  const imageUrl = item?.url?.[0];
 
   return (
-    <Card sx={{
-      boxShadow: 'none',
-      backgroundColor: 'white',
-      border: '1px solid #86C232',
-      height: { sm: '380px' },
-      maxWidth: 260,
-      margin: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      transition: 'all 0.3s ease',
-      '&:hover': { 
-        boxShadow: 4,
-        transform: 'translateY(-4px)'
-      }
-    }}>
-      {/* Category */}
-      <CardActions>
-        <Stack>
-          <Link to="/" style={{ textDecoration: 'none' }}>
-            <Typography 
-              sx={{ 
-                color: theme.colors.color5,
-                fontSize: 13,
-                textDecoration: 'underline',
-                fontWeight: 900,
-                '&:hover': { color: theme.colors.primary || '#1976d2' }
+    <Card
+      sx={{
+        borderRadius: 3,
+        overflow: 'hidden',
+        border: `1px solid ${theme.colors.divider}`,
+        backgroundColor: theme.colors.background,
+        boxShadow: '0 12px 30px rgba(0,0,0,0.10)',
+        transition: 'transform 150ms ease, box-shadow 150ms ease',
+        '&:hover': {
+          transform: 'translateY(-3px)',
+          boxShadow: '0 16px 40px rgba(0,0,0,0.14)',
+        },
+      }}
+    >
+      <CardActionArea component={Link} to={`/${item.id}`} sx={{ display: 'block' }}>
+        <Box sx={{ position: 'relative', height: { md: 180, lg: 220, xl: 240 }, overflow: 'hidden' }}>
+          {imageUrl ? (
+            <CardMedia
+              component="img"
+              image={imageUrl}
+              alt={item?.alt || item?.title}
+              sx={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                transition: 'transform 200ms ease',
               }}
-            >
-              {item.type}
-            </Typography>
-          </Link>
-        </Stack>
-      </CardActions>
+            />
+          ) : (
+            <Skeleton variant="rectangular" width="100%" height="100%" />
+          )}
 
-      {/* Title */}
-      <Link to={`/${item.id}`} style={{ textDecoration: 'none' }}>
-        <Typography 
-          sx={{ 
-            color: theme.colors.color3,
-            fontWeight: 900,
-            fontSize: 14,
-            px: 2,
-            lineHeight: 1.3,
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            '&:hover': { color: theme.colors.primary || '#1976d2' }
-          }}
-        >
-          {item.title}
-        </Typography>
-      </Link>
-
-      {/* Image */}
-      <Box sx={{ 
-        position: 'relative',
-        width: '100%',
-        height: 200,
-        mt: 2,
-        overflow: 'hidden'
-      }}>
-        <Link to={`/${item.id}`} style={{ textDecoration: 'none' }}>
-          <CardMedia 
-            component="img"
-            image={item.url[0]}
-            alt={item.alt}
-            sx={{ 
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              objectPosition: '50% 50%',
-              transition: 'transform 0.3s ease',
-              '&:hover': { transform: 'scale(1.05)' }
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              background:
+                'linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.7) 100%)',
             }}
           />
-        </Link>
-      </Box>
 
-      {/* Excerpt */}
-      <CardContent sx={{ flexGrow: 1, pt: 2 }}>
-        <Typography 
-          sx={{ 
-            color: 'text.primary',
-            fontSize: 11,
-            lineHeight: 1.5
-          }}
-        >
-          {excerpt}
-        </Typography>
-      </CardContent>
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ position: 'absolute', left: 10, bottom: 10 }}>
+            <Chip
+              size="small"
+              label={(item?.type || 'News').toUpperCase()}
+              sx={{
+                backgroundColor: theme.colors.secondary,
+                color: theme.colors.textInverse,
+                fontWeight: 900,
+              }}
+            />
+            <Typography sx={{ color: theme.colors.textInverse, fontSize: { md: 11, lg: 12, xl: 12 }, opacity: 0.9 }}>
+              {item?.time}
+            </Typography>
+          </Stack>
+        </Box>
+
+        <CardContent sx={{ p: 2 }}>
+          <Typography
+            sx={{
+              color: theme.colors.textPrimary,
+              fontWeight: 900,
+              fontSize: { md: 15, lg: 17, xl: 18 },
+              lineHeight: 1.2,
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
+              overflow: 'hidden',
+            }}
+          >
+            {item?.title}
+          </Typography>
+
+          <Typography
+            sx={{
+              mt: 1,
+              color: theme.colors.textSecondary,
+              fontSize: { md: 12, lg: 13, xl: 14 },
+              lineHeight: 1.45,
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
+              overflow: 'hidden',
+            }}
+          >
+            {excerpt}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
     </Card>
   );
 };

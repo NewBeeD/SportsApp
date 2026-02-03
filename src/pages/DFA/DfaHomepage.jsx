@@ -33,6 +33,7 @@ import FixturesData from "../../components/homePage/Fixtures";
 import FeaturedPlayer from '../../components/homePage/FeaturedPlayer';
 import MainNews from '../../components/homePage/MainNews';
 import TopStories from '../../components/homePage/TopStories';
+import CommunityPredictionsHome from '../../components/homePage/CommunityPredictionsHome';
 import Video from "../../components/Video";
 
 const DfaHomepage = () => {
@@ -107,9 +108,15 @@ const DfaHomepage = () => {
           </TabContext>
         </Box>
 
-        <DfaArticles level="first" size="small" />
+        <Box marginTop={2}>
+          <CommunityPredictionsHome limit={5} />
+        </Box>
 
+        <DfaArticles level="first" size="small" />
         <DfaArticles level="second" size="small" />
+        <DfaArticles level="third" size="small" />
+        <DfaArticles level="fourth" size="small" />
+        <DfaArticles level="fifth" size="small" />
 
 
       </Box>
@@ -119,9 +126,16 @@ const DfaHomepage = () => {
   // LARGE SCREEN LAYOUT (Tablet & Desktop)
   return (
     <Box paddingTop={10}>
-      <Box maxWidth={isLargeScreen ? 1400 : 1100} margin="auto">
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: { sm: 1100, md: 1400, lg: 1680, xl: 1920 },
+          mx: 'auto',
+          px: { sm: 2, md: 2 },
+        }}
+      >
 
-        <Grid container spacing={2}>
+        <Grid container spacing={{ xs: 2, md: 3, lg: 4 }}>
           {/* Left: Hero + Top stories + content */}
           <Grid item xs={12} md={8}>
             <Grid container spacing={2}>
@@ -168,6 +182,8 @@ const DfaHomepage = () => {
                 </Typography>
                 <FeaturedPlayer />
               </Box>
+
+              <CommunityPredictionsHome limit={5} />
             </Stack>
           </Grid>
         </Grid>

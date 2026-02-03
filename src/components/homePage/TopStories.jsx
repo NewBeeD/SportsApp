@@ -120,7 +120,7 @@ const TopStories = ({ count = 5, league }) => {
                         sx={{
                           color: theme.colors.textInverse,
                           fontWeight: 900,
-                          fontSize: 14,
+                          fontSize: { xs: 14, md: 15, lg: 16 },
                           lineHeight: 1.2,
                           display: '-webkit-box',
                           WebkitBoxOrient: 'vertical',
@@ -132,11 +132,11 @@ const TopStories = ({ count = 5, league }) => {
                       </Typography>
 
                       <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 0.5 }}>
-                        <Typography sx={{ fontSize: 11, color: theme.colors.secondaryLight, fontWeight: 900 }}>
-                          {item.league}
+                        <Typography sx={{ fontSize: { xs: 11, md: 12, lg: 12 }, color: theme.colors.secondaryLight, fontWeight: 900 }}>
+                          {(item?.type || 'News').toUpperCase()}
                         </Typography>
                         <Divider orientation="vertical" flexItem />
-                        <Typography sx={{ fontSize: 11, color: theme.colors.textTertiary }}>
+                        <Typography sx={{ fontSize: { xs: 11, md: 12, lg: 12 }, color: theme.colors.textTertiary }}>
                           {item.time}
                         </Typography>
                       </Stack>

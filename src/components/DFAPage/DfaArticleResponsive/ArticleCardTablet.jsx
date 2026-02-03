@@ -1,92 +1,87 @@
 import React from 'react';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import Skeleton from '@mui/material/Skeleton';
+import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
 
 const ArticleCardTablet = ({ item, theme }) => {
-  const excerpt = item.body_content.length > 80
-    ? `${item.body_content.substring(0, 80)}...`
-    : item.body_content;
+  const imageUrl = item?.url?.[0];
 
   return (
-    <Card sx={{
-      boxShadow: 'none',
-      backgroundColor: 'white',
-      border: '1px solid #86C232',
-      height: { sm: 'auto' },
-      maxWidth: 220,
-      margin: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      '&:hover': { boxShadow: 3 }
-    }}>
-      <Stack direction="column-reverse" sx={{ flexGrow: 1 }}>
-        {/* Title */}
-        <Link to={`/${item.id}`} style={{ textDecoration: 'none' }}>
-          <Typography 
-            sx={{ 
-              color: theme.colors.color3,
-              fontWeight: 900,
-              fontSize: 13,
-              px: 2,
-              pt: 1,
-              lineHeight: 1.3,
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              '&:hover': { color: theme.colors.primary || '#1976d2' }
-            }}
-          >
-            {item.title}
-          </Typography>
-        </Link>
-
-        {/* Category */}
-        <Box sx={{ px: 2, pb: 1 }}>
-          <Link to="/" style={{ textDecoration: 'none' }}>
-            <Typography 
-              sx={{ 
-                color: theme.colors.color5,
-                fontSize: 13,
-                textDecoration: 'underline',
-                fontWeight: 900,
-                '&:hover': { color: theme.colors.primary || '#1976d2' }
-              }}
-            >
-              {item.type}
-            </Typography>
-          </Link>
-        </Box>
-
-        {/* Image */}
-        <Box sx={{ 
-          position: 'relative',
-          width: '100%',
-          height: 200,
-          overflow: 'hidden'
-        }}>
-          <Link to={`/${item.id}`} style={{ textDecoration: 'none' }}>
-            <CardMedia 
+    <Card
+      sx={{
+        borderRadius: 3,
+        overflow: 'hidden',
+        border: `1px solid ${theme.colors.divider}`,
+        backgroundColor: theme.colors.background,
+        boxShadow: '0 10px 24px rgba(0,0,0,0.10)',
+        transition: 'transform 150ms ease, box-shadow 150ms ease',
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: '0 14px 34px rgba(0,0,0,0.13)',
+        },
+      }}
+    >
+      <CardActionArea component={Link} to={`/${item.id}`} sx={{ display: 'block' }}>
+        <Box sx={{ position: 'relative', height: 180 }}>
+          {imageUrl ? (
+            <CardMedia
               component="img"
-              image={item.url[0]}
-              alt={item.alt}
-              sx={{ 
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: '50% 50%',
-                transition: 'transform 0.3s ease',
-                '&:hover': { transform: 'scale(1.05)' }
+              image={imageUrl}
+              alt={item?.alt || item?.title}
+              sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          ) : (
+            <Skeleton variant="rectangular" width="100%" height="100%" />
+          )}
+
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              background:
+                'linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.7) 100%)',
+            }}
+          />
+
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ position: 'absolute', left: 10, bottom: 10 }}>
+            <Chip
+              size="small"
+              label={(item?.type || 'News').toUpperCase()}
+              sx={{
+                backgroundColor: theme.colors.secondary,
+                color: theme.colors.textInverse,
+                fontWeight: 900,
               }}
             />
-          </Link>
+            <Typography sx={{ color: theme.colors.textInverse, fontSize: { sm: 11, md: 12 }, opacity: 0.9 }}>
+              {item?.time}
+            </Typography>
+          </Stack>
         </Box>
-      </Stack>
+
+        <Box sx={{ p: 1.75 }}>
+          <Typography
+            sx={{
+              color: theme.colors.textPrimary,
+              fontWeight: 900,
+              fontSize: { sm: 14, md: 15 },
+              lineHeight: 1.2,
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
+              overflow: 'hidden',
+            }}
+          >
+            {item?.title}
+          </Typography>
+        </Box>
+      </CardActionArea>
     </Card>
   );
 };
