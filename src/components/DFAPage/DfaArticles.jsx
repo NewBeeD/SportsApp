@@ -21,8 +21,20 @@ const DfaArticles = ({ level, size }) => {
   const articles_raw = useSelector((state) => state.articles);
   const players = useSelector((state) => state.DfaPlayers);
 
-  let articles = articles_raw && articles_raw[0] 
-    ? articles_raw[0].filter(item => item.league === 'DFA' && item.headline !== 'YES')
+  const normalizeYes = (value) => {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'number') return value !== 0;
+    if (typeof value === 'string') {
+      const v = value.trim().toLowerCase();
+      return v === 'yes' || v === 'true' || v === '1';
+    }
+    return false;
+  };
+
+  const isHeadlineYes = (article) => normalizeYes(article?.Headline ?? article?.headline);
+
+  let articles = articles_raw && articles_raw[0]
+    ? articles_raw[0].filter(item => item.league === 'DFA' && !isHeadlineYes(item))
     : null;
 
   const articles_length = articles && articles_raw[0] ? articles.length : 0;

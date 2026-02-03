@@ -22,18 +22,42 @@ export const getUpcomingMatches = async (options = {}) => {
   try {
     const { limitResults = 20, league = null } = options;
 
-    const q = query(
+    const baseQuery = query(
       collection(db, 'matches'),
       where('status', '==', 'UPCOMING'),
       limit(limitResults)
     );
 
-    const snapshot = await getDocs(q);
+    const snapshot = await getDocs(baseQuery);
     let results = snapshot.docs.map((doc) => ({
       id: doc.id,  // ✅ This is the correct ID field
       matchId: doc.id,  // ✅ Also add as matchId for compatibility
       ...doc.data(),
     }));
+
+    if (results.length === 0) {
+      const fallbackQuery = query(
+        collection(db, 'matches'),
+        where('status', 'in', ['UPCOMING', 'Upcoming', 'SCHEDULED', 'Scheduled', 'PENDING', 'Pending']),
+        limit(limitResults)
+      );
+      const fallbackSnapshot = await getDocs(fallbackQuery);
+      results = fallbackSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        matchId: doc.id,
+        ...doc.data(),
+      }));
+    }
+
+    if (results.length === 0) {
+      const allQuery = query(collection(db, 'matches'), limit(limitResults));
+      const allSnapshot = await getDocs(allQuery);
+      results = allSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        matchId: doc.id,
+        ...doc.data(),
+      }));
+    }
 
     // Sort client-side
     results.sort((a, b) => {
@@ -43,7 +67,14 @@ export const getUpcomingMatches = async (options = {}) => {
     });
 
     if (league) {
-      results = results.filter((m) => m.league === league);
+      const normalizedLeague = String(league).trim().toLowerCase();
+      const filtered = results.filter((m) => {
+        if (!m?.league) return false;
+        return String(m.league).trim().toLowerCase() === normalizedLeague;
+      });
+      if (filtered.length > 0) {
+        results = filtered;
+      }
     }
 
     return results;

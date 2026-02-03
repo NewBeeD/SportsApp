@@ -385,10 +385,21 @@ const InlineTableLegend = () => {
     return (
     
 
-      <Box marginTop={8} marginBottom={2} width={{ sm: '255px', md: '300px', lg: '300px'}} sx={{ margin: 'auto', textAlign: 'center', border: '1px solid #D3E1FF', borderRadius: {xs: '4px'}}}>
+      <Box
+        marginTop={8}
+        marginBottom={2}
+        sx={{
+          width: '100%',
+          textAlign: 'center',
+          border: '1px solid #D3E1FF',
+          borderRadius: { xs: '4px' },
+        }}
+      >
 
 
-        <Typography fontWeight={900}>Premier League Standings</Typography>
+        <Typography fontWeight={900} sx={{ fontSize: { xs: 16, md: 18, lg: 20 } }}>
+          Premier League Standings
+        </Typography>
   
        {premierTable ? <TableContainer component={Paper} sx={{ marginTop: {xs: 1}}} >
 
@@ -396,10 +407,10 @@ const InlineTableLegend = () => {
 
             <TableHead >
               <TableRow >
-                <TableCell sx={{ fontSize: {xs: 13}, fontWeight: 900}}>Team</TableCell>
-                <TableCell sx={{ fontSize: {xs: 13}, fontWeight: 900}}>P</TableCell>
-                <TableCell sx={{ fontSize: {xs: 13}, fontWeight: 900}}>GD</TableCell>
-                <TableCell align="center" sx={{ fontSize: {xs: 13}, fontWeight: 900}}>Pts</TableCell>
+                <TableCell sx={{ fontSize: { xs: 13, md: 14, lg: 15 }, fontWeight: 900 }}>Team</TableCell>
+                <TableCell sx={{ fontSize: { xs: 13, md: 14, lg: 15 }, fontWeight: 900 }}>P</TableCell>
+                <TableCell sx={{ fontSize: { xs: 13, md: 14, lg: 15 }, fontWeight: 900 }}>GD</TableCell>
+                <TableCell align="center" sx={{ fontSize: { xs: 13, md: 14, lg: 15 }, fontWeight: 900 }}>Pts</TableCell>
               </TableRow>
             </TableHead>
 
@@ -408,10 +419,10 @@ const InlineTableLegend = () => {
 
                 <TableRow key={row.ID} sx={{ border: 0}}>
 
-                  <TableCell sx={{ fontSize: {xs: 12}, paddingY: 0.5, fontWeight: 'bold'}}>{row.Team}</TableCell>
-                  <TableCell sx={{ fontSize: {xs: 12}, paddingY: 0.5, fontWeight: 'bold'}}>{row.Played}</TableCell>
-                  <TableCell sx={{ fontSize: {xs: 12}, paddingY: 0.5, fontWeight: 'bold'}}>{row.GD}</TableCell>
-                  <TableCell align="center" sx={{ fontSize: {xs: 12}, paddingY: 0.5, fontWeight: 'bold'}}>{row.Points}</TableCell>
+                  <TableCell sx={{ fontSize: { xs: 12, md: 13, lg: 14 }, paddingY: 0.5, fontWeight: 'bold' }}>{row.Team}</TableCell>
+                  <TableCell sx={{ fontSize: { xs: 12, md: 13, lg: 14 }, paddingY: 0.5, fontWeight: 'bold' }}>{row.Played}</TableCell>
+                  <TableCell sx={{ fontSize: { xs: 12, md: 13, lg: 14 }, paddingY: 0.5, fontWeight: 'bold' }}>{row.GD}</TableCell>
+                  <TableCell align="center" sx={{ fontSize: { xs: 12, md: 13, lg: 14 }, paddingY: 0.5, fontWeight: 'bold' }}>{row.Points}</TableCell>
                   
                 </TableRow>
               ))}
@@ -423,7 +434,16 @@ const InlineTableLegend = () => {
             <Box>
 
               <Link to='DFA/Table'>
-                <Typography style={{ fontSize: 13, fontWeight: 'bold'}}  sx={{ textAlign: 'center', paddingY: {xs: '5px'}, backgroundColor: {xs: '#F9F9F9', sm: 'white'}, fontWeight: 900}}>
+                <Typography
+                  style={{ fontWeight: 'bold' }}
+                  sx={{
+                    fontSize: { xs: 13, md: 14, lg: 15 },
+                    textAlign: 'center',
+                    paddingY: { xs: '5px' },
+                    backgroundColor: { xs: '#F9F9F9', sm: 'white' },
+                    fontWeight: 900,
+                  }}
+                >
                   View Full Table
                 </Typography>
               </Link>

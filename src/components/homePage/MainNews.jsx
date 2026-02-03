@@ -1,8 +1,5 @@
-import {  Skeleton } from '@mui/material'
-import { Link } from 'react-router-dom';
-
-import theme from '../../css/theme';
-
+import { Skeleton } from '@mui/material'
+import PropTypes from 'prop-types'
 
 import '../../css/MainNewsCss.css'
 import "slick-carousel/slick/slick.css";
@@ -10,19 +7,32 @@ import "slick-carousel/slick/slick-theme.css";
 
 import Slide from '../../modules/MainHeadline/Slide';
 
-import { useState, useEffect } from 'react';
-
 import { useSelector } from 'react-redux';
 import Slider from 'react-slick';
 
 import '../../css/responsivenessWebApp.css'
 
 
-const MainNews = () => {
+const MainNews = ({ league }) => {
 
-  let articles = useSelector((state) => state.articles)
-  articles = articles && articles[0] ? articles[0]: '';
-  let headline = articles && articles[0] ? articles.filter(item => item.headline == 'Yes' && item.league == 'DFA'): '';
+  const articlesState = useSelector((state) => state.articles)
+  const articles = Array.isArray(articlesState?.[0]) ? articlesState[0] : [];
+
+  const normalizeYes = (value) => {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'number') return value !== 0;
+    if (typeof value === 'string') {
+      const v = value.trim().toLowerCase();
+      return v === 'yes' || v === 'true' || v === '1';
+    }
+    return false;
+  };
+
+  const headline = articles.filter((item) => {
+    if (!normalizeYes(item?.Headline ?? item?.headline)) return false;
+    if (league) return item?.league === league;
+    return true;
+  });
 
 
   const settings = {
@@ -36,10 +46,6 @@ const MainNews = () => {
     cssEase: 'cubic-bezier(.76,.49,.72,.66)',
 
   };
-
-  // const [headline, setHeadline] = useState(slides)
-  const [newsCounter, setNewsCounter] = useState(0)
-
 
   const getVideoDimensions = () => {
     const windowWidth = window.innerWidth;
@@ -92,3 +98,7 @@ const MainNews = () => {
 }
 
 export default MainNews
+
+MainNews.propTypes = {
+  league: PropTypes.string,
+}

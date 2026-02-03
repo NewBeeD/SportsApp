@@ -6,8 +6,8 @@
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 import Tab from '@mui/material/Tab';
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useTheme, useMediaQuery } from '@mui/material';
@@ -31,7 +31,9 @@ import DfaArticles from "../../components/DFAPage/DfaArticles";
 import Points_Table from "../../components/homePage/Points_Table";
 import FixturesData from "../../components/homePage/Fixtures";
 import FeaturedPlayer from '../../components/homePage/FeaturedPlayer';
-import HeadlineFeature from "../../components/DFAPage/Headline/HeadlineFeature";
+import MainNews from '../../components/homePage/MainNews';
+import TopStories from '../../components/homePage/TopStories';
+import CommunityPredictionsHome from '../../components/homePage/CommunityPredictionsHome';
 import Video from "../../components/Video";
 
 const DfaHomepage = () => {
@@ -78,7 +80,11 @@ const DfaHomepage = () => {
   if (isMobile) {
     return (
       <Box sx={{ paddingY: 0 }}>
-        <HeadlineFeature />
+        <MainNews league="DFA" />
+
+        <Box marginTop={2}>
+          <TopStories count={5} league="DFA" />
+        </Box>
 
         {/* Video Section - Featured at top */}
         <Box marginY={2}>
@@ -102,9 +108,15 @@ const DfaHomepage = () => {
           </TabContext>
         </Box>
 
-        <DfaArticles level="first" size="small" />
+        <Box marginTop={2}>
+          <CommunityPredictionsHome limit={5} />
+        </Box>
 
+        <DfaArticles level="first" size="small" />
         <DfaArticles level="second" size="small" />
+        <DfaArticles level="third" size="small" />
+        <DfaArticles level="fourth" size="small" />
+        <DfaArticles level="fifth" size="small" />
 
 
       </Box>
@@ -114,68 +126,67 @@ const DfaHomepage = () => {
   // LARGE SCREEN LAYOUT (Tablet & Desktop)
   return (
     <Box paddingTop={10}>
-      <Box maxWidth={isLargeScreen ? 1400 : 1100} margin="auto">
-        
-        {/* Sidebar + Articles Layout */}
-        <Stack
-          direction={{ xs: 'column', sm: 'row' }}
-          spacing={2}
-          margin={{ xs: 'auto' }}
-          divider={<Divider orientation={isLargeScreen ? 'vertical' : 'horizontal'} flexItem />}
-        >
-          
-          {/* SIDEBAR - Left Side (Visible on tablet & above) */}
-          <Box flex={isLargeScreen ? '0 0 350px' : '1'}>
-            <Stack spacing={3} width={isLargeScreen ? '350px' : 'auto'}>
-              
-              {/* Points Table */}
-              <Box>
-                <Points_Table page="DfaHomepage" />
-              </Box>
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: { sm: 1100, md: 1400, lg: 1680, xl: 1920 },
+          mx: 'auto',
+          px: { sm: 2, md: 2 },
+        }}
+      >
 
-              {/* Fixtures */}
-              <Box>
-                <FixturesData page="Dfahome" type="now" league="DFA" />
-              </Box>
+        <Grid container spacing={{ xs: 2, md: 3, lg: 4 }}>
+          {/* Left: Hero + Top stories + content */}
+          <Grid item xs={12} md={8}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} lg={8}>
+                <MainNews league="DFA" />
+              </Grid>
+              <Grid item xs={12} lg={4}>
+                <TopStories count={5} league="DFA" />
+              </Grid>
+            </Grid>
 
-              {/* Featured Players - Only on larger screens */}
-              {isLargeScreen && (
-                <>
-                  <Typography fontWeight={900} textAlign="left" paddingY={2} paddingLeft={1}>
-                    Featured Players
-                  </Typography>
-                  <FeaturedPlayer />
-                  <FeaturedPlayer />
-                  <FeaturedPlayer />
-                  <FeaturedPlayer />
-                  <FeaturedPlayer />
-                </>
-              )}
-            </Stack>
-          </Box>
-
-          {/* MAIN CONTENT - Right Side */}
-          <Stack flex="1" spacing={3} padding={2}>
-            
-            {/* Headline Feature */}
-            <Box>
-              <HeadlineFeature />
-            </Box>
-
-            {/* Video Section */}
-            <Box>
+            <Box marginTop={2}>
               <Video VideoLocation="Homepage1" />
             </Box>
 
-            <Divider sx={{ width: '100%' }} />
+            <Box marginTop={2}>
+              <DfaArticles level="first" />
+            </Box>
+          </Grid>
 
-            {/* Articles */}
-            <DfaArticles level="first" />
-          </Stack>
+          {/* Right rail: Table/Fixtures + Featured Player */}
+          <Grid item xs={12} md={4}>
+            <Stack spacing={2}>
+              <Box height="100%">
+                <TabContext value={value}>
+                  <TabList onChange={handleChangeTableFixtures} aria-label="tabs example" centered>
+                    <Tab label="Table" value="1" />
+                    <Tab label="Fixtures" value="2" />
+                  </TabList>
 
-        </Stack>
+                  <TabPanel value="1">
+                    <Points_Table page="DfaHomepage" />
+                  </TabPanel>
 
-        <Divider sx={{ marginTop: 4 }} />
+                  <TabPanel value="2">
+                    <FixturesData page="Dfahome" type="now" league="DFA" />
+                  </TabPanel>
+                </TabContext>
+              </Box>
+
+              <Box>
+                <Typography fontWeight={900} textAlign="left" paddingLeft={1}>
+                  Featured Player
+                </Typography>
+                <FeaturedPlayer />
+              </Box>
+
+              <CommunityPredictionsHome limit={5} />
+            </Stack>
+          </Grid>
+        </Grid>
       </Box>
     </Box>
   );

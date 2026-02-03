@@ -1,8 +1,11 @@
-import { Box, Stack } from "@mui/material"
+import { Box, Grid, Stack } from "@mui/material"
 import MainNews from "../components/homePage/MainNews"
 import TrendingSection from "../components/homePage/TrendingSection"
 import Points_Table from "../components/homePage/Points_Table"
 import FixturesData from "../components/homePage/Fixtures"
+import FeaturedPlayer from "../components/homePage/FeaturedPlayer"
+import TopStories from "../components/homePage/TopStories"
+import CommunityPredictionsHome from "../components/homePage/CommunityPredictionsHome"
 import Footer from "../components/Footer/Footer"
 
 import Tab from "@mui/material/Tab"; 
@@ -34,45 +37,77 @@ const HomePage = () => {
 
       <Box marginTop={7} />
 
-      <Box width={{xs:'100%', sm: 800, md: 1200}} sx={{margin: {xs: 0, sm: 'auto'}}}>
-
-        <MainNews />
-        <TrendingSection level={first}/>
-        {/* <Stack direction='row'>
-          <FixturesData page='home' />
-        </Stack> */}
-        <TrendingSection level={second}/>
-
-        {/* Tabs for fixtures and Points */}
-        <Box marginTop={{ sm: 7}} height='100%'>
-
-          <TabContext value={value}>
-
-            <TabList onChange={handleChange} aria-label="tabs example" centered >
-                      <Tab label='Table' value={1}  />
-                      <Tab label='Fixtures' value={2}  />
-            </TabList>
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: { xs: '100%', sm: 900, md: 1200, lg: 1440, xl: 1680 },
+          mx: { xs: 0, sm: 'auto' },
+          px: { xs: 0, sm: 2 },
+        }}
+      >
+        <Grid container spacing={2}>
+          {/* Left column: Hero + Top Stories + Latest */}
+          <Grid item xs={12} md={8}>
 
 
-            <TabPanel  value={1}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} lg={8}>
+                <MainNews />
+              </Grid>
+              <Grid item xs={12} lg={4}>
+                <TopStories count={5} />
+              </Grid>
+            </Grid>
 
-              <Points_Table page='Homepage'/>
+            <Box marginTop={2}>
+              <TrendingSection level={first} showSidePanel={false} />
+              <TrendingSection level={second} showSidePanel={false} />
+              <TrendingSection level={third} showSidePanel={false} />
+              <TrendingSection level={fourth} showSidePanel={false} />
+            </Box>
 
-            </TabPanel>
+          </Grid>
 
-            <TabPanel  value={2}>
+          {/* Right rail: Table/Fixtures + Featured Player */}
+          <Grid item xs={12} md={4}>
 
-              <FixturesData page='home' type="now" league='DFA' />
-              
-            </TabPanel>
+            <Stack spacing={2}>
 
-          </TabContext>
+              {/* Tabs for fixtures and Points */}
+              <Box height='100%'>
 
-        </Box>
-        
-        <TrendingSection level={third}/>
-        <TrendingSection level={fourth}/>
+                 <TabContext value={value}>
 
+                  <TabList onChange={handleChange} aria-label="tabs example" centered >
+                            <Tab label='Table' value={1}  />
+                            <Tab label='Fixtures' value={2}  />
+                  </TabList>
+
+
+                  <TabPanel  value={1}>
+
+                    <Points_Table page='Homepage'/>
+
+                  </TabPanel>
+
+                  <TabPanel  value={2}>
+
+                    <FixturesData page='home' type="now" league='DFA' />
+                    
+                  </TabPanel>
+
+                </TabContext>
+
+              </Box>
+
+              <FeaturedPlayer />
+
+              <CommunityPredictionsHome limit={5} />
+
+            </Stack>
+
+          </Grid>
+        </Grid>
       </Box>
 
       <Footer />

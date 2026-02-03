@@ -1,5 +1,6 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const crypto = require("crypto");
 
 admin.initializeApp();
 
@@ -172,3 +173,117 @@ exports.calculatePredictionPoints = functions.firestore
       }
     }
   });
+
+// Casual community vote with rate limiting (one vote per device per match)
+exports.submitCommunityVote = functions.https.onCall(async (data, context) => {
+  const matchId = String(data?.matchId || '').trim();
+  const outcome = String(data?.outcome || '').trim();
+  const deviceId = String(data?.deviceId || '').trim();
+
+  const validOutcomes = new Set(['HOME_WIN', 'DRAW', 'AWAY_WIN']);
+  if (!matchId || !deviceId || !validOutcomes.has(outcome)) {
+    throw new functions.https.HttpsError('invalid-argument', 'Invalid match, outcome, or device');
+  }
+
+  const matchRef = db.collection('matches').doc(matchId);
+  const matchSnap = await matchRef.get();
+  if (!matchSnap.exists) {
+    throw new functions.https.HttpsError('not-found', 'Match not found');
+  }
+
+  const matchData = matchSnap.data();
+  const status = String(matchData?.status || '').toUpperCase();
+  if (status !== 'UPCOMING') {
+    throw new functions.https.HttpsError('failed-precondition', 'Voting closed for this match');
+  }
+
+  const scheduledTime = matchData?.scheduledTime?.toDate
+    ? matchData.scheduledTime.toDate()
+    : matchData?.scheduledTime
+    ? new Date(matchData.scheduledTime)
+    : null;
+
+  if (scheduledTime && Date.now() >= scheduledTime.getTime()) {
+    throw new functions.https.HttpsError('failed-precondition', 'Voting closed for this match');
+  }
+
+  if (context.auth?.uid) {
+    const existingPredictionQuery = await db
+      .collection('predictions')
+      .where('userId', '==', context.auth.uid)
+      .where('matchId', '==', matchId)
+      .limit(1)
+      .get();
+
+    if (!existingPredictionQuery.empty) {
+      throw new functions.https.HttpsError(
+        'failed-precondition',
+        'Prediction already submitted for this match'
+      );
+    }
+  }
+
+  const voteKey = `${matchId}_${deviceId}`;
+  const voteRef = db.collection('communityPollVotes').doc(voteKey);
+  const voteSnap = await voteRef.get();
+  const existingVote = voteSnap.exists ? voteSnap.data() : null;
+  if (existingVote?.outcome && existingVote.outcome === outcome) {
+    return { success: true, unchanged: true };
+  }
+
+  const ip = context.rawRequest?.ip || '';
+  const ipHash = ip ? crypto.createHash('sha256').update(ip).digest('hex') : null;
+
+  const pollRef = db.collection('communityPolls').doc(matchId);
+  const pollSnap = await pollRef.get();
+
+  if (!pollSnap.exists) {
+    await pollRef.set(
+      {
+        home: 0,
+        draw: 0,
+        away: 0,
+        total: 0,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
+  }
+
+  const fieldMap = {
+    HOME_WIN: 'home',
+    DRAW: 'draw',
+    AWAY_WIN: 'away',
+  };
+
+  const batch = db.batch();
+  const incrementUpdates = {
+    [fieldMap[outcome]]: admin.firestore.FieldValue.increment(1),
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+  };
+
+  if (existingVote?.outcome && fieldMap[existingVote.outcome]) {
+    incrementUpdates[fieldMap[existingVote.outcome]] = admin.firestore.FieldValue.increment(-1);
+  } else {
+    incrementUpdates.total = admin.firestore.FieldValue.increment(1);
+  }
+
+  batch.update(pollRef, incrementUpdates);
+
+  batch.set(
+    voteRef,
+    {
+      matchId,
+      deviceId,
+      outcome,
+      ipHash,
+      createdAt: existingVote?.createdAt || admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    },
+    { merge: true }
+  );
+
+  await batch.commit();
+
+  return { success: true };
+});

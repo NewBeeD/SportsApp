@@ -1,19 +1,18 @@
+/* eslint-disable react/prop-types */
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import CardMedia from '@mui/material/CardMedia';
+import Skeleton from '@mui/material/Skeleton';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import CardActionArea from '@mui/material/CardActionArea';
 
-// Consider lightweight alternatives:
-import Stack from '@mui/material/Stack';          
-import CardHeader from '@mui/material/CardHeader'; 
-import CardContent from '@mui/material/CardContent'; 
-import CardMedia from '@mui/material/CardMedia';   
-import CardActions from '@mui/material/CardActions'; 
-import Skeleton from '@mui/material/Skeleton';     
+import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
-import Divider from '@mui/material/Divider';
 
 // Function to fetch article data and structured data
 import GetArticles from '../../modules/Homepage/TrendingSection/TrendingSectionDataFetch'
@@ -32,19 +31,13 @@ import FixturesData from './Fixtures';
 
 
 
-const TrendingSection = ({ level }) => {
+const TrendingSection = ({ level, showSidePanel = true }) => {
 
   // This function fetches the data on strapi and then structures it, then passes it to redux state
   GetArticles()
 
   const articles_raw = useSelector((state) => state.articles)
-  let articles = articles_raw[0]
-
-
-  let articles_length = articles && articles_raw[0] ? articles.length: 0;
-  let part_size = articles_length ? Math.ceil(articles_length/3): 0;
-
-
+  let articles = articles_raw?.[0]
   // TODO: Set up articles in slices
 
 
@@ -71,22 +64,224 @@ const TrendingSection = ({ level }) => {
       break;
   }
 
+  const getExcerpt = (item) => {
+    const text = typeof item?.body_content === 'string' ? item.body_content : '';
+    if (!text) return '';
+    return text.length <= 80 ? text : `${text.slice(0, 80)}...`;
+  };
+
+  const FeaturedCard = ({ item }) => (
+    <Card
+      sx={{
+        borderRadius: 3,
+        overflow: 'hidden',
+    // let part_size = articles_length ? Math.ceil(articles_length/3): 0;
+        border: `1px solid ${theme.colors.divider}`,
+        backgroundColor: theme.colors.background,
+      }}
+    >
+      <CardActionArea
+        to={`/${item.id}`}
+        component={Link}
+        sx={{
+          display: 'block',
+          position: 'relative',
+          '&:hover .ts-media': { transform: 'scale(1.03)' },
+        }}
+      >
+        <Box sx={{ position: 'relative', height: { sm: 320, md: 360, lg: 420, xl: 460 } }}>
+          {item?.url?.[0] ? (
+            <CardMedia
+              component='img'
+              className='ts-media'
+              loading='lazy'
+              src={item.url[0]}
+              alt={item.alt || item.title}
+              sx={{
+                height: '100%',
+                width: '100%',
+                objectFit: 'cover',
+                transition: 'transform 200ms ease',
+              }}
+            />
+          ) : (
+            <Skeleton variant='rectangular' width='100%' height='100%' />
+          )}
+
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              background:
+                'linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.65) 72%, rgba(0,0,0,0.85) 100%)',
+            }}
+          />
+
+          <Box
+            sx={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              p: 2.25,
+              color: theme.colors.textInverse,
+            }}
+          >
+            <Stack direction='row' spacing={1} alignItems='center' sx={{ mb: 1 }}>
+              <Chip
+                label={(item?.type || 'News').toUpperCase()}
+                size='small'
+                sx={{
+                  backgroundColor: theme.colors.secondary,
+                  color: theme.colors.textInverse,
+                  fontWeight: 900,
+                }}
+              />
+              <Typography sx={{ fontSize: 12, opacity: 0.9 }}>
+                {item.time}
+              </Typography>
+            </Stack>
+
+            <Typography
+              sx={{
+                fontWeight: 900,
+                fontSize: { sm: 22, md: 26, lg: 30, xl: 32 },
+                lineHeight: 1.15,
+                display: '-webkit-box',
+                WebkitBoxOrient: 'vertical',
+                WebkitLineClamp: 2,
+                overflow: 'hidden',
+              }}
+            >
+              {item.title}
+            </Typography>
+
+            <Typography
+              sx={{
+                mt: 1,
+                fontSize: { xs: 13, md: 14, lg: 15 },
+                opacity: 0.95,
+                display: '-webkit-box',
+                WebkitBoxOrient: 'vertical',
+                WebkitLineClamp: 2,
+                overflow: 'hidden',
+              }}
+            >
+              {getExcerpt(item)}
+            </Typography>
+          </Box>
+        </Box>
+      </CardActionArea>
+    </Card>
+  );
+
+  const CompactCard = ({ item }) => (
+    <Card
+      sx={{
+        borderRadius: 2.5,
+        overflow: 'hidden',
+        boxShadow: '0 10px 24px rgba(0,0,0,0.10)',
+        border: `1px solid ${theme.colors.divider}`,
+        backgroundColor: theme.colors.background,
+      }}
+    >
+      <CardActionArea
+        to={`/${item.id}`}
+        component={Link}
+        sx={{
+          display: 'flex',
+          gap: 1.5,
+          p: 1.25,
+          alignItems: 'center',
+          '&:hover': { backgroundColor: theme.colors.lightGray },
+        }}
+      >
+        <Box
+          sx={{
+            width: { xs: 92, md: 104, lg: 112 },
+            height: { xs: 72, md: 80, lg: 86 },
+            flex: '0 0 auto',
+            borderRadius: 2,
+            overflow: 'hidden',
+          }}
+        >
+          {item?.url?.[0] ? (
+            <CardMedia
+              component='img'
+              loading='lazy'
+              src={item.url[0]}
+              alt={item.alt || item.title}
+              sx={{ height: '100%', width: '100%', objectFit: 'cover' }}
+            />
+          ) : (
+            <Skeleton variant='rectangular' width='100%' height='100%' />
+          )}
+        </Box>
+
+        <Box sx={{ minWidth: 0, flex: 1 }}>
+          <Stack direction='row' spacing={1} alignItems='center'>
+            <Typography
+              sx={{
+                fontSize: { xs: 11, md: 12, lg: 12 },
+                fontWeight: 900,
+                color: theme.colors.secondary,
+                textTransform: 'uppercase',
+              }}
+            >
+              {(item?.type || 'News').toUpperCase()}
+            </Typography>
+            <Divider orientation='vertical' flexItem />
+            <Typography sx={{ fontSize: { xs: 11, md: 12, lg: 12 }, color: theme.colors.textTertiary }}>
+              {item.time}
+            </Typography>
+          </Stack>
+
+          <Typography
+            sx={{
+              mt: 0.25,
+              fontWeight: 900,
+              fontSize: { xs: 14, md: 15, lg: 16 },
+              color: theme.colors.textPrimary,
+              lineHeight: 1.2,
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
+              overflow: 'hidden',
+            }}
+          >
+            {item.title}
+          </Typography>
+        </Box>
+      </CardActionArea>
+    </Card>
+  );
+
+
+  const desktopItems = Array.isArray(articles) ? articles : null;
+  const featured = desktopItems?.[0];
+  const rest = desktopItems?.slice(1) ?? [];
 
   return (
-    
-    <Box sx={{ backgroundColor: {xs: 'F7F8FA', sm: 'white'}}} marginBottom={4} >  
+    <Box sx={{ backgroundColor: {xs: theme.colors.surface, sm: 'transparent'} }} marginBottom={4} >  
 
-      {level == 'second'? '':level == 'third'? '':level == 'fourth'? '':level == 'fifth'? '':(<Stack marginBottom={{xs: 2}}>
-
-        <Typography style={{ color: `var(--color-color2, ${theme.colors.color2})`}} width={85} marginLeft={2} marginTop={{xs: 2.5, sm: 3}}   fontSize={{xs: 16, sm: 30}} sx={{ letterSpacing: {xs:0, sm: 5}, fontWeight: {xs: '900', sm: '900'}}}>
-          WHAT'S 
-        </Typography>
-
-        <Typography style={{ color: `var(--color-color3, ${theme.colors.color3})`}} width={85} marginTop={{xs:-1.2, sm:-2.5}} marginLeft={{xs: 4, sm: 6.5}} fontSize={{xs: 16, sm: 30}} sx={{ letterSpacing: {xs:0, sm: 5}, fontWeight: 900 }}>
-          NEW
-        </Typography>
-
-      </Stack>)}
+      {level == 'second'? '':level == 'third'? '':level == 'fourth'? '':level == 'fifth'? '':(
+        <Stack marginBottom={{xs: 2}}>
+          <Stack direction='row' spacing={1.5} alignItems='center' sx={{ px: { xs: 2, sm: 2 }, pt: { xs: 2.5, sm: 3 } }}>
+            <Box sx={{ width: 10, height: 28, borderRadius: 99, backgroundColor: theme.colors.secondary }} />
+            <Typography
+              sx={{
+                color: theme.colors.textPrimary,
+                fontSize: { xs: 16, sm: 22, md: 24, lg: 26 },
+                fontWeight: 900,
+                letterSpacing: { xs: 0.5, sm: 2 },
+                textTransform: 'uppercase',
+              }}
+            >
+              What’s New
+            </Typography>
+          </Stack>
+        </Stack>
+      )}
 
       
 
@@ -94,148 +289,78 @@ const TrendingSection = ({ level }) => {
 
         <Box direction={{ xs: 'column', sm: 'row' }} sx={{ display: { sm: 'flex' }, flexDirection: 'row' }}>
 
-          <Stack display={{ sm:'none'}} direction='column' spacing={2} width={{xs: '90%'}} margin={{xs:'auto'}} divider={<Divider orientation='horizontal' flexItem />} >
-
-            {articles ? articles.map((item, idx) => {
-
-            return (
-            <Box key={idx}>
-              
-              <Card sx={{ boxShadow: 'none', backgroundColor: 'white', border: '1px solid #86C232'}}>
-
-                <CardActions>
-
-                  <Stack>
-
-                    {/* TODO: Link this page to the premiere league home page */}
-
-                    <Link to={`/${item.league}/Home`}>
-
-                    <Typography style={{ color: `var(--color-color5, ${theme.colors.color5})`}} sx={{ fontSize: {xs: 13}, textDecoration: 'underline', fontWeight: 900}}>{item.league}</Typography>
-
-                    </Link>
-
-
-                    <Stack direction='row' spacing={0.5}>
-
-                      <Typography style={{ color: `var(--color-color3, ${theme.colors.color3})`}} sx={{ fontSize: {xs: 9}}}>{item.author}</Typography>
-                      <Divider orientation='vertical' flexItem />
-                      <Typography style={{ color: `var(--color-color3, ${theme.colors.color3})`}} sx={{ fontSize: {xs: 9}}}>{item.time}</Typography>
-
-                    </Stack>
-
-
-                  </Stack>
-
-                </CardActions>
-
-                <Link to={`/${item.id}`} style={{ textDecoration: 'none'}}>
-
-                  <CardHeader titleTypographyProps={{variant:'body2', fontWeight: 900 }} title={item.title} style={{ color: `var(--color-color3, ${theme.colors.color3})`}}/>
-
-                </Link>
-
-
-                <Link to={`/${item.id}`} style={{ textDecoration: 'none'}}>
-
-                 <CardMedia component='img' loading='lazy' height={200} src={item.url[0]} alt={item.alt}/>
-                 
-                </Link>
-
-                <Link to={`/${item.id}`} style={{ textDecoration: 'none'}}>
-
-                  <CardContent>
-                    <Typography sx={{ color: 'black', fontSize: {xs: 13}}}>
-                      {item.body_content.length < 25? item.body_content: (item.body_content.substr(0, 50) + "...")}
-                    </Typography>
-                  </CardContent>
-                  
-                </Link>
-
-
-
-                
-              </Card>
-
-            </Box>)
-
-          }): <Skeleton variant="rectangular" width='100%' height={60} />}
-                    
-
+          {/* Mobile: modern compact list */}
+          <Stack
+            display={{ sm:'none'}}
+            direction='column'
+            spacing={1.5}
+            width={{xs: '92%'}}
+            margin={{xs:'auto'}}
+          >
+            {articles ? (
+              articles.map((item) => (
+                <CompactCard key={item.id} item={item} />
+              ))
+            ) : (
+              <Skeleton variant="rectangular" width='100%' height={120} />
+            )}
           </Stack>
 
 
-          <Grid display={{ xs:'none', sm: 'inherit'}}  container spacing={2} direction={{ xs: 'column', sm: 'row' }} justifyContent="left" marginX={2} paddingRight={2} width={{sm:600, md:700, lg:800}} >
-
-            {articles ? articles.map((item, idx) => (
-              <Grid item key={idx} xs={12} sm={5} md={4} lg={4}>
-              
-                <Card sx={{ boxShadow: 'none', backgroundColor: 'white', border: '1px solid #86C232', height: 450}}>
-
-                  <CardActions>
-
-                    <Stack>
-
-                      {/* TODO: Link this page to the premiere league home page */}
-
-                      <Link to='/DFA/Home'>
-                      <Typography style={{ color: `var(--color-color5, ${theme.colors.color5})`}} sx={{ fontSize: {xs: 13}, textDecoration: 'underline', fontWeight: 900}}>{item.league}</Typography>
-                      </Link>
-
-
-                      <Stack direction='row' spacing={0.5}>
-                        <Typography style={{ color: `var(--color-color3, ${theme.colors.color3})`}} sx={{ fontSize: {xs: 9}}}>{item.author}</Typography>
-                        <Divider orientation='vertical' flexItem />
-                        <Typography style={{ color: `var(--color-color3, ${theme.colors.color3})`}} sx={{ fontSize: {xs: 9}}}>{item.time}</Typography>
-                      </Stack>
-
-
-                    </Stack>
-
-                  </CardActions>
-
-                  <Link to={`/${item.id}`} style={{ textDecoration: 'none'}}>
-                    <CardHeader titleTypographyProps={{variant:'body2', fontWeight: 900 }} title={item.title} style={{ color: `var(--color-color3, ${theme.colors.color3})`}}/>
-                  </Link>
-
-
-                  <CardMedia component='img' loading='lazy' height={200} src={item.url[0]} alt={item.alt}/>
-
-                  <CardContent>
-                    <Typography sx={{ color: 'black', fontSize: {xs: 13}}}>
-                      {item.body_content.length < 25? item.body_content: (item.body_content.substr(0, 50) + "...")}
-                    </Typography>
-                  </CardContent>
-
-                </Card>
+          {/* Desktop: featured + list */}
+          <Grid
+            display={{ xs:'none', sm: 'grid'}}
+            container
+            spacing={2}
+            marginX={2}
+            paddingRight={2}
+            sx={{ flex: '1 1 auto', minWidth: 0 }}
+          >
+            {featured ? (
+              <>
+                <Grid item xs={12} md={7}>
+                  <FeaturedCard item={featured} />
+                </Grid>
+                <Grid item xs={12} md={5}>
+                  <Stack spacing={1.5}>
+                    {rest.length > 0 ? rest.map((item) => (
+                      <CompactCard key={item.id} item={item} />
+                    )) : null}
+                  </Stack>
+                </Grid>
+              </>
+            ) : (
+              <Grid item xs={12}>
+                <Skeleton variant="rectangular" width='100%' height={260} />
               </Grid>
-            )) : <Skeleton variant="rectangular" width='100%' height={60} />}
-
+            )}
           </Grid>
 
           {/* Side panel in the homepage */}
-          {level === 'first'?
-          
-            <Stack width={{ sm:'380px', md: '400px' }} display={{xs:'none', sm:'inherit'}}
-            direction='column'
-            justifyContent='center'
-            alignItems='center'
-            spacing={0}
-            sx={{ backgroundColor: `var(--color-color3, ${theme.colors.color3})`, borderRadius: '8px'}}
-            height={{ sm: '450px'}}>
+          {showSidePanel ? (
+            level === 'first' ? (
+              <Stack width={{ sm:'380px', md: '400px', lg: '460px', xl: '520px' }} display={{xs:'none', sm:'inherit'}}
+              direction='column'
+              justifyContent='center'
+              alignItems='center'
+              spacing={0}
+              sx={{ backgroundColor: `var(--color-color3, ${theme.colors.color3})`, borderRadius: '8px'}}
+              height={{ sm: '450px'}}>
 
-              {/* <Typography  variant='h3'>Ad Space here</Typography> */}
-              <Typography variant='h4' color='white' padding={0} sx={{ paddingTop: 2}}>The Video of The Day</Typography>
+                {/* <Typography  variant='h3'>Ad Space here</Typography> */}
+                <Typography variant='h4' color='white' padding={0} sx={{ paddingTop: 2}}>The Video of The Day</Typography>
 
-              <VideoHighlights VideoLocation='Homepage1' />
-              
-            </Stack>: level === 'second'?
-            
-            <Box display={{ xs: 'none'}}>
-              <FixturesData page='home' type='sm' />
-            </Box>
-          
-          : ''}
+                <VideoHighlights VideoLocation='Homepage1' />
+                
+              </Stack>
+            ) : level === 'second' ? (
+              <Box display={{ xs: 'none'}}>
+                <FixturesData page='home' type='sm' />
+              </Box>
+            ) : (
+              ''
+            )
+          ) : null}
 
 
         </Box>
@@ -247,3 +372,8 @@ const TrendingSection = ({ level }) => {
 }
 
 export default TrendingSection 
+
+TrendingSection.propTypes = {
+  level: PropTypes.string,
+  showSidePanel: PropTypes.bool,
+};
