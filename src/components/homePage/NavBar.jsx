@@ -17,6 +17,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon'; 
 import ListItemText from '@mui/material/ListItemText'; 
 import Divider from '@mui/material/Divider';      
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 
 import SportsIcon from '@mui/icons-material/Sports'
@@ -30,8 +32,10 @@ import GroupsIcon from '@mui/icons-material/Groups'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import CloseIcon from '@mui/icons-material/Close'
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
+import SecurityIcon from '@mui/icons-material/Security'
 
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { auth } from '../../config/firebaseConfig'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
@@ -43,17 +47,11 @@ const navItems = [
   { id: 3, label: 'Tables', path: '/DFA/Table', icon: <TableChartIcon /> },
   { id: 4, label: 'Clubs', path: '/DFA/Teams', icon: <GroupsIcon /> },
   { id: 5, label: 'Stats', path: '/DFA/Stats', icon: <BarChartIcon /> },
-  { 
-    id: 6, 
-    label: 'Predict', 
-    path: '/PredictionGame', 
-    external: false,
-    icon: <SportsIcon />
-  },
+  { id: 6, label: 'Cup', path: '/DFA/Cup', icon: <EmojiEventsIcon /> },
   { 
     id: 7, 
-    label: 'Admin', 
-    path: '/Admin/Matches', 
+    label: 'Predict', 
+    path: '/PredictionGame', 
     external: false,
     icon: <SportsIcon />
   },
@@ -61,12 +59,14 @@ const navItems = [
 
 const NavBar = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [prevScrollPos, setPrevScrollPos] = useState(0)
   const [visible, setVisible] = useState(true)
   const [userSignedIn, setUserSignedIn] = useState(false)
   const [userProfile, setUserProfile] = useState(null)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [adminMenuAnchor, setAdminMenuAnchor] = useState(null)
 
   // Handle drawer
   const toggleDrawer = (open) => (event) => {
@@ -131,6 +131,19 @@ const NavBar = () => {
     }
   }
 
+  const handleOpenAdminMenu = (event) => {
+    setAdminMenuAnchor(event.currentTarget)
+  }
+
+  const handleCloseAdminMenu = () => {
+    setAdminMenuAnchor(null)
+  }
+
+  const handleAdminNavigate = (path) => {
+    handleCloseAdminMenu()
+    navigate(path)
+  }
+
   // Check if link is active
   const isActiveLink = (path) => {
     if (path === '/') {
@@ -143,11 +156,15 @@ const NavBar = () => {
   const drawerContent = () => (
     <Box
       sx={{ 
-        width: 280,
+        width: { xs: '80vw', sm: 300 },
+        maxWidth: 320,
         backgroundColor: '#222629',
-        height: '100%',
+        height: '100vh',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        overflowY: 'auto',
+        overscrollBehavior: 'contain',
+        pb: 2
       }}
       role="presentation"
       onClick={toggleDrawer(false)}
@@ -190,11 +207,6 @@ const NavBar = () => {
       {/* Navigation items */}
       <List sx={{ flexGrow: 1, p: 0 }}>
         {navItems.map((item) => {
-          // Skip Admin link if user is not admin
-          if (item.label === 'Admin' && !isAdmin) {
-            return null
-          }
-
           if (item.external) {
             return (
               <ListItem
@@ -258,6 +270,50 @@ const NavBar = () => {
             </ListItem>
           )
         })}
+        {isAdmin && (
+          <>
+            <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
+            <ListItem
+              sx={{
+                color: '#FFD700',
+                py: 2,
+                px: 3,
+                fontWeight: 600
+              }}
+            >
+              <ListItemIcon sx={{ color: '#FFD700', minWidth: 40 }}>
+                <SecurityIcon />
+              </ListItemIcon>
+              <ListItemText primary="ADMIN" />
+            </ListItem>
+            <ListItem
+              component={Link}
+              to="/Admin/Matches"
+              onClick={() => setDrawerOpen(false)}
+              sx={{
+                color: 'white',
+                py: 1.5,
+                px: 5,
+                '&:hover': { backgroundColor: 'rgba(255, 107, 0, 0.1)' }
+              }}
+            >
+              <ListItemText primary="Prediction Game" />
+            </ListItem>
+            <ListItem
+              component={Link}
+              to="/Admin/Cup"
+              onClick={() => setDrawerOpen(false)}
+              sx={{
+                color: 'white',
+                py: 1.5,
+                px: 5,
+                '&:hover': { backgroundColor: 'rgba(255, 107, 0, 0.1)' }
+              }}
+            >
+              <ListItemText primary="Cup Admin" />
+            </ListItem>
+          </>
+        )}
       </List>
 
       {/* Auth section */}
@@ -393,7 +449,7 @@ const NavBar = () => {
                   display: { xs: 'none', md: 'block' }
                 }}
               >
-                DOMINICA FOOTBALL ASSOCIATION
+                DSPORT
               </Typography>
             </Box>
 
@@ -408,10 +464,6 @@ const NavBar = () => {
             >
               {navItems.map((item) => {
                 // Skip Admin link if user is not admin
-                if (item.label === 'Admin' && !isAdmin) {
-                  return null
-                }
-
                 if (item.external) {
                   return (
                     <Button
@@ -467,6 +519,51 @@ const NavBar = () => {
                   </Button>
                 )
               })}
+              {isAdmin && (
+                <>
+                  <Button
+                    onClick={handleOpenAdminMenu}
+                    startIcon={<SecurityIcon />}
+                    sx={{
+                      color: adminMenuAnchor ? '#FFD700' : 'white',
+                      fontWeight: 600,
+                      borderRadius: '20px',
+                      px: 2,
+                      py: 1,
+                      backgroundColor: adminMenuAnchor ? 'rgba(255, 107, 0, 0.15)' : 'transparent',
+                      border: adminMenuAnchor ? '1px solid #FF6B00' : '1px solid transparent',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 107, 0, 0.1)',
+                        color: '#FFD700',
+                        border: '1px solid #FF6B00',
+                        transform: 'translateY(-2px)'
+                      }
+                    }}
+                  >
+                    Admin
+                  </Button>
+                  <Menu
+                    anchorEl={adminMenuAnchor}
+                    open={Boolean(adminMenuAnchor)}
+                    onClose={handleCloseAdminMenu}
+                    PaperProps={{
+                      sx: {
+                        backgroundColor: '#222629',
+                        color: 'white',
+                        border: '1px solid rgba(255, 107, 0, 0.35)'
+                      }
+                    }}
+                  >
+                    <MenuItem onClick={() => handleAdminNavigate('/Admin/Matches')}>
+                      Prediction Game
+                    </MenuItem>
+                    <MenuItem onClick={() => handleAdminNavigate('/Admin/Cup')}>
+                      Cup Admin
+                    </MenuItem>
+                  </Menu>
+                </>
+              )}
             </Stack>
 
             {/* User/Auth Section */}

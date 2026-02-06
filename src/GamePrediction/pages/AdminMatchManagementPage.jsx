@@ -288,7 +288,10 @@ const AdminMatchManagementPage = () => {
         {/* Header with Add Button */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, mb: { xs: 2, sm: 4 }, flexDirection: { xs: 'column', sm: 'row' }, gap: { xs: 1, sm: 0 } }}>
           <Box>
-            <Typography variant={{ xs: 'h6', sm: 'h5' }} sx={{ fontWeight: 'bold' }}>
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: 'bold', fontSize: { xs: '1.1rem', sm: '1.5rem' } }}
+            >
               📋 Match Management
             </Typography>
             <Typography variant="body2" color="textSecondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>

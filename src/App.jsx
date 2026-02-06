@@ -55,6 +55,8 @@ const TournamentBrackets = lazy(() => import('./components/TournamentBrackets/To
 const HeadlineArticle = lazy(() => import('./pages/HeadLine/HeadlineArticles'))
 const PredictionGameDashboard = lazy(() => import('./GamePrediction/pages/PredictionGameDashboard'))
 const AdminMatchManagementPage = lazy(() => import('./GamePrediction/pages/AdminMatchManagementPage'))
+const AdminCupManagementPage = lazy(() => import('./GamePrediction/pages/AdminCupManagementPage'))
+const AdminDashboard = lazy(() => import('./GamePrediction/pages/AdminDashboard'))
 
 
 
@@ -121,7 +123,9 @@ function App() {
 
           {/* Prediction Game Routes */}
           <Route path='/PredictionGame' element={<PredictionGameDashboard />} />
+          <Route path='/Admin' element={<AdminDashboard />} />
           <Route path='/Admin/Matches' element={<AdminMatchManagementPage />} />
+          <Route path='/Admin/Cup' element={<AdminCupManagementPage />} />
 
           {/* Policy Pages */}
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
