@@ -7,6 +7,7 @@ import {
   Grid,
   Typography,
   CircularProgress,
+  Link,
   Stack,
   LinearProgress,
   Chip,
@@ -17,6 +18,7 @@ import {
   useMediaQuery,
   IconButton,
 } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -35,10 +37,14 @@ const CommunityPredictions = ({ matchId, match, currentUser }) => {
   const [showScorelines, setShowScorelines] = useState(false);
 
   useEffect(() => {
-    
     if (!matchId) {
-      
       setLoading(false);
+      return;
+    }
+
+    if (!currentUser) {
+      setLoading(false);
+      setError(null);
       return;
     }
 
@@ -67,6 +73,21 @@ const CommunityPredictions = ({ matchId, match, currentUser }) => {
       <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
         <CircularProgress size={24} />
       </Box>
+    );
+  }
+
+  if (!currentUser) {
+    return (
+      <Card sx={{ mt: 2, backgroundColor: '#f5f5f5' }}>
+        <CardContent>
+          <Typography variant="body2" color="textSecondary" sx={{ textAlign: 'center' }}>
+            Log in to view community predictions.{' '}
+            <Link component={RouterLink} to="/Login" underline="hover" sx={{ fontWeight: 600 }}>
+              Log in
+            </Link>
+          </Typography>
+        </CardContent>
+      </Card>
     );
   }
 

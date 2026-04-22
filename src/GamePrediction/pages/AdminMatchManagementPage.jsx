@@ -8,6 +8,7 @@ import {
   Grid,
   Alert,
   CircularProgress,
+  Link,
   AppBar,
   Toolbar,
   Tabs,
@@ -29,6 +30,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../config/firebaseConfig';
 import {
@@ -240,7 +242,12 @@ const AdminMatchManagementPage = () => {
     return (
       <Container sx={{ py: 4 }}>
         <Box sx={{ mt: {xs:10, sm: 10} }}>
-          <Alert severity="warning">Please log in to access the Prediction Game.</Alert>
+          <Alert severity="warning">
+            Please log in to access the Prediction Game.{' '}
+            <Link component={RouterLink} to="/Login" underline="hover" sx={{ fontWeight: 600 }}>
+              Log in
+            </Link>
+          </Alert>
         </Box>
 
         
