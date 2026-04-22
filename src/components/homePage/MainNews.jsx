@@ -46,35 +46,6 @@ const MainNews = ({ league }) => {
     cssEase: 'cubic-bezier(.76,.49,.72,.66)',
 
   };
-
-  const getVideoDimensions = () => {
-    const windowWidth = window.innerWidth;
-
-    // Adjust these values based on your layout and design preferences
-    if (windowWidth >= 500) {
-      return {window_width: 500}
-    } else if (windowWidth >= 420) {
-      return {window_width: 420}
-    }else if (windowWidth >= 400) {
-      return {window_width: 400}
-    }else if (windowWidth >= 390) {
-      return {window_width: 390}
-    }else if (windowWidth >= 350) {
-      return {window_width: 350}
-    }
-    else if (windowWidth >= 300) {
-      return {window_width: 300}
-    } 
-    else {
-      return {window_width: 280}
-    }
-    
-  };
-
-  const { window_width } = getVideoDimensions();
-
-
-
   return (
 
     <div >

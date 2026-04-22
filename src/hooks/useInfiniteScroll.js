@@ -1,7 +1,7 @@
 // hooks/useInfiniteScroll.js
 import { useRef, useEffect, useCallback } from 'react';
 
-const useInfiniteScroll = (onIntersect, options = {}) => {
+const useInfiniteScroll = (onIntersect) => {
   const loaderRef = useRef(null);
   const observerRef = useRef(null);
 

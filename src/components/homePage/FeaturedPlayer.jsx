@@ -7,24 +7,18 @@ import {
   Card, 
   Typography, 
   Skeleton,
-  Button,
   CardContent,
   CardMedia,
   Chip,
   Fade,
-  Avatar,
-  AvatarGroup
 } from "@mui/material"
 import { Link } from "react-router-dom"
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios"
 import appTheme from '../../css/theme'
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer'
 import PersonIcon from '@mui/icons-material/Person'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
-import LocationOnIcon from '@mui/icons-material/LocationOn'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
 
 // Constants
 const API_BASE_URL = 'https://strapi-dominica-sport.onrender.com/api/dfa-players'
@@ -51,7 +45,6 @@ const queryParams_prem_players = {
 
 const FeaturedPlayer = () => { 
 
-  const [players, setPlayers] = useState([])
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
   const [randomPlayer, setRandomPlayer] = useState(null)
@@ -89,9 +82,6 @@ const FeaturedPlayer = () => {
         if (!Array.isArray(result) || result.length === 0) {
           throw new Error('No players found in API response')
         }
-
-        setPlayers(result)
-
         // Filter for featured or notable players first, then random
         const notablePlayers = result.filter(player => 
           player.attributes.isFeatured || 

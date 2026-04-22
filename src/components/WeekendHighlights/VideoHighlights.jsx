@@ -1,7 +1,8 @@
 import {  Box } from '@mui/material'
+import PropTypes from 'prop-types'
 
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 import axios from 'axios'
@@ -18,13 +19,9 @@ import VideoStructure from '../../modules/Video/VideoStructure';
 
 const VideoHighlights = ({ VideoLocation }) => {
 
-  let videoLocate = VideoLocation
-
-
+  const videoLocate = VideoLocation
 
   const [video, setVideo] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   let width;
   let height;
@@ -62,7 +59,7 @@ const VideoHighlights = ({ VideoLocation }) => {
     return {width: width, height: height}
   };
 
-  switch(VideoLocation){
+  switch(videoLocate){
 
     case 'Homepage1':
     case 'Homepage2':
@@ -97,9 +94,6 @@ const VideoHighlights = ({ VideoLocation }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Set loading to true when starting the fetch
-        setLoading(true);
-
         // Your API endpoint URL
         const apiUrl = 'https://strapi-dominica-sport.onrender.com/api/videos';
   
@@ -124,17 +118,13 @@ const VideoHighlights = ({ VideoLocation }) => {
         // Set the data state
         setVideo(final_data[0].VideoId);
       } catch (error) {
-        // Set the error state if there's an issue
-        setError(error.message);
-      } finally {
-        // Set loading to false regardless of success or failure
-        setLoading(false);
+        console.error('Failed to fetch weekend highlights:', error);
       }
     };
 
     // Call the fetchData function when the component mounts
     fetchData();
-  }, []);
+  }, [videoLocate]);
 
 
 
@@ -170,6 +160,10 @@ const VideoHighlights = ({ VideoLocation }) => {
 
   )
 
+}
+
+VideoHighlights.propTypes = {
+  VideoLocation: PropTypes.string,
 }
 
 export default VideoHighlights

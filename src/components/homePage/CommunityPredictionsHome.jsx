@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Card,
@@ -10,7 +11,6 @@ import {
   LinearProgress,
   Button,
   CircularProgress,
-  Divider,
   Chip,
   useTheme,
   useMediaQuery,
@@ -792,6 +792,11 @@ const CommunityPredictionsHome = ({ limit = 2, league = null }) => {
       </CardContent>
     </Card>
   );
+};
+
+CommunityPredictionsHome.propTypes = {
+  limit: PropTypes.number,
+  league: PropTypes.string,
 };
 
 export default CommunityPredictionsHome;

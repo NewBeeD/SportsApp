@@ -1,8 +1,5 @@
 
 
-export default function DabaPointDisplay(team_points){
-
-
-
-
+export default function DabaPointDisplay(){
+	return null;
 }

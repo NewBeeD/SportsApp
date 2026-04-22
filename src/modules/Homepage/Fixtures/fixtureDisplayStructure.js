@@ -91,7 +91,7 @@ export default function displayFixture(fixtures_data) {
   // Convert to desired structure
   const result = [];
   
-  for (const [league, dateMap] of leagueMap) {
+  for (const dateMap of leagueMap.values()) {
     const leagueFixtures = [];
     
     // Sort dates if needed (optional)

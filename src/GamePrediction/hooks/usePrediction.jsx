@@ -9,9 +9,10 @@ export const usePredictions = (userId, options = {}) => {
   const [predictions, setPredictions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const optionsKey = useMemo(() => JSON.stringify(options), [options]);
 
   // Memoize options to prevent infinite loop
-  const memoizedOptions = useMemo(() => options, [JSON.stringify(options)]);
+  const memoizedOptions = useMemo(() => JSON.parse(optionsKey || '{}'), [optionsKey]);
 
   const fetch = useCallback(async () => {
     if (!userId) {

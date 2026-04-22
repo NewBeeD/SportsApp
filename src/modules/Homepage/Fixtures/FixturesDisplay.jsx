@@ -232,15 +232,6 @@ function realLeague(leagueName){
     }
 }
 
-function upcomingFixtures(fixtures){
-
-  let today_date = new Date().toISOString()
-
-  let upcoming_fixtures = fixtures.filter(item => item['attributes']['Date'] > today_date)
-
-  return upcoming_fixtures
-}
-
 function gameDetails(game_info){
 
   if(game_info != null){

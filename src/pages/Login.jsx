@@ -1,4 +1,3 @@
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 
 import Typography from '@mui/material/Typography';
@@ -12,24 +11,17 @@ import CardContent from '@mui/material/CardContent';
 import Paper from '@mui/material/Paper';
 
 
-import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,  createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithPopup } from 'firebase/auth'
 
 import { auth, googleProvider } from '../config/firebaseConfig'
 import { trackUserLogin } from '../utils/analyticsEvents'
 
-import { useState, useEffect } from 'react'
-
 import theme from '../css/theme'
 import { useNavigate } from 'react-router'
-import { Link } from 'react-router-dom'
 
 
 
 const Login = () => {
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
   const navigation = useNavigate()
   
 
@@ -37,7 +29,7 @@ const Login = () => {
   const signInWithGoogle = async () => {
 
     try{
-      await signInWithPopup(auth, googleProvider).then((userCredentials)=>{
+      await signInWithPopup(auth, googleProvider).then(() => {
         trackUserLogin('google')
         navigation('/')
       })
@@ -46,22 +38,6 @@ const Login = () => {
       console.log(err);
     }
   }
-
-  const signIn = async () => {
-
-    try{
-      await signInWithEmailAndPassword(auth, email, password).then((userCredentials)=>{
-        trackUserLogin('email')
-
-        navigation('/')
-      })
-    }
-    catch(err){
-      console.log(err);
-    }
-  }
-
-
 
   return (
     <Box display='flex' justifyContent='center' alignContent='center'  width='100%' height='100vh' sx={{ backgroundColor: `var(--color-color1, ${theme.colors.color1})`}}> 

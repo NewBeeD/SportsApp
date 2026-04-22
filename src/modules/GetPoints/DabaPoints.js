@@ -2,21 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import qs from 'qs'
 import axios from 'axios'
 
-// Redux
-import { useDispatch} from 'react-redux'
-
 import DabaPointDisplay from '../DABA/DabaPointTableDisplay/DabaPointsTableDisplay';
 
 
 
 
 export default function DabaPoints (){
-  
-  const dispatch = useDispatch() 
-  
-
-  let structured_data;
-  // const [structuredDataFinal, setStructuredDataFinal]= useState(null)
 
   const fetchDataFromStrapi = async (queryParams) => {
 
@@ -45,16 +36,15 @@ export default function DabaPoints (){
     }   
   }
 
-  const { isLoading, data, error} = useQuery({
+  useQuery({
     queryKey: ['Points-Daba-query'], 
     queryFn: () => fetchDataFromStrapi(queryParams).then((value) =>{
 
-      // Learn redux
-      structured_data = DabaPointDisplay(value.data)
-
-      // dispatch(populate(structured_data))
+      DabaPointDisplay(value.data)
       return value
     })
   })
+
+  return null;
 }
 

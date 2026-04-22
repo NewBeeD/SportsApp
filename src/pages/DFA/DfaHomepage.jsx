@@ -39,7 +39,6 @@ import Video from "../../components/Video";
 const DfaHomepage = () => {
   // Responsive breakpoints
   const muiTheme = useTheme();
-  const isLargeScreen = useMediaQuery(muiTheme.breakpoints.up('md'));
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
 
   // Redux data

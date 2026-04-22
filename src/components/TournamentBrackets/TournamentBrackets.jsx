@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 
 // import '../../css/TournamentRounds.css'
@@ -24,6 +25,25 @@ const roundLabelMap = {
   3: 'Final',
   4: 'Round of 16',
 };
+
+const initialTeams = [
+  { id: 'team-1', name: 'TBD' },
+  { id: 'team-2', name: 'TBD' },
+  { id: 'team-3', name: 'TBD' },
+  { id: 'team-4', name: 'TBD' },
+  { id: 'team-5', name: 'TBD' },
+  { id: 'team-6', name: 'TBD' },
+  { id: 'team-7', name: 'TBD' },
+  { id: 'team-8', name: 'TBD' },
+  { id: 'team-9', name: 'TBD' },
+  { id: 'team-10', name: 'TBD' },
+  { id: 'team-11', name: 'TBD' },
+  { id: 'team-12', name: 'TBD' },
+  { id: 'team-13', name: 'TBD' },
+  { id: 'team-14', name: 'TBD' },
+  { id: 'team-15', name: 'TBD' },
+  { id: 'team-16', name: 'TBD' },
+];
 
 const getRoundLabel = (match) => {
   const round = match?.round ?? Number(match?.tournamentRoundText) ?? null;
@@ -142,6 +162,13 @@ const FifaMatch = ({ match, topParty, bottomParty, onMatchClick }) => {
   );
 };
 
+FifaMatch.propTypes = {
+  match: PropTypes.object,
+  topParty: PropTypes.object,
+  bottomParty: PropTypes.object,
+  onMatchClick: PropTypes.func,
+};
+
 const TournamentBrackets = () => {
 
 
@@ -196,26 +223,6 @@ const TournamentBrackets = () => {
 
     return roundMatches.flat();
   };
-
-  // Use 8 or 16 teams. Trim this list to 8 to render a smaller bracket.
-  const initialTeams = [
-    { id: 'team-1', name: 'TBD' },
-    { id: 'team-2', name: 'TBD' },
-    { id: 'team-3', name: 'TBD' },
-    { id: 'team-4', name: 'TBD' },
-    { id: 'team-5', name: 'TBD' },
-    { id: 'team-6', name: 'TBD' },
-    { id: 'team-7', name: 'TBD' },
-    { id: 'team-8', name: 'TBD' },
-    { id: 'team-9', name: 'TBD' },
-    { id: 'team-10', name: 'TBD' },
-    { id: 'team-11', name: 'TBD' },
-    { id: 'team-12', name: 'TBD' },
-    { id: 'team-13', name: 'TBD' },
-    { id: 'team-14', name: 'TBD' },
-    { id: 'team-15', name: 'TBD' },
-    { id: 'team-16', name: 'TBD' },
-  ];
 
   const [matches, setMatches] = useState(() => buildSingleElimMatches(initialTeams));
   const [loading, setLoading] = useState(true);

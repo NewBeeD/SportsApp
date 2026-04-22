@@ -37,7 +37,7 @@ export default function GetVideos(){
     }   
   }
 
-  const { isLoading, data, error} = useQuery({
+  useQuery({
     
     queryKey: ['Video-Query'], 
     queryFn: () => fetchDataFromStrapi(queryParams).then((value) =>{
@@ -47,7 +47,8 @@ export default function GetVideos(){
       return value
     })
   })
-  
+
+  return null;
 
 }
 
