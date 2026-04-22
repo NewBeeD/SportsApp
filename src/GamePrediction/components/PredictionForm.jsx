@@ -1,5 +1,6 @@
 // src/GamePrediction/components/PredictionForm.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import {
   Card,
   CardContent,
@@ -22,11 +23,35 @@ import {
 import { useSnackbar } from 'notistack';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../config/firebaseConfig';
-import { validatePrediction } from '../utils/predictionValidators';
 import { usePredictionMutation } from '../hooks/usePredictionMutation';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import CommunityPredictions from './CommunityPredictions';
 import PredictionComparison from './PredictionComparison';
+
+const timestampPropType = PropTypes.shape({
+  seconds: PropTypes.number,
+});
+
+const scorePropType = PropTypes.shape({
+  home: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  away: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+});
+
+const matchPropType = PropTypes.shape({
+  id: PropTypes.string,
+  matchId: PropTypes.string,
+  status: PropTypes.string,
+  homeTeamName: PropTypes.string,
+  awayTeamName: PropTypes.string,
+  scheduledTime: timestampPropType,
+  actualScore: scorePropType,
+});
+
+const predictionPropType = PropTypes.shape({
+  points: PropTypes.number,
+  predictedOutcome: PropTypes.string,
+  predictedScore: scorePropType,
+});
 
 const PredictionForm = ({ match, onSubmitSuccess, existingPrediction = null }) => {
   const [homeScore, setHomeScore] = useState('');
@@ -601,6 +626,12 @@ const PredictionForm = ({ match, onSubmitSuccess, existingPrediction = null }) =
       </Box>
     </Box>
   );
+};
+
+PredictionForm.propTypes = {
+  match: matchPropType,
+  onSubmitSuccess: PropTypes.func,
+  existingPrediction: predictionPropType,
 };
 
 export default PredictionForm;

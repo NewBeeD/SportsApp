@@ -11,9 +11,10 @@ export const useMatches = (status = 'UPCOMING', options = {}) => {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const optionsKey = useMemo(() => JSON.stringify(options), [options]);
 
   // Memoize options to prevent re-creates on every render
-  const memoizedOptions = useMemo(() => options, [JSON.stringify(options)]);
+  const memoizedOptions = useMemo(() => JSON.parse(optionsKey || '{}'), [optionsKey]);
 
   const fetch = useCallback(async () => {
     try {

@@ -9,9 +9,8 @@ import {
   Chip,
   Button,
   Grid,
-  useMediaQuery,
-  useTheme as useMuiTheme
 } from "@mui/material"
+import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { Link } from "react-router-dom"
 import { memo, useMemo, useCallback } from 'react'
@@ -102,8 +101,6 @@ const renderTeamName = (teamName, teamId, isHomepage, textAlign = 'left') => {
 
 // Fixture card component for reusability
 const FixtureCard = memo(({ fixture, showLeague = false, showVenue = true, showGoals = false, compact = false, isHomepage = false }) => {
-  const muiTheme = useMuiTheme()
-  
   if (!fixture) return null
 
   const status = getFixtureStatus(fixture)
@@ -384,6 +381,15 @@ const FixtureCard = memo(({ fixture, showLeague = false, showVenue = true, showG
 
 FixtureCard.displayName = 'FixtureCard'
 
+FixtureCard.propTypes = {
+  fixture: PropTypes.object,
+  showLeague: PropTypes.bool,
+  showVenue: PropTypes.bool,
+  showGoals: PropTypes.bool,
+  compact: PropTypes.bool,
+  isHomepage: PropTypes.bool,
+}
+
 // Loading skeleton component
 const FixtureSkeleton = memo(({ compact = false }) => (
   <Box sx={{ width: '100%', marginBottom: 2 }}>
@@ -401,10 +407,12 @@ const FixtureSkeleton = memo(({ compact = false }) => (
 
 FixtureSkeleton.displayName = 'FixtureSkeleton'
 
+FixtureSkeleton.propTypes = {
+  compact: PropTypes.bool,
+}
+
 // Main FixturesData component
 const FixturesData = ({ page, type, league }) => {
-  const muiTheme = useMuiTheme()
-  
   // Get fixtures data
   GetFixtures()
   const fixtures_raw = useSelector((state) => state.fixtures)
@@ -426,13 +434,14 @@ const FixturesData = ({ page, type, league }) => {
   // Filter fixtures based on type
   const getFilteredFixtures = useCallback(() => {
     switch(type) {
-      case 'now':
+      case 'now': {
         const upcoming = fixtures_filtered.filter(item => 
           item?.Complete !== 'Yes' && item?.Cancelled !== 'Yes'
         )
         return page === 'home' || page === 'Dfahome' 
           ? upcoming.slice(0, HOMEPAGE_FIXTURES_LIMIT)
           : upcoming
+      }
       case 'past':
         return fixtures_filtered.filter(item => item?.Complete === 'Yes')
       default:
@@ -593,6 +602,12 @@ const FixturesData = ({ page, type, league }) => {
       )}
     </Box>
   )
+}
+
+FixturesData.propTypes = {
+  page: PropTypes.string,
+  type: PropTypes.string,
+  league: PropTypes.string,
 }
 
 export default FixturesData

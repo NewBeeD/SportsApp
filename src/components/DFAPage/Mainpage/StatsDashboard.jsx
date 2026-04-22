@@ -1,4 +1,5 @@
 
+import PropTypes from 'prop-types'
 import { Link } from "react-router-dom"
 
 import Box from '@mui/material/Box';
@@ -21,11 +22,22 @@ import { alpha } from '@mui/material/styles';
 
 import {
   ArrowForward as ArrowForwardIcon,
-  SportsSoccer as SoccerIcon,
   EmojiEvents as TrophyIcon,
   TrendingUp as TrendingUpIcon,
-  Shield as ShieldIcon
 } from '@mui/icons-material'
+
+const statsPlayerPropType = PropTypes.shape({
+  top_scorer_prem_goals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  top_scorer_prem_url: PropTypes.string,
+  top_assist_prem_assist: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  top_assist_prem_url: PropTypes.string,
+  top_clean_sheet_prem_clean_sheets: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  top_clean_sheet_prem_url: PropTypes.string,
+})
+
+const statsTeamPropType = PropTypes.shape({
+  totalGoals: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+})
 
 const StatCard = ({ title, value, imageUrl, link, statType = "player", loading = false }) => {
   const theme = useTheme()
@@ -123,6 +135,15 @@ const StatCard = ({ title, value, imageUrl, link, statType = "player", loading =
       </CardContent>
     </Card>
   )
+}
+
+StatCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  imageUrl: PropTypes.string,
+  link: PropTypes.string.isRequired,
+  statType: PropTypes.string,
+  loading: PropTypes.bool,
 }
 
 const StatsDashboard = ({ playerStats, teamMostGoals, loading }) => {
@@ -223,6 +244,12 @@ const StatsDashboard = ({ playerStats, teamMostGoals, loading }) => {
       </Box>
     </>
   )
+}
+
+StatsDashboard.propTypes = {
+  playerStats: PropTypes.arrayOf(statsPlayerPropType),
+  teamMostGoals: PropTypes.arrayOf(statsTeamPropType),
+  loading: PropTypes.bool,
 }
 
 export default StatsDashboard

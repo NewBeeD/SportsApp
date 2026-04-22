@@ -1,5 +1,6 @@
 // src/GamePrediction/pages/GameweekStatsPage.jsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import appTheme from '../../css/theme';
 import {
   Box,
@@ -221,6 +222,10 @@ const GameweekStatsPage = ({ userId }) => {
       </Card>
     </Box>
   );
+};
+
+GameweekStatsPage.propTypes = {
+  userId: PropTypes.string,
 };
 
 export default GameweekStatsPage;

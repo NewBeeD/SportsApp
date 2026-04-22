@@ -4,6 +4,7 @@
 
 
 import { useState, useEffect } from "react"
+import PropTypes from 'prop-types'
 import { useParams } from "react-router-dom"
 import { trackTeamViewed } from "../../utils/analyticsEvents"
 import qs from 'qs'
@@ -120,6 +121,10 @@ const PlayerCard = ({ player }) => (
   </Card>
 )
 
+PlayerCard.propTypes = {
+  player: PropTypes.object,
+}
+
 // Reusable Staff Card Component
 const StaffCard = ({ staff }) => (
   <Card sx={{ display: 'flex', mb: 2, transition: 'transform 0.2s' }}>
@@ -143,6 +148,10 @@ const StaffCard = ({ staff }) => (
     </Box>
   </Card>
 )
+
+StaffCard.propTypes = {
+  staff: PropTypes.object,
+}
 
 const TeamPage = () => {
   const { id } = useParams()
@@ -191,7 +200,7 @@ if (error) {
             Team profiles are being updated
           </Typography>
           <Typography variant="body2">
-            We're adding the latest team information. Please try again soon!
+            We&apos;re adding the latest team information. Please try again soon!
           </Typography>
         </Alert>
         
@@ -293,7 +302,7 @@ if (error) {
                     color="text.secondary"
                     sx={{ borderLeft: '3px solid', borderColor: 'primary.main', pl: 2 }}
                   >
-                    "{data.motto}"
+                    &ldquo;{data.motto}&rdquo;
                   </Typography>
                 )}
               </Box>
@@ -370,7 +379,7 @@ if (error) {
                     <Typography variant="body1" paragraph>
                       {data.description || `Welcome to the official page of ${data.Team}, 
                       based in ${data.Community}. Founded in ${data.est}, 
-                      we're proud to compete in the Dominica Football Association.`}
+                      we are proud to compete in the Dominica Football Association.`}
                     </Typography>
                     
                     {/* Team Stats */}

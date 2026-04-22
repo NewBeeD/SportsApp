@@ -1,3 +1,4 @@
+/* eslint-env node */
 import { initializeApp, cert } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import fs from "fs";

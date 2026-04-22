@@ -1,5 +1,6 @@
 // src/GamePrediction/components/GameweekTopPlayer.jsx
-import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Card,
@@ -9,17 +10,12 @@ import {
   CircularProgress,
   Stack,
   Avatar,
-  useTheme,
-  useMediaQuery,
 } from '@mui/material';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import StarIcon from '@mui/icons-material/Star';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { getGameweekTopPlayer, getGameweekTopPlayers } from '../services/communityStatsService';
 
 const GameweekTopPlayer = ({ gameweek, showTopThree = false }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [topPlayers, setTopPlayers] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -161,7 +157,7 @@ const GameweekTopPlayer = ({ gameweek, showTopThree = false }) => {
         {/* Top Three Players (grid layout) */}
         {showTopThree && (
           <Grid container spacing={2}>
-            {topPlayers.map((player, index) => (
+            {topPlayers.map((player) => (
               <Grid item xs={12} sm={6} md={4} key={player.userId}>
                 <Box
                   sx={{
@@ -227,12 +223,17 @@ const GameweekTopPlayer = ({ gameweek, showTopThree = false }) => {
         {/* Recognition Message */}
         <Box sx={{ mt: 2, p: 1.5, backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 1, textAlign: 'center' }}>
           <Typography variant="caption" sx={{ opacity: 0.9 }}>
-            🎉 Congratulations to the week's top predictor! Keep making great predictions! 🚀
+            🎉 Congratulations to the week&apos;s top predictor! Keep making great predictions! 🚀
           </Typography>
         </Box>
       </CardContent>
     </Card>
   );
+};
+
+GameweekTopPlayer.propTypes = {
+  gameweek: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  showTopThree: PropTypes.bool,
 };
 
 export default GameweekTopPlayer;

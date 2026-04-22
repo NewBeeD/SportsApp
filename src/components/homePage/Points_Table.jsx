@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper'; 
+import PropTypes from 'prop-types';
 
 // Consider lightweight alternatives:
 import Table from '@mui/material/Table';           
@@ -10,18 +10,11 @@ import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';   
 import TableRow from '@mui/material/TableRow';     
 import TableCell from '@mui/material/TableCell';   
-import Stack from '@mui/material/Stack';           
 import Skeleton from '@mui/material/Skeleton';     
 import Hidden from '@mui/material/Hidden';         
-import Menu from '@mui/material/Menu';             
 import MenuItem from '@mui/material/MenuItem';     
 import Select from '@mui/material/Select';         
 import FormControl from '@mui/material/FormControl'; 
-import InputLabel from '@mui/material/InputLabel';   
-
-
-import {  Grid, Chip } from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
 
 
 import { useState } from "react"
@@ -36,14 +29,6 @@ import { useSelector } from 'react-redux';
 import GetPoints from "../../modules/Homepage/PointsTables/PointsTableDataFetch";
 
 
-
-
-
-
-function SortPoints(a, b) {
-  return b.Points - a.Points;
-}
-
 const Points_Table = ({ page }) => {
 
   GetPoints();
@@ -52,8 +37,10 @@ const Points_Table = ({ page }) => {
 
   const premierTable_raw = useSelector((state) => state.points)
   const divOne_Table = useSelector((state) => state.DivOneTable)
+  const womenTable_raw = useSelector((state) => state.WomenTable)
   const premierTable = premierTable_raw[0]
   const divOneTable = divOne_Table[0]
+  const womenTable = womenTable_raw[0]
 
 
 const InlineTableLegend = () => {
@@ -555,6 +542,10 @@ const InlineTableLegend = () => {
   
 
   
+}
+
+Points_Table.propTypes = {
+  page: PropTypes.string,
 }
 
 export default Points_Table

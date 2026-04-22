@@ -2,10 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import qs from 'qs'
 import axios from 'axios'
 
-import { useState } from 'react';
-
 // Redux
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { populate } from '../../features/PointsTable/PointsSlice'
 import { setDivOneTableData } from '../../features/Div_One_Table/DivOneTableSlice';
 
@@ -15,10 +13,6 @@ import PointsTableStructuredDisplay from '../Homepage/PointsTables/PointsTableSt
 export default function DfaPoints (){
   
   const dispatch = useDispatch() 
-  
-
-  let structured_data;
-  // const [structuredDataFinal, setStructuredDataFinal]= useState(null)
 
   const fetchDataFromStrapi = async (queryParams) => {
 
@@ -59,26 +53,24 @@ export default function DfaPoints (){
     }   
   }
 
-  const { isLoading, data, error} = useQuery({
+  useQuery({
     queryKey: ['Points-query'], 
     queryFn: () => fetchDataFromStrapi(queryParams).then((value) =>{
 
-      // Learn redux
-      structured_data = PointsTableStructuredDisplay(value)
+      const structuredData = PointsTableStructuredDisplay(value)
 
-      dispatch(populate(structured_data))
+      dispatch(populate(structuredData))
       return value
     })
   })
 
-  const { isLoading: divLoading, data: divData, error: divError} = useQuery({
+  useQuery({
     queryKey: ['Points-Query-Div1'], 
     queryFn: () => fetchDataFromStrapiDivOne(queryParams).then((value) =>{  
       
-      // Learn redux
-      structured_data = PointsTableStructuredDisplay(value)
+      const structuredData = PointsTableStructuredDisplay(value)
 
-      dispatch(setDivOneTableData(structured_data))
+      dispatch(setDivOneTableData(structuredData))
       return value
     })
   })

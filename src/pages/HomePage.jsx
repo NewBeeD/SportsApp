@@ -51,11 +51,8 @@ const HomePage = () => {
 
 
             <Grid container spacing={2}>
-              <Grid item xs={12} lg={8}>
+              <Grid item xs={12}>
                 <MainNews />
-              </Grid>
-              <Grid item xs={12} lg={4}>
-                <TopStories count={5} />
               </Grid>
             </Grid>
 
@@ -98,6 +95,10 @@ const HomePage = () => {
 
                 </TabContext>
 
+              </Box>
+
+              <Box sx={{ display: { xs: "none", lg: "block" } }}>
+                <TopStories count={5} />
               </Box>
 
               <FeaturedPlayer />

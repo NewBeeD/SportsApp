@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Button, Dialog, DialogActions, DialogContent, Slide } from '@mui/material';
 
 import '../../css/TrendingNewsCss.css'
@@ -63,6 +64,10 @@ const ImageSlideshow = ({ images }) => {
       </Dialog>
     </div>
   );
+};
+
+ImageSlideshow.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default ImageSlideshow;

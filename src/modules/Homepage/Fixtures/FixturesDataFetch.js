@@ -2,10 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import qs from 'qs'
 import axios from 'axios'
 
-import { useState } from 'react';
-
 // Redux
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { populate } from '../../../features/Fixtures/FixturesSlice'
 
 import fixturesSetup from '../Fixtures/FixturesDisplay'
@@ -61,7 +59,7 @@ const queryParams = {
     }
   };
 
-  const { isLoading, data, error} = useQuery({
+  useQuery({
     queryKey: ['Fixture-Query'], 
     queryFn: () => fetchDataFromStrapi(queryParams).then((value) =>{
 
@@ -71,7 +69,8 @@ const queryParams = {
       return value
     })
   })
-  
+
+  return null;
 
 }
 

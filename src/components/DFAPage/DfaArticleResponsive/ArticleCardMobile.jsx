@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
@@ -8,6 +8,26 @@ import { Link } from 'react-router-dom';
 import Chip from '@mui/material/Chip';
 import Skeleton from '@mui/material/Skeleton';
 import CardActionArea from '@mui/material/CardActionArea';
+
+const articleItemPropType = PropTypes.shape({
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  url: PropTypes.arrayOf(PropTypes.string),
+  alt: PropTypes.string,
+  title: PropTypes.string,
+  type: PropTypes.string,
+  time: PropTypes.string,
+});
+
+const articleThemePropType = PropTypes.shape({
+  colors: PropTypes.shape({
+    divider: PropTypes.string,
+    background: PropTypes.string,
+    secondary: PropTypes.string,
+    textInverse: PropTypes.string,
+    textTertiary: PropTypes.string,
+    textPrimary: PropTypes.string,
+  }),
+});
 
 const ArticleCardMobile = ({ item, theme }) => {
   const imageUrl = item?.url?.[0];
@@ -79,6 +99,11 @@ const ArticleCardMobile = ({ item, theme }) => {
       </CardActionArea>
     </Card>
   );
+};
+
+ArticleCardMobile.propTypes = {
+  item: articleItemPropType,
+  theme: articleThemePropType,
 };
 
 export default ArticleCardMobile;

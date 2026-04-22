@@ -17,8 +17,6 @@ export default function GetArticles(){
 
   const dispatch = useDispatch()
 
-  let structured_data;
-
   const fetchDataFromStrapi = async (queryParams) => {
 
     // const queryString = qs.stringify(queryParams);
@@ -47,15 +45,16 @@ export default function GetArticles(){
     sort: ['createdAt:desc'],   
   }
 
-  const { isLoading, data, error, isFetching} = useQuery({
+  useQuery({
     queryKey: ['Articles-Query'], 
     queryFn: () => fetchDataFromStrapi(queryParams).then((value) =>{
 
-      structured_data = ArticlesStructuredDisplay(value)
-      dispatch(populate(structured_data))
+      const structuredData = ArticlesStructuredDisplay(value)
+      dispatch(populate(structuredData))
       return value
     }), 
   })
-  
+
+  return null;
 }
 

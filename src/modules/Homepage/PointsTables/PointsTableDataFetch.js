@@ -1,13 +1,9 @@
 import DfaPoints from "../../GetPoints/DfaPoints";
-import DabaPoints from "../../GetPoints/DabaPoints";
 
 
 
-export default function GetPoints(league){
+export default function GetPoints(){
 
   DfaPoints()
-  // DabaPoints()
-  
-  // return structured_data;
 }
 

@@ -1,6 +1,5 @@
 // src/GamePrediction/pages/AdminMatchManagementPage.jsx
-import React, { useState, useEffect } from 'react';
-import appTheme from '../../css/theme';
+import { useState, useEffect } from 'react';
 import {
   Container,
   Box,
@@ -8,13 +7,10 @@ import {
   Grid,
   Alert,
   CircularProgress,
-  AppBar,
+  Link,
   Toolbar,
   Tabs,
   Tab,
-  Card,
-  CardContent,
-  CardHeader,
   Button,
   TextField,
   Dialog,
@@ -29,13 +25,13 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../config/firebaseConfig';
 import {
   collection,
   addDoc,
   onSnapshot,
-  query,
   doc,
   updateDoc,
   deleteDoc,
@@ -43,11 +39,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../config/firebaseConfig';
 import { useSnackbar } from 'notistack';
-import SecurityIcon from '@mui/icons-material/Security';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MatchCard from '../components/MatchCard';
 
 const AdminMatchManagementPage = () => {
@@ -105,7 +97,7 @@ const AdminMatchManagementPage = () => {
     });
     // Clean up auth listener on unmount
     return () => unsubscribeAuth();
-  }, []);
+  }, [enqueueSnackbar]);
 
   // Handle form input
   const handleFormChange = (e) => {
@@ -240,7 +232,12 @@ const AdminMatchManagementPage = () => {
     return (
       <Container sx={{ py: 4 }}>
         <Box sx={{ mt: {xs:10, sm: 10} }}>
-          <Alert severity="warning">Please log in to access the Prediction Game.</Alert>
+          <Alert severity="warning">
+            Please log in to access the Prediction Game.{' '}
+            <Link component={RouterLink} to="/Login" underline="hover" sx={{ fontWeight: 600 }}>
+              Log in
+            </Link>
+          </Alert>
         </Box>
 
         
@@ -288,7 +285,10 @@ const AdminMatchManagementPage = () => {
         {/* Header with Add Button */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, mb: { xs: 2, sm: 4 }, flexDirection: { xs: 'column', sm: 'row' }, gap: { xs: 1, sm: 0 } }}>
           <Box>
-            <Typography variant={{ xs: 'h6', sm: 'h5' }} sx={{ fontWeight: 'bold' }}>
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: 'bold', fontSize: { xs: '1.1rem', sm: '1.5rem' } }}
+            >
               📋 Match Management
             </Typography>
             <Typography variant="body2" color="textSecondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
@@ -445,7 +445,7 @@ const AdminMatchManagementPage = () => {
               >
                 <MenuItem value="PREMIER">Premier Division</MenuItem>
                 <MenuItem value="DIV_ONE">Division One</MenuItem>
-                <MenuItem value="WOMEN">Women's Division</MenuItem>
+                <MenuItem value="WOMEN">Women&apos;s Division</MenuItem>
                 <MenuItem value="CUP">Cup</MenuItem>
               </Select>
             </FormControl>

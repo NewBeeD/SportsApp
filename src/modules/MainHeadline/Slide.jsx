@@ -1,4 +1,5 @@
-import {  Box, Typography, Stack, Button, Skeleton } from '@mui/material'
+import {  Box, Typography, Stack } from '@mui/material'
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import '../../css/MainNewsCss.css'
@@ -76,6 +77,15 @@ const Slide = ({ headline }) => {
 
     </Box>
   )
+}
+
+Slide.propTypes = {
+  headline: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    url: PropTypes.arrayOf(PropTypes.string),
+    type: PropTypes.string,
+    title: PropTypes.string,
+  }),
 }
 
 export default Slide

@@ -1,5 +1,5 @@
 // src/GamePrediction/pages/PredictionGameDashboard.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { trackPredictionGameStarted } from '../../utils/analyticsEvents';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../config/firebaseConfig';
@@ -7,20 +7,18 @@ import appTheme from '../../css/theme';
 import {
   Container,
   Box,
-  AppBar,
-  Toolbar,
   Typography,
   Tabs,
   Tab,
   Card,
   CardContent,
   Grid,
-  Stack,
-  CircularProgress,
   Alert,
+  Link,
   useTheme,
   useMediaQuery,
 } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../config/firebaseConfig';
 import SoccerIcon from '@mui/icons-material/SportsFootball';
@@ -91,7 +89,12 @@ const PredictionGameDashboard = () => {
         }}
       >
         <Box sx={{ mt: {xs:10, sm: 20} }}>
-          <Alert severity="warning">Please log in to access the Prediction Game.</Alert>
+          <Alert severity="warning">
+            Please log in to access the Prediction Game.{' '}
+            <Link component={RouterLink} to="/Login" underline="hover" sx={{ fontWeight: 600 }}>
+              Log in
+            </Link>
+          </Alert>
         </Box>
       </Container>
     );

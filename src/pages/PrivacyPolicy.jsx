@@ -27,7 +27,7 @@ const PrivacyPolicy = () => {
             Introduction
           </Typography>
           <Typography variant="body1" className="section-content">
-            DSport ("we," "us," "our," or "Company") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and otherwise process personal information in connection with our website, mobile application, and related services (collectively, the "Services").
+            {'DSport ("we," "us," "our," or "Company") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and otherwise process personal information in connection with our website, mobile application, and related services (collectively, the "Services").'}
           </Typography>
         </Paper>
 
@@ -152,7 +152,7 @@ const PrivacyPolicy = () => {
         {/* Children's Privacy */}
         <Paper elevation={0} className="policy-section">
           <Typography variant="h5" className="section-title">
-            Children's Privacy
+            Children&apos;s Privacy
           </Typography>
           <Typography variant="body1" className="section-content">
             Our Services are not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that we have collected personal information from a child under 13, we will take steps to delete such information promptly.
@@ -179,7 +179,7 @@ const PrivacyPolicy = () => {
             Changes to This Privacy Policy
           </Typography>
           <Typography variant="body1" className="section-content">
-            We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. We will notify you of any significant changes by updating the "Last Updated" date at the top of this policy. Your continued use of our Services constitutes your acceptance of the updated Privacy Policy.
+            {'We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. We will notify you of any significant changes by updating the "Last Updated" date at the top of this policy. Your continued use of our Services constitutes your acceptance of the updated Privacy Policy.'}
           </Typography>
         </Paper>
       </Container>

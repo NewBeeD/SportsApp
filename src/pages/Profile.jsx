@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,  createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { signOut } from 'firebase/auth'
 
 
 import Box from '@mui/material/Box';

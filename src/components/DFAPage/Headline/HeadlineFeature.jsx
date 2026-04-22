@@ -32,16 +32,6 @@ const SUMMARY_MAX_LENGTH = 200;
 const WORDS_PER_MINUTE = 200; // Average reading speed
 
 const HeadlineFeature = () => {
-  // Helper function to parse hex color to RGB values
-  const hexToRgb = (hex) => {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? [
-      parseInt(result[1], 16),
-      parseInt(result[2], 16),
-      parseInt(result[3], 16)
-    ] : [255, 107, 0]; // Default to secondary color
-  };
-
   // Format ISO date to readable format (e.g., "Jan 20, 2025")
   const formatDate = (dateString) => {
     if (!dateString) return new Date().toLocaleDateString('en-US', { 

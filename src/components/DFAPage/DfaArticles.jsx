@@ -1,7 +1,5 @@
 
-
-
-import React from 'react';
+import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
@@ -19,7 +17,6 @@ const DfaArticles = ({ level, size }) => {
   GetArticles();
 
   const articles_raw = useSelector((state) => state.articles);
-  const players = useSelector((state) => state.DfaPlayers);
 
   const normalizeYes = (value) => {
     if (typeof value === 'boolean') return value;
@@ -38,7 +35,6 @@ const DfaArticles = ({ level, size }) => {
     : null;
 
   const articles_length = articles && articles_raw[0] ? articles.length : 0;
-  const part_size = articles_length ? Math.ceil(articles_length / 3) : 0;
 
   // Slice articles based on level and size
   const getSlicedArticles = () => {
@@ -110,6 +106,11 @@ const DfaArticles = ({ level, size }) => {
       )}
     </Box>
   );
+};
+
+DfaArticles.propTypes = {
+  level: PropTypes.string,
+  size: PropTypes.string,
 };
 
 export default DfaArticles;

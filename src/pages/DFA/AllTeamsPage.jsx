@@ -13,15 +13,15 @@ import Tab from '@mui/material/Tab';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import Skeleton from '@mui/material/Skeleton';
 import Button from '@mui/material/Button';
+import PropTypes from 'prop-types';
 
 import qs from 'qs';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { useState, useEffect, useMemo, useCallback, memo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 
 import { queryParams_dfa_teams } from '../../modules/DFA/QueryParams';
 import AllTeamsDataStructure from '../../components/DFAPage/AllTeamsPage/AllTeamsDataStructure';
-import Footer from '../../components/Footer/Footer';
 import theme from '../../css/theme';
 
 // Constants
@@ -37,7 +37,7 @@ const CARD_HEIGHT = { xs: 250, md: 270 };
 const CARD_CREST_HEIGHT = 200;
 
 // Memoized TeamCard Component
-const TeamCard = memo(({ team }) => (
+const TeamCard = ({ team }) => (
   <Link
     to={`/DFA/Home/Team/${team.ID}`}
     style={{ textDecoration: 'none' }}
@@ -85,12 +85,14 @@ const TeamCard = memo(({ team }) => (
       </Stack>
     </Card>
   </Link>
-));
+);
 
-TeamCard.displayName = 'TeamCard';
+TeamCard.propTypes = {
+  team: PropTypes.object,
+};
 
 // Memoized SkeletonCard Component
-const SkeletonCard = memo(() => (
+const SkeletonCard = () => (
   <Card sx={{ height: CARD_HEIGHT, backgroundColor: 'rgba(34, 38, 41, 0.95)' }}>
     <Stack direction="column" height="100%">
       <Skeleton 
@@ -108,9 +110,7 @@ const SkeletonCard = memo(() => (
       </CardContent>
     </Stack>
   </Card>
-));
-
-SkeletonCard.displayName = 'SkeletonCard';
+);
 
 const AllTeamsPage = () => {
   const [data, setData] = useState(null);
@@ -291,4 +291,4 @@ const AllTeamsPage = () => {
   );
 };
 
-export default memo(AllTeamsPage);
+export default AllTeamsPage;

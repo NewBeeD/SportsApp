@@ -1,5 +1,6 @@
 
 import { useParams, useNavigate } from "react-router-dom"
+import PropTypes from 'prop-types'
 import { useState, useEffect } from "react"
 import qs from 'qs'
 import axios from "axios"
@@ -18,7 +19,6 @@ import {
   Chip,
   Avatar,
   IconButton,
-  Tooltip,
   Paper,
   Alert,
   CircularProgress,
@@ -62,15 +62,6 @@ const PlayerHeaderSkeleton = () => (
   </Stack>
 )
 
-const StatCardSkeleton = () => (
-  <Card sx={{ height: '100%' }}>
-    <CardContent>
-      <Skeleton variant="text" width="80%" />
-      <Skeleton variant="text" width="40%" height={40} />
-    </CardContent>
-  </Card>
-)
-
 // Reusable Stat Card Component
 const StatCard = ({ label, value, icon, color = 'primary', trend = null }) => {
   const theme = useTheme()
@@ -110,6 +101,14 @@ const StatCard = ({ label, value, icon, color = 'primary', trend = null }) => {
   )
 }
 
+StatCard.propTypes = {
+  label: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  icon: PropTypes.node,
+  color: PropTypes.string,
+  trend: PropTypes.string,
+}
+
 // Reusable Info Item Component
 const InfoItem = ({ label, value, icon, color = 'text.secondary' }) => (
   <Stack direction="row" spacing={2} alignItems="center" sx={{ py: 1.5 }}>
@@ -124,6 +123,13 @@ const InfoItem = ({ label, value, icon, color = 'text.secondary' }) => (
     </Typography>
   </Stack>
 )
+
+InfoItem.propTypes = {
+  label: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  icon: PropTypes.node,
+  color: PropTypes.string,
+}
 
 const PlayerProfile = () => {
   const { id } = useParams()
@@ -246,7 +252,7 @@ const PlayerProfile = () => {
     if (data) {
       fetchSeasonStats()
     }
-  }, [data])
+  }, [data, id])
 
   const handleBackClick = () => {
     window.scrollTo(0, 0)

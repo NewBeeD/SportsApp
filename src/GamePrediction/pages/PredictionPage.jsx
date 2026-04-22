@@ -1,5 +1,4 @@
 // src/GamePrediction/pages/PredictionPage.jsx
-import React from 'react';
 import {
   Container,
   Grid,
@@ -7,18 +6,14 @@ import {
   Typography,
   CircularProgress,
   Alert,
-  AppBar,
-  Toolbar,
   useTheme,
   useMediaQuery,
 } from '@mui/material';
 import PredictionForm from '../components/PredictionForm';
-import MatchCard from '../components/MatchCard';
 import { useMatches } from '../hooks/useMatches';
 import { usePredictions } from "../hooks/usePrediction.jsx";
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../config/firebaseConfig';
-import SoccerIcon from '@mui/icons-material/SportsFootball';
 import { useState, useEffect } from 'react';
 
 const PredictionPage = () => {

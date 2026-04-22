@@ -1,5 +1,6 @@
 // src/GamePrediction/components/Leaderboard.jsx
-import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -45,7 +46,6 @@ const Leaderboard = ({ topN = 50, enableRealtime = false }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-  const isSmallMobile = useMediaQuery(theme.breakpoints.down(360));
 
   const [currentUser, setCurrentUser] = useState(null);
   const [viewMode, setViewMode] = useState(0); // 0 = All Time, 1 = Gameweek
@@ -233,7 +233,7 @@ const Leaderboard = ({ topN = 50, enableRealtime = false }) => {
 
       {/* User's Current Position (if logged in and ranked) */}
       {currentUser && userPosition && (
-        <UserPositionCard userPosition={userPosition} theme={theme} isMobile={isMobile} />
+        <UserPositionCard userPosition={userPosition} isMobile={isMobile} />
       )}
 
       {/* Main Leaderboard - RESPONSIVE LAYOUT */}
@@ -584,11 +584,16 @@ const Leaderboard = ({ topN = 50, enableRealtime = false }) => {
       {/* Not Ranked Info */}
       {currentUser && !userPosition && (
         <Alert severity="info" sx={{ mt: 3, fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
-          📈 You're not on the leaderboard yet. Make predictions to climb the ranks!
+          📈 You&apos;re not on the leaderboard yet. Make predictions to climb the ranks!
         </Alert>
       )}
     </Container>
   );
+};
+
+Leaderboard.propTypes = {
+  topN: PropTypes.number,
+  enableRealtime: PropTypes.bool,
 };
 
 /**
@@ -627,11 +632,16 @@ function MedalIcon({ rank }) {
   );
 }
 
+MedalIcon.propTypes = {
+  rank: PropTypes.number.isRequired,
+};
+
 /**
  * User Position Card Component
  * Shows current user's rank and stats
  */
-function UserPositionCard({ userPosition, theme, isMobile }) {
+function UserPositionCard({ userPosition, isMobile }) {
+  const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
@@ -748,5 +758,15 @@ function UserPositionCard({ userPosition, theme, isMobile }) {
     </Card>
   );
 }
+
+UserPositionCard.propTypes = {
+  userPosition: PropTypes.shape({
+    rank: PropTypes.number,
+    totalPoints: PropTypes.number,
+    totalPredictions: PropTypes.number,
+    correctPredictions: PropTypes.number,
+  }).isRequired,
+  isMobile: PropTypes.bool.isRequired,
+};
 
 export default Leaderboard;

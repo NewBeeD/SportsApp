@@ -152,7 +152,7 @@ function formatDate(date) {
   // Add the ordinal suffix for the day (1st, 2nd, 3rd, etc.)
   const dayWithSuffix = formattedDate.replace(
     /(\d{1,2})(st|nd|rd|th)/,
-    (_, day, suffix) => {
+    (_, day) => {
       const dayNumber = parseInt(day);
       if (dayNumber >= 11 && dayNumber <= 13) {
         return day + 'th';

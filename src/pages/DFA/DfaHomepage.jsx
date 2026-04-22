@@ -39,7 +39,6 @@ import Video from "../../components/Video";
 const DfaHomepage = () => {
   // Responsive breakpoints
   const muiTheme = useTheme();
-  const isLargeScreen = useMediaQuery(muiTheme.breakpoints.up('md'));
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
 
   // Redux data
@@ -136,14 +135,11 @@ const DfaHomepage = () => {
       >
 
         <Grid container spacing={{ xs: 2, md: 3, lg: 4 }}>
-          {/* Left: Hero + Top stories + content */}
+          {/* Left: Hero + content */}
           <Grid item xs={12} md={8}>
             <Grid container spacing={2}>
-              <Grid item xs={12} lg={8}>
+              <Grid item xs={12}>
                 <MainNews league="DFA" />
-              </Grid>
-              <Grid item xs={12} lg={4}>
-                <TopStories count={5} league="DFA" />
               </Grid>
             </Grid>
 
@@ -174,6 +170,10 @@ const DfaHomepage = () => {
                     <FixturesData page="Dfahome" type="now" league="DFA" />
                   </TabPanel>
                 </TabContext>
+              </Box>
+
+              <Box sx={{ display: { xs: "none", lg: "block" } }}>
+                <TopStories count={5} league="DFA" />
               </Box>
 
               <Box>

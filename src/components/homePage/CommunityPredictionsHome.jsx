@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Card,
@@ -10,10 +11,10 @@ import {
   LinearProgress,
   Button,
   CircularProgress,
-  Divider,
   Chip,
   useTheme,
   useMediaQuery,
+  Link,
 } from '@mui/material';
 import SoccerIcon from '@mui/icons-material/SportsFootball';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -22,6 +23,7 @@ import { getMatchCommunityStats } from '../../GamePrediction/services/communityS
 import { getCommunityPoll, submitCommunityPollVote } from '../../GamePrediction/services/communityPollService';
 import { formatTimeRemaining } from '../../GamePrediction/utils/pointsCalculator';
 import { auth } from '../../config/firebaseConfig';
+import { Link as RouterLink } from 'react-router-dom';
 
 const OUTCOME_ORDER = ['HOME_WIN', 'DRAW', 'AWAY_WIN'];
 const UPCOMING_STATUSES = new Set(['UPCOMING', 'SCHEDULED', 'PENDING']);
@@ -117,6 +119,12 @@ const CommunityPredictionsHome = ({ limit = 2, league = null }) => {
     let active = true;
 
     const fetchStats = async () => {
+      if (!currentUser) {
+        setStatsByMatch({});
+        setLoadingStats(false);
+        setError(null);
+        return;
+      }
       if (visibleMatches.length === 0) {
         setStatsByMatch({});
         setLoadingStats(false);
@@ -160,7 +168,7 @@ const CommunityPredictionsHome = ({ limit = 2, league = null }) => {
     return () => {
       active = false;
     };
-  }, [visibleMatches]);
+  }, [visibleMatches, currentUser]);
 
   const handleVote = async (matchId, outcome) => {
     if (!matchId) return;
@@ -508,6 +516,14 @@ const CommunityPredictionsHome = ({ limit = 2, league = null }) => {
                   </Stack>
                 )}
 
+                {!currentUser && (
+                  <Typography variant="caption" color="textSecondary">
+                    Log in to view community predictions.{' '}
+                    <Link component={RouterLink} to="/Login" underline="hover" sx={{ fontWeight: 600 }}>
+                      Log in
+                    </Link>
+                  </Typography>
+                )}
                 {error && (
                   <Typography variant="caption" color="error">
                     {error}
@@ -751,6 +767,14 @@ const CommunityPredictionsHome = ({ limit = 2, league = null }) => {
                             </Stack>
                           )}
 
+                          {!currentUser && (
+                            <Typography variant="caption" color="textSecondary">
+                              Log in to view community predictions.{' '}
+                              <Link component={RouterLink} to="/Login" underline="hover" sx={{ fontWeight: 600 }}>
+                                Log in
+                              </Link>
+                            </Typography>
+                          )}
                           {error && (
                             <Typography variant="caption" color="error">
                               {error}
@@ -768,6 +792,11 @@ const CommunityPredictionsHome = ({ limit = 2, league = null }) => {
       </CardContent>
     </Card>
   );
+};
+
+CommunityPredictionsHome.propTypes = {
+  limit: PropTypes.number,
+  league: PropTypes.string,
 };
 
 export default CommunityPredictionsHome;

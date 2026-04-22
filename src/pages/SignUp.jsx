@@ -2,7 +2,6 @@
 import Box from '@mui/material/Box';
 
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import Card from '@mui/material/Card';
@@ -18,7 +17,7 @@ import { signInWithPopup, createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth, googleProvider } from '../config/firebaseConfig'
 import { trackUserSignUp } from '../utils/analyticsEvents'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import theme from '../css/theme'
 import { useNavigate } from 'react-router'
@@ -38,7 +37,7 @@ const Signup = () => {
   const signUpWithGoogle = async () => {
 
     try{
-      await signInWithPopup(auth, googleProvider).then((userCredentials)=>{
+      await signInWithPopup(auth, googleProvider).then(() => {
         trackUserSignUp('google')
         navigation('/')
       })
@@ -51,9 +50,8 @@ const Signup = () => {
   const signUp = async () => {
 
     try{
-      await createUserWithEmailAndPassword(auth, email, password).then((userCredentials)=>{
+      await createUserWithEmailAndPassword(auth, email, password).then(() => {
         trackUserSignUp('email')
-        console.log(userCredentials);
         navigation('/')
       })
     }

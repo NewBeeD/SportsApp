@@ -1,15 +1,14 @@
 // src/GamePrediction/components/UserStatsCard.jsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import appTheme from '../../css/theme';
 import {
   Card,
   CardContent,
   Typography,
   Grid,
-  Box,
   CircularProgress,
   Alert,
-  Stack,
 } from '@mui/material';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../config/firebaseConfig';
@@ -115,6 +114,10 @@ const UserStatsCard = ({ userId }) => {
       </Grid>
     </Grid>
   );
+};
+
+UserStatsCard.propTypes = {
+  userId: PropTypes.string,
 };
 
 export default UserStatsCard;

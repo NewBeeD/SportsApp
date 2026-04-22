@@ -1,4 +1,4 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from "react-router-dom"
 import {
   Box,
@@ -12,6 +12,12 @@ import {
   alpha
 } from '@mui/material'
 import { Stadium as StadiumIcon } from '@mui/icons-material'
+
+const teamPropType = PropTypes.shape({
+  ID: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  team_crest: PropTypes.string,
+  Team: PropTypes.string,
+})
 
 const TeamCard = ({ team }) => {
   const theme = useTheme()
@@ -73,6 +79,10 @@ const TeamCard = ({ team }) => {
   )
 }
 
+TeamCard.propTypes = {
+  team: teamPropType,
+}
+
 const TeamsGallery = ({ teams, loading }) => {
   if (loading) {
     return (
@@ -106,6 +116,11 @@ const TeamsGallery = ({ teams, loading }) => {
       ))}
     </Grid>
   )
+}
+
+TeamsGallery.propTypes = {
+  teams: PropTypes.arrayOf(teamPropType),
+  loading: PropTypes.bool,
 }
 
 export default TeamsGallery

@@ -27,7 +27,7 @@ const TermsOfService = () => {
             Agreement to Terms
           </Typography>
           <Typography variant="body1" className="section-content">
-            By accessing and using DSport's website, mobile application, and services (collectively, the "Services"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our Services. We reserve the right to update these Terms at any time.
+            {'By accessing and using DSport\'s website, mobile application, and services (collectively, the "Services"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our Services. We reserve the right to update these Terms at any time.'}
           </Typography>
         </Paper>
 
@@ -106,7 +106,7 @@ const TermsOfService = () => {
             Disclaimer of Warranties
           </Typography>
           <Typography variant="body1" className="section-content">
-            Our Services are provided on an "AS IS" and "AS AVAILABLE" basis without warranties of any kind. We disclaim all express and implied warranties, including but not limited to:
+            {'Our Services are provided on an "AS IS" and "AS AVAILABLE" basis without warranties of any kind. We disclaim all express and implied warranties, including but not limited to:'}
           </Typography>
           <Box className="bullet-list">
             <Typography variant="body2">• Merchantability</Typography>
@@ -160,7 +160,7 @@ const TermsOfService = () => {
             <Typography variant="body2">• Engage in harassment, abuse, or threatening behavior</Typography>
             <Typography variant="body2">• Post illegal or defamatory content</Typography>
             <Typography variant="body2">• Attempt unauthorized access to our systems</Typography>
-            <Typography variant="body2">• Interfere with others' use of our Services</Typography>
+            <Typography variant="body2">• Interfere with others&apos; use of our Services</Typography>
             <Typography variant="body2">• Engage in spam or unsolicited marketing</Typography>
             <Typography variant="body2">• Violate any applicable laws or regulations</Typography>
           </Box>

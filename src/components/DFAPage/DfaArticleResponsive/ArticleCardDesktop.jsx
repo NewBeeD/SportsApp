@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -9,6 +9,27 @@ import Chip from '@mui/material/Chip';
 import Skeleton from '@mui/material/Skeleton';
 import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
+
+const articleItemPropType = PropTypes.shape({
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  body_content: PropTypes.string,
+  url: PropTypes.arrayOf(PropTypes.string),
+  alt: PropTypes.string,
+  title: PropTypes.string,
+  type: PropTypes.string,
+  time: PropTypes.string,
+});
+
+const articleThemePropType = PropTypes.shape({
+  colors: PropTypes.shape({
+    divider: PropTypes.string,
+    background: PropTypes.string,
+    secondary: PropTypes.string,
+    textInverse: PropTypes.string,
+    textPrimary: PropTypes.string,
+    textSecondary: PropTypes.string,
+  }),
+});
 
 const ArticleCardDesktop = ({ item, theme }) => {
   const body = typeof item?.body_content === 'string' ? item.body_content : '';
@@ -107,6 +128,11 @@ const ArticleCardDesktop = ({ item, theme }) => {
       </CardActionArea>
     </Card>
   );
+};
+
+ArticleCardDesktop.propTypes = {
+  item: articleItemPropType,
+  theme: articleThemePropType,
 };
 
 export default ArticleCardDesktop;

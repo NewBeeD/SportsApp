@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect } from "react"
 
 
 import axios from "axios"
@@ -29,49 +29,12 @@ const HeadlineArticle = () => {
   const { id } = useParams()
 
   const [articles, setArticles] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const renderedRichText = useMemo(() => {
-    if (articles?.RichText && articles.RichText !== 'none') {
-      return (
-        
-        <BlocksRenderer
-          content={articles.RichText}
-          blocks={{
-            image: ({ image }) => (
-              <Box width={{ xs: '100%', sm: 800, md: 1000 }}>
-                <img
-                  src={image.url}
-                  alt="Article Image"
-                  style={{ objectFit: 'cover', objectPosition: '50% 50%' }}
-                  loading="lazy"
-                  height='100%' 
-                  width='100%'
-                />
-              </Box>
-            ),
-            heading: ({ children, level }) => (
-              <Typography variant={`h${level}`} gutterBottom>
-                {children}
-              </Typography>
-            ),
-            paragraph: ({ children }) => <Typography>{children}</Typography>,
-          }}
-        />
-      );
-    }
-    return null;
-  }, [articles]);
   
 
   useEffect(() => {
     
     const fetchData = async () => {
       try {
-        // Set loading to true when starting the fetch
-        setLoading(true);
-
         // Your API endpoint URL
         const apiUrl = `https://strapi-dominica-sport.onrender.com/api/articles`;
   
@@ -95,11 +58,7 @@ const HeadlineArticle = () => {
         setArticles(final_data);
         // setModalIsOpen(true);
       } catch (error) {
-        // Set the error state if there's an issue
-        setError(error.message);
-      } finally {
-        // Set loading to false regardless of success or failure
-        setLoading(false);
+        console.error('Error loading headline article:', error);
       }
 
 

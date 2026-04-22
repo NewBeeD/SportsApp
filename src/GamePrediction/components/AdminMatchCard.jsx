@@ -1,5 +1,5 @@
 // src/GamePrediction/components/AdminMatchCard.jsx
-import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Card,
   CardContent,
@@ -16,6 +16,22 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ScheduleIcon from '@mui/icons-material/Schedule';
+
+const matchPropType = PropTypes.shape({
+  id: PropTypes.string,
+  status: PropTypes.string,
+  league: PropTypes.string,
+  scheduledTime: PropTypes.shape({
+    seconds: PropTypes.number,
+  }),
+  homeTeamName: PropTypes.string,
+  awayTeamName: PropTypes.string,
+  actualScore: PropTypes.shape({
+    home: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    away: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  }),
+  totalPredictions: PropTypes.number,
+});
 
 const AdminMatchCard = ({ match, onEdit, onDelete }) => {
   const isFinished = match.status === 'FINISHED';
@@ -148,6 +164,12 @@ const AdminMatchCard = ({ match, onEdit, onDelete }) => {
       </CardActions>
     </Card>
   );
+};
+
+AdminMatchCard.propTypes = {
+  match: matchPropType.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default AdminMatchCard;
