@@ -70,7 +70,6 @@ export const getUserLeaderboardPosition = async (userId) => {
     }
 
     const userData = docSnapshot.data();
-    const userPoints = userData.totalPoints || 0;
 
     // Calculate rank by counting users with more points
     const q = query(

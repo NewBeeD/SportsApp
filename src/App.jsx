@@ -29,7 +29,6 @@ import NavBar from './components/homePage/NavBar'
 import Footer from './components/Footer/Footer'
 
 // Lazy load pages to enable code splitting
-const HomePage = lazy(() => import("./pages/HomePage"))
 const Article = lazy(() => import("./pages/Article"))
 const DfaHomepage = lazy(() => import('./pages/DFA/DfaHomepage'))
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
@@ -43,13 +42,11 @@ const DivisionOnePlayerAssists = lazy(() => import('./pages/DFA/DivisionOne/Divi
 const TeamGoals = lazy(() => import('./pages/DFA/TeamGoals'))
 const TeamCleanSheets = lazy(() => import('./pages/DFA/TeamCleanSheets'))
 const Login = lazy(() => import('./pages/Login'))
-const SignUp = lazy(() => import('./pages/SignUp'))
 const Profile = lazy(() => import('./pages/Profile'))
 const TeamPage = lazy(() => import('./pages/DFA/TeamPage'))
 const AllTeamsPage = lazy(() => import('./pages/DFA/AllTeamsPage'))
 const StatsPage = lazy(() => import('./pages/DFA/StatsPage'))
 const DivisionOneStatsPage = lazy(() => import('./pages/DFA/DivisionOne/DivisionOneStatsPage'))
-const FixturesPage = lazy(() => import('./pages/DFA/FixturesPage'))
 const AllTeamsFixtures = lazy(() => import('./pages/DFA/AllTeamsFixtures'))
 const TournamentBrackets = lazy(() => import('./components/TournamentBrackets/TournamentBrackets'))
 const HeadlineArticle = lazy(() => import('./pages/HeadLine/HeadlineArticles'))

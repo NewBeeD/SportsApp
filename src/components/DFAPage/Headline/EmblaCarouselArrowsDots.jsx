@@ -1,4 +1,5 @@
-import React from 'react'
+import PropTypes from 'prop-types'
+import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
@@ -64,3 +65,18 @@ export const NextButton = ({ enabled, onClick }) => (
     <ArrowForwardIosIcon />
   </IconButton>
 )
+
+DotButton.propTypes = {
+  selected: PropTypes.bool,
+  onClick: PropTypes.func,
+}
+
+PrevButton.propTypes = {
+  enabled: PropTypes.bool,
+  onClick: PropTypes.func,
+}
+
+NextButton.propTypes = {
+  enabled: PropTypes.bool,
+  onClick: PropTypes.func,
+}

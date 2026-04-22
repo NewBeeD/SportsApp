@@ -1,5 +1,5 @@
 // src/GamePrediction/pages/MyPredictionsPage.jsx
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Container,
   Box,
@@ -24,8 +24,6 @@ import {
   FormControl,
   InputLabel,
   Button,
-  Divider,
-  LinearProgress,
   Badge,
   Fade,
 } from '@mui/material';
@@ -35,10 +33,7 @@ import { usePredictions } from '../hooks/usePrediction';
 import { useMatches } from '../hooks/useMatches';
 import { getMatch } from '../services/matchService';
 import MatchCard from '../components/MatchCard';
-import MatchResultsView from '../components/MatchResultsView';
-import UserStatsCard from '../components/UserStatsCard';
 import {
-  Assignment,
   CheckCircle,
   Pending,
   TrendingUp,
@@ -46,12 +41,9 @@ import {
   EmojiEvents,
   Scoreboard,
   Timer,
-  Refresh,
   Close,
   Visibility,
   VisibilityOff,
-  BarChart,
-  SportsSoccer,
 } from '@mui/icons-material';
 
 const MyPredictionsPage = () => {
@@ -66,7 +58,6 @@ const MyPredictionsPage = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, setCurrentUser);
@@ -450,7 +441,7 @@ const MyPredictionsPage = () => {
                   <MenuItem value="ALL">All Leagues</MenuItem>
                   <MenuItem value="PREMIER">Premier</MenuItem>
                   <MenuItem value="DIV_ONE">Div One</MenuItem>
-                  <MenuItem value="WOMEN">Women's</MenuItem>
+                  <MenuItem value="WOMEN">Women&apos;s</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

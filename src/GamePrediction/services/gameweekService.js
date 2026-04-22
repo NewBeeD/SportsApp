@@ -10,8 +10,6 @@ import {
   getDocs,
   getDoc,
   doc,
-  limit,
-  where,
 } from 'firebase/firestore';
 import { db } from '../../config/firebaseConfig';
 

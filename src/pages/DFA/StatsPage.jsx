@@ -24,14 +24,13 @@ import { useState, useEffect } from 'react';
 
 import qs from 'qs'
 import axios from "axios";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import theme from '../../css/theme';
 
 import { queryParams_prem_players_stats } from '../../modules/DFA/QueryParams';
 
 import StatsPageStructureData from '../../modules/DFA/StatsPage/StatsPageStructureData';
-import LightweightTable from '../../components/LightweightTable';
 
 function Sort(a, b){
 
@@ -62,17 +61,10 @@ function Sort_Clean_Sheets(a, b){
 const StatsPage = () => {
 
   const [players_Goals_data, setPlayers_Goals_data] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const navigate = useNavigate()
 
   // const [players_Assists_data, setPlayers_Assists_data] = useState(null);
   // const [loading_assist, setLoading_Assits] = useState(true);
   // const [error_assists, setError_Assists] = useState(null);
-
-
-  const [currentSeason, setCurrentSeason] = useState(null)
 
   // Menu Lists
   const [anchorEl, setAnchorEl] = useState(null);
@@ -124,9 +116,6 @@ const StatsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Set loading to true when starting the fetch
-        setLoading(true);
-
         const queryString = qs.stringify(queryParams_prem_players_stats);
 
         // Your API endpoint URL
@@ -150,17 +139,10 @@ const StatsPage = () => {
         let final_data = StatsPageStructureData(result)
         final_data = final_data.map(goals => goals).sort(Sort)
         
-
-        setCurrentSeason(final_data[0].Season.substring(1).replace('-', '/'))
-        
         // Set the data state
         setPlayers_Goals_data(final_data);
       } catch (error) {
-        // Set the error state if there's an issue
-        setError(error.message);
-      } finally {
-        // Set loading to false regardless of success or failure
-        setLoading(false);
+        console.error('Failed to fetch stats page data:', error);
       }
     };
 

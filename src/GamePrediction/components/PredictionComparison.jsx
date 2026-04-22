@@ -1,5 +1,6 @@
 // src/GamePrediction/components/PredictionComparison.jsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import appTheme from '../../css/theme';
 import {
   Box,
@@ -16,6 +17,19 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import EqualIcon from '@mui/icons-material/DragHandle';
 import { getUserVsCommunityAverage } from '../services/communityStatsService';
+
+const matchPropType = PropTypes.shape({
+  status: PropTypes.string,
+});
+
+const predictionPropType = PropTypes.shape({
+  predictedOutcome: PropTypes.string,
+  predictedScore: PropTypes.shape({
+    home: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    away: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  }),
+  points: PropTypes.number,
+});
 
 const PredictionComparison = ({ userId, matchId, match, prediction }) => {
   const [comparison, setComparison] = useState(null);
@@ -215,6 +229,13 @@ const PredictionComparison = ({ userId, matchId, match, prediction }) => {
       </CardContent>
     </Card>
   );
+};
+
+PredictionComparison.propTypes = {
+  userId: PropTypes.string,
+  matchId: PropTypes.string,
+  match: matchPropType,
+  prediction: predictionPropType,
 };
 
 export default PredictionComparison;

@@ -1,8 +1,5 @@
-import { useSelector } from 'react-redux';
-
 import qs from 'qs'
 import axios from "axios"
-import { Link } from 'react-router-dom';
 
 import { useState, useEffect } from 'react';
 
@@ -16,6 +13,7 @@ import theme from '../../css/theme';
 import TeamGoalsAssists from '../../modules/DFA/TeamGoalsandAssist/TeamGoalsAssists_Img';
 
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
@@ -27,12 +25,8 @@ const TeamGoals = () => {
 
 
   const [players_data, setPlayers_data] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const [team_data, setTeam_data] = useState(null);
-  const [teamLoading, setTeamLoading] = useState(true);
-  const [teamError, setTeamError] = useState(null);
 
   const [combineData, setCombineData] = useState(null)
 
@@ -42,9 +36,6 @@ const TeamGoals = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Set loading to true when starting the fetch
-        setLoading(true);
-
         const queryString = qs.stringify(queryParams_prem_players_stats);
 
         // Your API endpoint URL
@@ -68,11 +59,7 @@ const TeamGoals = () => {
         // Set the data state
         setPlayers_data(final_data);
       } catch (error) {
-        // Set the error state if there's an issue
-        setError(error.message);
-      } finally {
-        // Set loading to false regardless of success or failure
-        setLoading(false);
+        console.error('Failed to fetch team goal stats:', error);
       }
     };
 
@@ -83,9 +70,6 @@ const TeamGoals = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Set loading to true when starting the fetch
-        setTeamLoading(true);
-
         const queryString = qs.stringify(queryParams_dfa_teams);
 
         // Your API endpoint URL
@@ -108,11 +92,7 @@ const TeamGoals = () => {
         // Set the data state
         setTeam_data(final_data);
       } catch (error) {
-        // Set the error state if there's an issue
-        setTeamError(error.message);
-      } finally {
-        // Set loading to false regardless of success or failure
-        setTeamLoading(false);
+        console.error('Failed to fetch team crest data:', error);
       }
     };
 

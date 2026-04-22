@@ -6,6 +6,8 @@
  */
 
 import { useEffect, useState, useCallback } from 'react';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { db } from '../../config/firebaseConfig';
 import { getUserPredictions } from '../services/predictionService';
 
 /**
@@ -100,10 +102,6 @@ export const usePredictionsRealtime = (userId) => {
     try {
       setLoading(true);
       setError(null);
-
-      // Import Firestore directly for real-time listening
-      const { query, collection, where, onSnapshot } = require('firebase/firestore');
-      const { db } = require('../../config/firebaseConfig');
 
       const q = query(
         collection(db, 'predictions'),

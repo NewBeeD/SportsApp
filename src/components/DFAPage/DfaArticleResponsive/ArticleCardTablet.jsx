@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
@@ -8,6 +8,25 @@ import Chip from '@mui/material/Chip';
 import Skeleton from '@mui/material/Skeleton';
 import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
+
+const articleItemPropType = PropTypes.shape({
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  url: PropTypes.arrayOf(PropTypes.string),
+  alt: PropTypes.string,
+  title: PropTypes.string,
+  type: PropTypes.string,
+  time: PropTypes.string,
+});
+
+const articleThemePropType = PropTypes.shape({
+  colors: PropTypes.shape({
+    divider: PropTypes.string,
+    background: PropTypes.string,
+    secondary: PropTypes.string,
+    textInverse: PropTypes.string,
+    textPrimary: PropTypes.string,
+  }),
+});
 
 const ArticleCardTablet = ({ item, theme }) => {
   const imageUrl = item?.url?.[0];
@@ -84,6 +103,11 @@ const ArticleCardTablet = ({ item, theme }) => {
       </CardActionArea>
     </Card>
   );
+};
+
+ArticleCardTablet.propTypes = {
+  item: articleItemPropType,
+  theme: articleThemePropType,
 };
 
 export default ArticleCardTablet;

@@ -1,17 +1,21 @@
 // src/GamePrediction/components/MatchResultsView.jsx
-import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Card,
   CardContent,
   Typography,
   Box,
-  Grid,
   Chip,
   Stack,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { formatScore } from '../utils/pointsCalculator';
+
+const resultsScorePropType = PropTypes.shape({
+  home: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  away: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+});
 
 const MatchResultsView = ({ prediction, match }) => {
   if (!match || !match.actualScore || prediction.points === undefined) {
@@ -83,6 +87,20 @@ const MatchResultsView = ({ prediction, match }) => {
       </CardContent>
     </Card>
   );
+};
+
+MatchResultsView.propTypes = {
+  prediction: PropTypes.shape({
+    points: PropTypes.number,
+    predictedScore: resultsScorePropType,
+    pointBreakdown: PropTypes.shape({
+      outcomePoints: PropTypes.number,
+      exactScorePoints: PropTypes.number,
+    }),
+  }),
+  match: PropTypes.shape({
+    actualScore: resultsScorePropType,
+  }),
 };
 
 export default MatchResultsView;

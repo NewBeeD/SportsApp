@@ -1,5 +1,6 @@
 // src/GamePrediction/components/MatchCard.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import {
   Card,
   CardContent,
@@ -8,9 +9,7 @@ import {
   Box,
   Stack,
   Chip,
-  Avatar,
   Grid,
-  CircularProgress,
   IconButton,
   Tooltip,
   useTheme,
@@ -21,6 +20,29 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { formatScore, formatTimeRemaining, hasTimePasssed } from '../utils/pointsCalculator';
 import SoccerIcon from '@mui/icons-material/SportsFootball';
 import TimerIcon from '@mui/icons-material/Timer';
+
+const scorePropType = PropTypes.shape({
+  home: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  away: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+});
+
+const matchPropType = PropTypes.shape({
+  id: PropTypes.string,
+  status: PropTypes.string,
+  homeTeamName: PropTypes.string,
+  awayTeamName: PropTypes.string,
+  scheduledTime: PropTypes.shape({
+    seconds: PropTypes.number,
+  }),
+  actualScore: scorePropType,
+  totalPredictions: PropTypes.number,
+});
+
+const predictionPropType = PropTypes.shape({
+  points: PropTypes.number,
+  predictedOutcome: PropTypes.string,
+  predictedScore: scorePropType,
+});
 
 const MatchCard = ({ match, prediction, onEdit, onDelete }) => {
   const [timeRemaining, setTimeRemaining] = useState('');
@@ -182,6 +204,13 @@ const MatchCard = ({ match, prediction, onEdit, onDelete }) => {
       </CardContent>
     </Card>
   );
+};
+
+MatchCard.propTypes = {
+  match: matchPropType,
+  prediction: predictionPropType,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 export default MatchCard;

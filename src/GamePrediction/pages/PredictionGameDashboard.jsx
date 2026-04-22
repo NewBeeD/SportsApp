@@ -1,5 +1,5 @@
 // src/GamePrediction/pages/PredictionGameDashboard.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { trackPredictionGameStarted } from '../../utils/analyticsEvents';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../config/firebaseConfig';
@@ -7,16 +7,12 @@ import appTheme from '../../css/theme';
 import {
   Container,
   Box,
-  AppBar,
-  Toolbar,
   Typography,
   Tabs,
   Tab,
   Card,
   CardContent,
   Grid,
-  Stack,
-  CircularProgress,
   Alert,
   Link,
   useTheme,

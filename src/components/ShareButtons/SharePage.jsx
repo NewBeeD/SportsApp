@@ -1,4 +1,5 @@
-import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, WhatsappShareButton, WhatsappIcon, RedditShareButton, RedditIcon } from "react-share"
+import PropTypes from 'prop-types'
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, WhatsappShareButton, WhatsappIcon } from "react-share"
 
 import { Box, Stack } from "@mui/material"
 import { trackArticleShare } from '../../utils/analyticsEvents'
@@ -35,6 +36,10 @@ const SharePage = ({ title }) => {
 
   </Stack>
   )
+}
+
+SharePage.propTypes = {
+  title: PropTypes.string,
 }
 
 export default SharePage

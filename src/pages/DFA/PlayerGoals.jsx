@@ -1,6 +1,3 @@
-import { useSelector } from 'react-redux';
-
-
 import qs from 'qs'
 import axios from "axios"
 import { Link } from 'react-router-dom';
@@ -12,6 +9,7 @@ import theme from '../../css/theme';
 
 
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
@@ -33,8 +31,6 @@ const PlayerGoals = () => {
 
 
   const [players_data, setPlayers_data] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const [currentSeason, setCurrentSeason] = useState(null)
 
@@ -43,9 +39,6 @@ const PlayerGoals = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Set loading to true when starting the fetch
-        setLoading(true);
-
         const queryString = qs.stringify(queryParams_prem_players_stats);
 
         // Your API endpoint URL
@@ -73,11 +66,7 @@ const PlayerGoals = () => {
         // Set the data state
         setPlayers_data(final_data);
       } catch (error) {
-        // Set the error state if there's an issue
-        setError(error.message);
-      } finally {
-        // Set loading to false regardless of success or failure
-        setLoading(false);
+        console.error('Failed to fetch player goals:', error);
       }
     };
 

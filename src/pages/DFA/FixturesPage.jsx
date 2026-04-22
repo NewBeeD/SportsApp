@@ -26,8 +26,6 @@ import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 const FixturesPage = () => {
 
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const [type, setType] = useState('now')
 
@@ -39,9 +37,6 @@ const FixturesPage = () => {
 
     const fetchData = async () => {
       try {
-        // Set loading to true when starting the fetch
-        setLoading(true);
-
         const queryString = qs.stringify(queryParams_fixtures);
 
         // Your API endpoint URL
@@ -67,11 +62,7 @@ const FixturesPage = () => {
         // Set the data state
         setData(final_data);
       } catch (error) {
-        // Set the error state if there's an issue
-        setError(error.message);
-      } finally {
-        // Set loading to false regardless of success or failure
-        setLoading(false);
+        console.error('Failed to fetch fixtures:', error);
       }
     };
 

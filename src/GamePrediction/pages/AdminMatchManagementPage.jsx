@@ -1,6 +1,5 @@
 // src/GamePrediction/pages/AdminMatchManagementPage.jsx
-import React, { useState, useEffect } from 'react';
-import appTheme from '../../css/theme';
+import { useState, useEffect } from 'react';
 import {
   Container,
   Box,
@@ -9,13 +8,9 @@ import {
   Alert,
   CircularProgress,
   Link,
-  AppBar,
   Toolbar,
   Tabs,
   Tab,
-  Card,
-  CardContent,
-  CardHeader,
   Button,
   TextField,
   Dialog,
@@ -37,7 +32,6 @@ import {
   collection,
   addDoc,
   onSnapshot,
-  query,
   doc,
   updateDoc,
   deleteDoc,
@@ -45,11 +39,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../config/firebaseConfig';
 import { useSnackbar } from 'notistack';
-import SecurityIcon from '@mui/icons-material/Security';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MatchCard from '../components/MatchCard';
 
 const AdminMatchManagementPage = () => {
@@ -107,7 +97,7 @@ const AdminMatchManagementPage = () => {
     });
     // Clean up auth listener on unmount
     return () => unsubscribeAuth();
-  }, []);
+  }, [enqueueSnackbar]);
 
   // Handle form input
   const handleFormChange = (e) => {
@@ -455,7 +445,7 @@ const AdminMatchManagementPage = () => {
               >
                 <MenuItem value="PREMIER">Premier Division</MenuItem>
                 <MenuItem value="DIV_ONE">Division One</MenuItem>
-                <MenuItem value="WOMEN">Women's Division</MenuItem>
+                <MenuItem value="WOMEN">Women&apos;s Division</MenuItem>
                 <MenuItem value="CUP">Cup</MenuItem>
               </Select>
             </FormControl>

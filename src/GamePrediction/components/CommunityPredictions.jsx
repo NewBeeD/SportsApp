@@ -1,5 +1,6 @@
 // src/GamePrediction/components/CommunityPredictions.jsx
-import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Card,
@@ -11,19 +12,25 @@ import {
   Stack,
   LinearProgress,
   Chip,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   useTheme,
   useMediaQuery,
   IconButton,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { getMatchCommunityStats, getPredictionAccuracyRate } from '../services/communityStatsService';
+
+const communityMatchPropType = PropTypes.shape({
+  homeTeamName: PropTypes.string,
+  awayTeamName: PropTypes.string,
+});
+
+const collapsibleHeaderPropTypes = {
+  title: PropTypes.string.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
 
 const CommunityPredictions = ({ matchId, match, currentUser }) => {
   const theme = useTheme();
@@ -66,7 +73,7 @@ const CommunityPredictions = ({ matchId, match, currentUser }) => {
     };
 
     fetchStats();
-  }, [matchId]);
+  }, [matchId, currentUser]);
 
   if (loading) {
     return (
@@ -149,7 +156,7 @@ const CommunityPredictions = ({ matchId, match, currentUser }) => {
   };
 
   // Helper component for collapsible section header
-  const CollapsibleHeader = ({ title, icon, isOpen, onClick }) => (
+  const CollapsibleHeader = ({ title, isOpen, onClick }) => (
     <Box 
       onClick={onClick}
       sx={{ 
@@ -165,7 +172,6 @@ const CommunityPredictions = ({ matchId, match, currentUser }) => {
       }}
     >
       <Stack direction={isMobile ? 'column' : 'row'} spacing={1} sx={{ alignItems: 'flex-start', flex: 1 }}>
-        <Box sx={{ fontSize: { xs: 20, sm: 24 } }}>{icon}</Box>
         <Typography variant={isMobile ? 'body2' : 'subtitle2'} sx={{ fontWeight: 'bold', fontSize: { xs: '0.8rem', sm: '0.95rem' } }}>
           {title}
         </Typography>
@@ -182,6 +188,8 @@ const CommunityPredictions = ({ matchId, match, currentUser }) => {
       </IconButton>
     </Box>
   );
+
+  CollapsibleHeader.propTypes = collapsibleHeaderPropTypes;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 0.8, sm: 1 } }}>
@@ -446,6 +454,14 @@ const CommunityPredictions = ({ matchId, match, currentUser }) => {
       </Typography>
     </Box>
   );
+};
+
+CommunityPredictions.propTypes = {
+  matchId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  match: communityMatchPropType,
+  currentUser: PropTypes.shape({
+    uid: PropTypes.string,
+  }),
 };
 
 export default CommunityPredictions;
