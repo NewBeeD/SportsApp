@@ -3,9 +3,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 
-ParagraphsDisplay.propTypes = {
-  paragraphs: PropTypes.string.isRequired,
-};
 const ParagraphsDisplay = ({ paragraphs }) => {
 
 
@@ -28,5 +25,9 @@ const ParagraphsDisplay = ({ paragraphs }) => {
     </div>
   )
 }
+
+ParagraphsDisplay.propTypes = {
+  paragraphs: PropTypes.string.isRequired,
+};
 
 export default ParagraphsDisplay
